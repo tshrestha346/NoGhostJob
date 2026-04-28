@@ -10,3 +10,11 @@ What I worked on:
 * Pushed my branch to repo.
 * Created pull request to main branch.
 * Merged the code.
+
+What I learned today:
+* How to created branch.
+* How to switch branch.
+* How to resolve the conflict after pull.
+* How to push the code.
+* Make pull request.
+* Merge the pull request.
