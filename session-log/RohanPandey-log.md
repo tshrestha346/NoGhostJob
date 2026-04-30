@@ -11,3 +11,19 @@ what i learned:
 
 Questions :
 --> how to merge code to main branch
+
+
+Thrusday 30-04-2026
+Rohan
+What I worked on :
+--> discussed project
+-->Project registration
+-->UI
+
+what i learned:
+--> how to merge code to main branch
+--> how to work in project 
+--> different website which is to be used in project
+
+Questions :
+-->
