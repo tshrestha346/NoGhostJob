@@ -1,4 +1,4 @@
-Tuesday 28-04-2026
+## Tuesday 28-04-2026
 Rohan
 What I worked on :
 --> Set up the project 
@@ -13,7 +13,7 @@ Questions :
 --> how to merge code to main 
 
 
-Thrusday 30-04-2026
+## Thrusday 30-04-2026
 Rohan
 What I worked on :
 --> discussed project
@@ -29,7 +29,7 @@ Questions :
 -->
 
 
-Tuesday 05-05-2026
+## Tuesday 05-05-2026
 Rohan
 What I worked on :
 --> Feature list for the project
