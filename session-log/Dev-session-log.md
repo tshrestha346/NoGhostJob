@@ -25,3 +25,15 @@ what i learned:
 
 Questions :
 --> 
+
+Thursday 05-05-2026
+Dev
+What I worked on :
+--> make user Scenario
+--> make user persona
+
+what i learned:
+--> Different steps is require to understand our application User's and their perspectives.
+
+Questions :
+--> 
