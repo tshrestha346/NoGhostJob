@@ -30,3 +30,10 @@ What i learned:
 -How to work in group 
 -Learned about the different website that are avilable for design that can be used in the project
 
+# Tuesday 05-05-26
+
+Deval 
+
+What I worked on:
+-Work with others for feature discussion
+-Create a feature folder and push it into the main branch 
