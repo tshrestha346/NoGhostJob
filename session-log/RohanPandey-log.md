@@ -11,6 +11,7 @@ what i learned:
 
 Questions :
 --> how to merge code to main branch
+--> how to merge code to main 
 
 
 Thrusday 30-04-2026
@@ -27,3 +28,19 @@ what i learned:
 
 Questions :
 -->
+
+
+Tuesday 05-05-2026
+Rohan
+What I worked on :
+--> Feature list for the project
+-->Discussed Persona of the project with group
+--> Worked on scenarios and stories
+--> made user stories
+
+what i learned:
+--> More github commands 
+--> How Main , development and production works in real time.
+
+Questions :
+--> 
