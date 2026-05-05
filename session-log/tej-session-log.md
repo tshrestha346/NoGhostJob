@@ -30,3 +30,12 @@ What I worked on:
 
 What I learned today:
 * Creating branches and making the status of all the branch to equal status.
+
+# Tuesday 05-05-2026
+
+What I worked on:
+* Making new project iteration(task management in github) and assigning tasks to the members.
+* Segregated branches from each branch and updated all the branch in same state.(Branches: main, production and development)
+
+What I learned today:
+* To create an iteration of project in github just as Jira and assign each task to project members.
