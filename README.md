@@ -13,8 +13,7 @@
 | Developer | Dev Desai|
 
 ## Project Overview
-
-_Brief description of the problem you are solving, your target users, and the core value your product delivers._
+A student-focused job platform that enables job searching and posting while providing detailed feedback on rejected applications to help users improve their skills.
 
 ## Architecture
 
@@ -29,7 +28,7 @@ service-a  ──►  service-b
 
 ## Tech Stack
 
-| Layer | Technology |
+| Layer | Technology | MERN Stack
 |---|---|
 | Frontend | |
 | Backend | |

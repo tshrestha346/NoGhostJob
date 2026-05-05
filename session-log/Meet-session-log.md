@@ -1,6 +1,6 @@
-# Tuesday 28-04-2026
+# Thursday 30-04-2026
 
-Tej
+Meet
 
 What I worked on:
 * Created and switched a new branch of my name "tej".
@@ -18,15 +18,3 @@ What I learned today:
 * How to push the code.
 * Make pull request.
 * Merge the pull request.
-
-
-# Thursday 30-04-2026
-
-What I worked on:
-* Created two branches for development(dev) and production(prod).
-* Merged pull request of the developer to main branches that was edited for session log.
-* Discussion for UI/UX and page layouts.
-* Task distribution.
-
-What I learned today:
-* Creating branches and making the status of all the branch to equal status.

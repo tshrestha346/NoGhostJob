@@ -10,6 +10,7 @@ what i learned:
 --> you can't push to main branch directly
 
 Questions :
+--> how to merge code to main branch
 --> how to merge code to main 
 
 
