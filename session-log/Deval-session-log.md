@@ -45,5 +45,5 @@
 
 ## 🚀 What I Worked On
 - Participated in a Scrum meeting with team members to review project progress
-- Discussed completed tasks and ongoing development Updates
+- Discussed completed tasks and ongoing Development Updates
 - Pushed the project feature list to GitHub Projects
