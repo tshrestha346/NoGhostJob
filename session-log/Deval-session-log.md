@@ -47,3 +47,9 @@
 - Participated in a Scrum meeting with team members to review project progress
 - Discussed completed tasks and ongoing development updates
 - Pushed the project feature list to GitHub Projects
+- Had discussion with team b about their idea and i share mine and we both get feedback about our idea
+- Had discussion with project Team Environment meet up  about their idea and i share mine and we both get feedback about our idea
+- Part 6 
+- Ans-1 User scenarios were best as they provide us with the clear path of how we should develop our product 
+- Ans-2  So one assumption from the user for our project that forced us to challenge is to we need to make the dashboard and the other part much easy to use so one can have idea with just a simple view of the website 
+
