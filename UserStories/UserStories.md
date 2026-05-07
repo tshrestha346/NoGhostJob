@@ -39,3 +39,17 @@ Reduces user fatigue and increases engagement.
 **Justification:**
 Addresses the “ghosting” problem and improves transparency.
 
+
+---
+
+## 🔹 User Story 4: CV Creation Tool
+
+### Actor: Sofia (Student / Fresher)
+
+**User Story:**
+> As a user, I want to create a CV using guided templates, so that I can build a professional resume easily.
+
+**Justification:**
+Helps new users enter the job market effectively.
+
+---
