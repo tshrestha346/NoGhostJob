@@ -1,39 +1,49 @@
-# Tuesday 28-04-2026
+# 📅 Tuesday, 28-04-2026 — Deval
 
-Deval 
+## 🚀 What I Worked On
+- Created and switched to a new branch named **`Deval`**
+- Created a session log `.md` file
+- Added the tasks completed during the day into the log file
+- Pulled the latest changes from the `main` branch before pushing code
+- Pushed the branch to the repository
+- Created a Pull Request (PR) for merging into the `main` branch
+- Successfully merged the code into the `main` branch
 
-What I worked on:
-* Created and switched a new branch of my name "Deval".
-* Created a session log md file.
-* Inseted the task that I did today.
-* Pulled the main branch before pushing the code 
-* Pushed my branch to repo.
-* Created pull request to main branch.
-* Merged the code.
+## 📚 What I Learned
+- Learned how to create and manage branches in GitHub
+- Became familiar with commonly used Git commands
+- Learned how to create and manage Pull Requests
+- Gained knowledge about **Agile Software Engineering**
+- Understood the roles and responsibilities of:
+  - **Scrum Master**
+  - **Product Owner**
 
+---
 
-What i learned :
-- How to create branch in github and get familiar with it commands
-- Also learned how to create pull request
-- Learned about agile software engineering and roles of the scrum master and the product owner
+# 📅 Thursday, 30-04-2026 — Deval
 
-# Thursday 30-04-26
+## 🚀 What I Worked On
+- Collaborated with team members to assist with their branches
+- Discussed and finalized the technology stack for project development
+- Participated in discussions about the project pages and overall structure
 
-Deval 
+## 📚 What I Learned
+- Improved teamwork and collaboration skills
+- Explored different websites and platforms for UI/UX design inspiration and development resources
 
-What I worked on:
--Work with others to help with their branch
--Discuss which stack should be used for development with team
--Discuss about the pages should be in project with team
+---
 
-What i learned:
--How to work in group 
--Learned about the different website that are avilable for design that can be used in the project
+# 📅 Tuesday, 05-05-2026 — Deval
 
-# Tuesday 05-05-26
+## 🚀 What I Worked On
+- Collaborated with team members for feature discussions
+- Created a feature folder and pushed it to the `main` branch
 
-Deval 
+---
 
-What I worked on:
--Work with others for feature discussion
--Create a feature folder and push it into the main branch 
+# 📅 Thursday, 07-05-2026 — Deval
+
+## 🚀 What I Worked On
+- Participated in a Scrum meeting with team members to review project progress
+- Discussed completed tasks and ongoing Development Updates
+- Pushed the project feature list to GitHub Projectss
