@@ -48,3 +48,15 @@ Addresses the “ghosting” problem and improves transparency.
 
 **Justification:**
 Helps new users enter the job market effectively.
+
+## 🔹 User Story 5: OTP-Based Login
+
+### Actor: Alex (User)
+
+**User Story:**
+> As a user, I want to log in using OTP authentication, so that I can access my account securely without remembering passwords.
+
+**Justification:**
+Enhances security while simplifying login experience.
+
+---

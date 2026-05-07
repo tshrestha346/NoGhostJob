@@ -44,3 +44,35 @@ what i learned:
 
 Questions :
 --> 
+
+
+## Thursday 05-05-2026
+Rohan
+
+#### Q: Which concept (personas / scenarios / user stories / features) was most useful for your project, and why?
+#### A:I believe that no ghosting feature is the very important feature of our project as in many job platform people are ghosted for days/months and then application is rejcted without any reason but in ourt platform company/HR will provide all the reasons for rejecting application
+#### 2: job posting and job application are also two important feature .
+
+#### Q: What is one assumption about your users that this workshop forced you to challenge?
+#### A: Another assumption the workshop forced us to challenge was that company managers would want to post very detailed, complex job descriptions.
+
+#### We initially thought that companies would provide full, exhaustive job requirements and responsibilities for every posting. However, through the workshop exercises with personas and scenarios, we realized that many managers prefer quick, simple job postings to save time, especially for entry-level or student roles. This made us reconsider the design of the job creation feature to allow both quick posts and more detailed options, rather than assuming every posting would be fully comprehensive.
+
+
+
+What I worked on :
+-->Scenarios of our project and our classmate project.
+-->created different user stories
+-->interviewed people and gave them suggestions 
+-->github commands
+
+
+what i learned:
+--> my peers projects 
+-->how to write user stories 
+--> Conduct SCRUM meeting 
+-->
+
+Questions : Architecture of project
+
+
