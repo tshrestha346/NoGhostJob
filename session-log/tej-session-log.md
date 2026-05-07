@@ -59,3 +59,16 @@
 ## What I learned today:
 * To conduct meeting with my team members and resolve the unresolved task.
 * Exchange feedbacks with other teams and share ideas of our projects.
+
+# Part 6 - Group Debrief
+### Reflection
+
+#### Which concept (personas / scenerios / user stories / features) was most useful for your project and why?
+=> Job Posting is the most useful concept because it forms the backbone of our platform. It enables the main interactions between students and companies, drives engagement, supports additional features, and provides actionable data for improving the platform.
+
+#### What is one assumption about your users that this workshop forced you to challenge?
+=> One assumption about our users that this workshop forced us to challenge is that all students would prefer to create their CVs directly on our platform.
+
+Initially, we assumed that students would want to use our CV builder as the main way to prepare job applications. However, through the workshop activities—such as persona analysis and user scenario discussions—we realized that many students already have existing CVs in Word, PDF, or LinkedIn formats, and may prefer uploading those rather than building a new one from scratch.
+
+This insight forced us to reconsider our approach and focus on making the platform compatible with existing CVs while keeping the CV creation feature optional, rather than assuming it would be the primary method for all users.
