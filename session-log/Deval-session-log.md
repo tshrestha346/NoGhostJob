@@ -60,4 +60,4 @@
 - Installed nginx server and run it commands
 - create index file and push into virtual machine server
 - run in on local server and transfer file betweeen the host and server using filezilla 
-- Completed all the task of today sessions.
+- Completed all the task of today sessionss.
