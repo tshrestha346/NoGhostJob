@@ -30,3 +30,12 @@ What I learned:
 * Creating Project with the help of Persona and Scenarios.
 
 # Tuesday 19-05-2026
+
+What I worked on:
+* Installed git and nginx on virtualbox server
+* Used filezilla and scp for file transfer
+* cloned git repo in virtualbox server
+
+What I learned:
+* How to transfer file from host to server
+* Best local server provider in germany and in india
