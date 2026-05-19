@@ -72,3 +72,20 @@
 Initially, we assumed that students would want to use our CV builder as the main way to prepare job applications. However, through the workshop activities—such as persona analysis and user scenario discussions—we realized that many students already have existing CVs in Word, PDF, or LinkedIn formats, and may prefer uploading those rather than building a new one from scratch.
 
 This insight forced us to reconsider our approach and focus on making the platform compatible with existing CVs while keeping the CV creation feature optional, rather than assuming it would be the primary method for all users.
+
+# Tuesday 12-05-2026
+
+## What I worked on:
+* Installing Virtual Box in Local Machine.
+* Installing UBUNTU Server in virtual box.
+* Configure ssh of virtual box serve in the local machine.
+* Install filezilla to transfer files.
+
+# Tuesday 19-05-2026
+
+## What I worked on:
+* Configure ssh of virtual box serve in the local machine.
+* Transfer files from local to virtual from sftp using filezilla.
+* Used scp command to transfer file from local to virtual server.
+* Installed nginx web server to start static website in the virtual box.
+* Changed the content of the index file to show updated content in the browser.
