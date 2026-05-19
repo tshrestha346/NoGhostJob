@@ -18,3 +18,15 @@ What I learned today:
 * How to push the code.
 * Make pull request.
 * Merge the pull request.
+
+# Tuesday 05-05-2026
+
+What I worked on:
+* Created a Persona 
+* Create a user scenario based on that persona.
+
+What I learned:
+* Using figma for making Persona and Scenario
+* Creating Project with the help of Persona and Scenarios.
+
+# Tuesday 19-05-2026
