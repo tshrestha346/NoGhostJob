@@ -76,3 +76,35 @@ what i learned:
 Questions : Architecture of project
 
 
+## Tuesday 12-05-2026
+
+Rohan
+What I worked on :
+--> downloading/setting up virtual machine
+-->downloading linux image and adding it to virtual machine
+
+
+what i learned:
+--> how to have more machines on a system
+
+
+Questions :
+--> ssh protocol
+--> scp and transfering data 
+
+## Tuesday 19-05-2026
+
+Rohan
+What I worked on :
+--> setting up virtual machine for use
+-->downloading nginx 
+--> ssh and scp command to transfer file
+
+what i learned:
+--> ssh and scp commands 
+--> nginx and sharing files with between local and host
+
+Questions :
+--> how pair it with github
+
+
