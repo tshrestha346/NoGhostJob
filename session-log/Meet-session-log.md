@@ -39,3 +39,14 @@ What I worked on:
 What I learned:
 * How to transfer file from host to server
 * Best local server provider in germany and in india.
+
+# Thursday 21-05-2026
+
+What I worked on:
+* Docker and Docker compose
+* Team discussion on project ppt
+* how to use nginx in docker
+
+What I learned:
+* How to create a container on docker and on docker-compose
+* how to actively update a file and see live change on website using docker
