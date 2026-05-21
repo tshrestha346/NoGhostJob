@@ -54,7 +54,7 @@
 - Ans-2  So one assumption from the user for our project that forced us to challenge is to we need to make the dashboard and the other part much easy to use so one can have idea with just a simple view of the website 
 
 
-`# 📅 Tuesday, 19-05-2026 — Deval`
+# 📅 Tuesday, 19-05-2026 — Deval`
 
 ## 🚀 What I Worked On
 - Installed nginx server and run it commands
@@ -63,3 +63,12 @@
 - Completed all the task of today sessionss.
 
 # 📅 Thursday, 21-05-2026 — Deval
+
+-Installed docker desktop 
+-Create the account and set it services
+-run nginx server on it and then run index.html file on it 
+-do the same thing but using docker composer 
+
+what i learned 
+-about the container
+-learn about docker and docker composer 
