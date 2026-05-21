@@ -89,3 +89,15 @@ This insight forced us to reconsider our approach and focus on making the platfo
 * Used scp command to transfer file from local to virtual server.
 * Installed nginx web server to start static website in the virtual box.
 * Changed the content of the index file to show updated content in the browser.
+
+# Thursday 21-05-2026
+
+## What I worked on:
+* Installed Docker-Desktop on windows local machine.
+* Pulled docker image and started in docker container.
+* Created docker image and docker-compose.yml file and it's structure.
+
+## What I learned today:
+* Learned commands of docker.
+* How to bind mount to share files between host and container.
+* Understood live development workflows with volumes
