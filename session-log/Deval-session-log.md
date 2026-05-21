@@ -64,11 +64,12 @@
 
 # 📅 Thursday, 21-05-2026 — Deval
 
--Installed docker desktop 
--Create the account and set it services
--run nginx server on it and then run index.html file on it 
--do the same thing but using docker composer 
+## what i do worked on
+- Installed docker desktop 
+- Create the account and set it services
+- run nginx server on it and then run index.html file on it 
+- do the same thing but using docker composer 
 
-what i learned 
--about the container
--learn about docker and docker composer 
+## what i learned 
+- about the container
+- learn about docker and docker composer.
