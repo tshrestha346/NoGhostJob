@@ -108,3 +108,18 @@ Questions :
 --> how pair it with github
 
 
+## Thrusday 21-05-2026
+
+Rohan
+What I worked on :
+--> Install Docker and Docker Compose
+--> Pull and run a containerized web server (nginx)
+--> Understand live development workflows with volumes
+--> Manage setups declaratively with docker
+
+what i learned:
+--> Use bind mounts to share files between host and container
+--> Understand live development workflows with volumes
+
+Questions :
+--> why use docker when we can use vs code
