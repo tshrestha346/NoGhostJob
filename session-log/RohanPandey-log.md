@@ -126,28 +126,28 @@ Questions :
 
 
 ## my logs from todays
-mysite  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
-mysite  | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
-mysite  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
-mysite  | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
-mysite  | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
-mysite  | /docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
-mysite  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
-mysite  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
-mysite  | /docker-entrypoint.sh: Configuration complete; ready for start up
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: using the "epoll" event method
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: nginx/1.31.0
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: built by gcc 15.2.0 (Alpine 15.2.0) 
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: OS: Linux 6.12.76-linuxkit
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker processes
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 30
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 31
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 32
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 33
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 34
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 35
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 36
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 37
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 38
-mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 39
+##### mysite  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+##### mysite  | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+##### mysite  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+##### mysite  | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+##### mysite  | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+##### mysite  | /docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+##### mysite  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+##### mysite  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+##### mysite  | /docker-entrypoint.sh: Configuration complete; ready for start up
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: using the "epoll" event method
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: nginx/1.31.0
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: built by gcc 15.2.0 (Alpine 15.2.0) 
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: OS: Linux 6.12.76-linuxkit
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker processes
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 30
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 31
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 32
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 33
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 34
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 35
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 36
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 37
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 38
+##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 39
