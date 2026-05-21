@@ -72,4 +72,4 @@
 
 ## what i learned 
 - about the container
-- learn about docker and docker composer 
+- learn about docker and docker composer.
