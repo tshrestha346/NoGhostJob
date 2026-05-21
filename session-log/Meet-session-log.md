@@ -38,4 +38,4 @@ What I worked on:
 
 What I learned:
 * How to transfer file from host to server
-* Best local server provider in germany and in india
+* Best local server provider in germany and in india.
