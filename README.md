@@ -1,7 +1,5 @@
 # NoGhostJob
 
-> One-sentence description of what this project does and who it is for.
-
 ## Team
 
 | Role | Name |
@@ -30,10 +28,10 @@ service-a  ──►  service-b
 
 | Layer | Technology | MERN Stack
 |---|---|
-| Frontend | |
-| Backend | |
-| Database | |
-| Deployment | |
+| Frontend |ReactJS|
+| Backend |ExpressJS|
+| Database |MongoDB|
+| Deployment |Vercel|
 
 ## Getting Started
 
@@ -69,6 +67,9 @@ The app will be available at `http://localhost:3000`.
 ## Documentation
 
 - [Vision Document](docs/vision.md)
+-Session log of each group partners is in the seesion log folder
+-Dev branch wil be use for development
+-Prod branch will be use for deployment
 
 
 ## License
