@@ -89,3 +89,29 @@ This insight forced us to reconsider our approach and focus on making the platfo
 * Used scp command to transfer file from local to virtual server.
 * Installed nginx web server to start static website in the virtual box.
 * Changed the content of the index file to show updated content in the browser.
+
+# Thursday 21-05-2026
+
+## What I worked on:
+* Installed Docker-Desktop on windows local machine.
+* Pulled docker image and started in docker container.
+* Created docker image and docker-compose.yml file and it's structure.
+
+## What I learned today:
+* Learned commands of docker.
+* How to bind mount to share files between host and container.
+* Understood live development workflows with volumes.
+
+## Docker container logs
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 38
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 39
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 40
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 41
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 42
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 43
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 44
+localsite  | 2026/05/21 18:19:30 [notice] 1#1: start worker process 45
+localsite  | 172.18.0.1 - - [21/May/2026:18:21:20 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
+localsite  | 172.18.0.1 - - [21/May/2026:18:21:27 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
+localsite  | 172.18.0.1 - - [21/May/2026:18:21:28 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
+localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
