@@ -151,3 +151,20 @@ Questions :
 ##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 37
 ##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 38
 ##### mysite  | 2026/05/21 17:51:29 [notice] 1#1: start worker process 39
+
+
+## Tuesday 26-05-2026
+
+Rohan
+What I worked on :
+-->delivered our presentation
+-->answered question regarding our project
+--> asked questions from other groups and gave them valuable suggestions
+
+what i learned:
+--> learned about different groups project
+--> like -: project on cultural events and volunteering and fashion projects 
+
+
+Questions :
+--> today was only presentation day so no questions 
