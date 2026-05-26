@@ -66,3 +66,28 @@ What i worked on :
 
 What i learned:
 * types of softeware architechture 
+
+# Tuesday 19-05-2026
+
+what i worked on :
+* Installed git and nginx on virtualbox server
+* used filezilla and scp for file transfer
+* clone git repo in vertualbox server
+
+what i learned :
+* how to transfer file from host to server
+* best local server provider in germany and in india.
+
+# Thursday 21-05-2026
+
+what i worked on:
+* Docker and Docker compose
+* Team Discussion on project ppt
+* How to use nginx in docker
+
+What i learned:
+* How to create a container on docker and on docker-compose	
+* How to actively update a file and see live change on website using docker
+
+#tuesday 26-05-2026
+* 	
