@@ -89,5 +89,10 @@ What i learned:
 * How to create a container on docker and on docker-compose	
 * How to actively update a file and see live change on website using docker
 
-#tuesday 26-05-2026
-* 	
+# Tuesday 26-05-2026
+ what i worked on:
+* Give mid-term presentation of our project
+
+what i learned:
+* how we can make our project different from the other similar Application/websites.
+
