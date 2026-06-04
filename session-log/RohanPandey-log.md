@@ -160,6 +160,7 @@ What I worked on :
 -->delivered our presentation
 -->answered question regarding our project
 --> asked questions from other groups and gave them valuable suggestions
+--> learned different types of architecture
 
 what i learned:
 --> learned about different groups project
@@ -168,3 +169,36 @@ what i learned:
 
 Questions :
 --> today was only presentation day so no questions 
+
+## Tuesday 02-06-2026
+Rohan
+What I worked on :
+-->started with MVC labs
+-->build frontend and backend 
+-->connected with docker 
+-->installed all requirements
+
+what i learned:
+--> how to build structure of the project 
+-->how to write text files
+-->how to create docker compose and docker file
+
+question:
+--> how to run front and backend
+
+
+## Thrusday 04-06-2026
+Rohan
+What I worked on :
+-->completed all 5 exercises
+-->build whole website  
+-->connexted everrything and working 
+-->styling added
+
+what i learned:
+--> how to connect database
+-->how to do run without reloading
+
+
+question:
+--> no questions everthing fertig
