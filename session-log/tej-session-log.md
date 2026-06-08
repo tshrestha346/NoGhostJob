@@ -115,3 +115,24 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:20 +0000] "GET / HTTP/1.1" 304 0 
 localsite  | 172.18.0.1 - - [21/May/2026:18:21:27 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
 localsite  | 172.18.0.1 - - [21/May/2026:18:21:28 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
 localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
+
+# Tuesday 02-06-2026
+
+## What I worked on:
+* Followed MVC pattern
+* Built frontend and backend using react structure and python fastAPI respectively.
+* Setup Dockerfile and docker-compose.yml file
+
+## What I learned today:
+* How to setup a project from scratch.
+* How to create Dockerfile and docker-compose.yml file and it's components structure.
+
+# Thursday 04-06-2026
+
+## What I worked on:
+* Successfully completed all 5 exercise.
+* Built whole website with own design.
+* SQLlite database connected.
+
+## What I learned today:
+* How to connect database
