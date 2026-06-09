@@ -103,3 +103,30 @@ mysite  | 2026/05/21 17:34:59 [notice] 1#1: start worker process 39
 mysite  | 2026/05/21 17:34:59 [notice] 1#1: start worker process 40
 mysite  | 2026/05/21 17:34:59 [notice] 1#1: start worker process 41
 mysite  | 172.18.0.1 - - [21/May/2026:17:35:12 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" "-"
+
+
+
+# 📅 Thursday, 28-05-2026 — Deval
+
+## what i do worked on
+- Implemented mcv struture 
+- completed the task one and two by setting up the structure 
+- able to run backend on the local host and able to send the data form backnd 
+
+## what i learned 
+- learned about the python
+- also learned how to set up the fastapi.
+
+# 📅 Thursday, 02-06-2026 — Deval
+
+## what i do worked on
+- Implemented mcv struture 
+- completed the task one and two by setting up the structure 
+- completed the frontend as well and backend and able to show the backend data in frontend.
+- completed the taks given in the excercise till 4
+- able to run backend on the local host and able to send the data form backnd 
+- create a crud thing in the react and same created its api in the backend
+
+## what i learned 
+- learned about the python
+- also learned how to set up the fastapi.
