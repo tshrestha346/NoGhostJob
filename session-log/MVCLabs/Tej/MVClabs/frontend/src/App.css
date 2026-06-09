@@ -1,0 +1,132 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 50%,
+    #6b46c1 100%
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.app {
+  width: 640px;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 2400px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.task-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.task-form input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.task-form button {
+  border: none;
+  padding: 14px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(
+    135deg,
+    #00c6ff,
+    #0072ff
+  );
+  transition: all 0.25s ease;
+}
+
+.task-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 114, 255, 0.35);
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.task-item span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.delete-btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  background: linear-gradient(
+    135deg,
+    #ff416c,
+    #ff4b2b
+  );
+  transition: all 0.25s ease;
+}
+
+.delete-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 75, 43, 0.35);
+}
+
+.empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 20px;
+  font-size: 1rem;
+}
