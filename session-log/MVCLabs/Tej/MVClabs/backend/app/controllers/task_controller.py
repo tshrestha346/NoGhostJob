@@ -21,7 +21,20 @@ def delete_task(task_id: int):
 #servic login
 class TaskService:
     def create_task(self, title: str) -> dict:
-        ... # assign next id , append, return the new task
-    
+        task = {
+            "id": self.next_id,
+            "title": title,
+        }
+        print(f"Creating task: {task}")
+        self.tasks.append(task)
+        self.next_id += 1
+
+        return task
+
     def delete_task(self, task_id: int) -> bool:
-        ... # return True if removed, False it not found
+        for task in self.tasks:
+            if task["id"] == task_id:
+                self.tasks.remove(task)
+                return True
+
+        return False

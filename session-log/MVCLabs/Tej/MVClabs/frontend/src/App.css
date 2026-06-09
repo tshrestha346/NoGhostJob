@@ -20,7 +20,7 @@ body {
 }
 
 .app {
-  width: 1000px;
+  width: 640px;
   display: flex;
   justify-content: center;
 }
