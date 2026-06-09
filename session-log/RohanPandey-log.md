@@ -202,3 +202,19 @@ what i learned:
 
 question:
 --> no questions everthing fertig
+
+## Thrusday 09-06-2026
+
+Rohan
+What I worked on :
+-->completed 1st exercise
+-->did sprint with team and checkd backlogs 
+-->started building authentication page
+
+
+what i learned:
+--> postgresql 
+--> how to use it in the project
+
+questions :
+-->nothing
