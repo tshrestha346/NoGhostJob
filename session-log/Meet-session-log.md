@@ -71,3 +71,28 @@ mysite  | 2026/05/21 18:05:45 [notice] 1#1: start worker process 33
 What I learned:
 * How to create a container on docker and on docker-compose
 * how to actively update a file and see live change on website using docker
+
+# Thursday, 28-05-2026
+
+what i do worked on:
+* Implemented mvc struture 
+* completed the task one and two by setting up the structure 
+* able to run backend on the local host and able to send the data form backnd 
+
+what i learned:
+* learned about the python
+* also learned how to set up the fastapi.
+
+# Thursday, 02-06-2026
+
+what i do worked on:
+* Implemented mcv struture 
+* completed the task one and two by setting up the structure 
+* completed the frontend as well and backend and able to show the backend data in frontend.
+* completed the taks given in the excercise till 4
+* able to run backend on the local host and able to send the data form backnd 
+* create a crud thing in the react and same created its api in the backend
+
+what i learned:
+* learned about the python
+* also learned how to set up the fastapi.
