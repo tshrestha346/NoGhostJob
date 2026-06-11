@@ -130,3 +130,29 @@ mysite  | 172.18.0.1 - - [21/May/2026:17:35:12 +0000] "GET / HTTP/1.1" 304 0 "-"
 ## what i learned 
 - learned about the python
 - also learned how to set up the fastapi.
+
+# 📅 Tuesday, 09-06-2026 — Deval
+
+## what i do worked on
+- Implemented the new stack 
+- Replace docker compose file with the code given us 
+- Add some code in the requirement text and also in main.py
+- create a new path db-ping and test and completed the acceptance of ex 1 
+
+## what i learned 
+- learned how to connect to the database 
+- got idea about how to create api in the python and then implement them 
+
+# 📅 Tuesday, 11-06-2026 — Deval
+
+## what i do worked on
+- Implemented the 6 code files of the 2 excercise  
+- Complete the empty function to make the api runny completely 
+- create schemas and define modals and other files as well and test them
+- redefine the ui in react and then test the api and achieve all the task of the exercise 2 
+
+## what i learned 
+- learned how to connect to the database 
+- got idea about how to create api in the python and then implement them 
+- also got to know the dbeaver 
+- Know different databse availabe in the dbeaver and how to connect them to the app i created 
