@@ -20,7 +20,7 @@ What I worked on :
 --> Work on UI framework 
 
 what i learned:
---> Different websites are there for get ideation of designing.
+--> Different websites are there for get ideation of designing.ss
 --> steps of developing project.
 
 Questions :
