@@ -94,5 +94,5 @@ What i learned:
 * Give mid-term presentation of our project
 
 what i learned:
-* how we can make our project different from the other similar Application/websites.
+* how we can make our project different from the other similar Application/websites..
 
