@@ -137,7 +137,7 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 
 ## What I learned today:
 * How to connect database SQLite databse.
 
-# Tuesday 10-06-2026
+# Tuesday 09-06-2026
 
 ## What I worked on:
 * Setting up new properties in docker-compose.yml to setup postgresql.
@@ -149,3 +149,14 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 
 
 ## Result of connecting postgresql (while running http://localhost:8000/db-ping):
 {"postgres":"PostgreSQL 17.10 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit"}
+
+# Thursday 11-06-2026
+
+## What I worked on:
+* Configuring PostgreSql in FastAPI
+* Establish new connection of PostgreSql in DBeaver
+* Connecting PostgreSql in FastAPI
+
+## What I learned today:
+* Configuration of PostgreSql
+* Database connection with FastAPI
