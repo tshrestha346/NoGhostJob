@@ -4,7 +4,12 @@ from app.controllers.task_controller import router as task_router
 from sqlalchemy import create_engine, text
 import os
 
+from app.database import Base, engine
+from app import models
+
 app = FastAPI(title="MVC Task API")
+
+Base.metadata.create_all(bind=engine)
 
 @app.get("/db-ping")
 def db_ping():
