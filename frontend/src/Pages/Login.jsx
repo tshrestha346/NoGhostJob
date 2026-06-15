@@ -87,7 +87,7 @@ function SocialBtn({ icon, label }) {
   );
 }
 
-export default function Login() {
+export default function Login({ onLoginSuccess }) {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -97,6 +97,7 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -109,6 +110,7 @@ export default function Login() {
     if (errors[name]) {
       setErrors((er) => ({ ...er, [name]: "" }));
     }
+    if (serverError) setServerError("");
   };
 
   const validate = () => {
@@ -126,16 +128,61 @@ export default function Login() {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setLoading(true);
+    setServerError("");
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      if (form.remember) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            _id: data._id,
+            fullName: data.fullName,
+            email: data.email,
+          })
+        );
+      } else {
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify({
+            _id: data._id,
+            fullName: data.fullName,
+            email: data.email,
+          })
+        );
+      }
+
       setLoading(false);
       setSuccess(true);
-    }, 1400);
+
+      if (onLoginSuccess) {
+        setTimeout(() => onLoginSuccess(data), 1400);
+      }
+    } catch (err) {
+      setLoading(false);
+      setServerError(err.message || "Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -294,6 +341,15 @@ export default function Login() {
                 <div className="flex-1 h-px bg-[#DDEAFC]" />
               </div>
 
+              {serverError && (
+                <div className="mb-5 flex items-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 py-2.5">
+                  <span className="text-sm text-red-600">⚠</span>
+                  <span className="text-sm font-medium text-red-600">
+                    {serverError}
+                  </span>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} noValidate>
                 <AuthInput
                   label="Email Address"
@@ -341,7 +397,8 @@ export default function Login() {
                     </span>
                   </label>
 
-                  <a
+                  
+                    <a
                     href="#"
                     className="text-sm text-blue-700 font-semibold no-underline"
                   >

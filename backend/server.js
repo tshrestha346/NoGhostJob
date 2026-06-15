@@ -1,27 +1,29 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const connectDB = require("./config/db");
 
-const PORT = process.env.PORT || 5000;
+dotenv.config();
+connectDB();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req,res) => {
-    res.send('API is running.');
-});
+// Routes
+app.use("/api/auth", require("./routes/authrRoutes"));
 
-mongoose.connect(process.env.MONGODB)
-  .then(() => {
-    console.log('Database Connected');
-  })
-  .catch((error) => {
-    console.error('Database connection failed:', error);
+// Protected test route
+const protect = require("./middleware/authMiddleware");
+
+app.get("/api/dashboard", protect, (req, res) => {
+  res.json({
+    message: "Welcome to protected dashboard",
+    user: req.user,
   });
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
 });
+
+app.listen(process.env.PORT, () =>
+  console.log(`Server running on port ${process.env.PORT}`)
+);
