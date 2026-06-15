@@ -37,6 +37,13 @@ export default function Navbar() {
           >
             Home
           </Link>
+          
+           <Link
+            to="/Contact"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Contact Us
+          </Link>
         </div>
 
         {/* Desktop Actions */}
