@@ -157,7 +157,7 @@ function StepDot({ n, active, done }) {
   );
 }
 
-export default function Register() {
+export default function Register({ onRegisterSuccess }) {
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -169,6 +169,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -178,6 +179,7 @@ export default function Register() {
     if (errors[name]) {
       setErrors((er) => ({ ...er, [name]: "" }));
     }
+    if (serverError) setServerError("");
   };
 
   const validate = () => {
@@ -204,17 +206,51 @@ export default function Register() {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) return;
 
     setLoading(true);
+    setServerError("");
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          _id: data._id,
+          fullName: data.fullName,
+          email: data.email,
+        })
+      );
+
       setLoading(false);
       setSuccess(true);
-    }, 1500);
+
+      if (onRegisterSuccess) {
+        setTimeout(() => onRegisterSuccess(data), 1500);
+      }
+    } catch (err) {
+      setLoading(false);
+      setServerError(err.message || "Something went wrong. Please try again.");
+    }
   };
 
   const step =
@@ -422,6 +458,15 @@ export default function Register() {
                 </span>
                 <div className="h-px flex-1 bg-[#DDEAFC]" />
               </div>
+
+              {serverError && (
+                <div className="mb-5 flex items-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 py-2.5">
+                  <span className="text-sm text-red-600">⚠</span>
+                  <span className="text-sm font-medium text-red-600">
+                    {serverError}
+                  </span>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} noValidate>
                 <AuthInput
