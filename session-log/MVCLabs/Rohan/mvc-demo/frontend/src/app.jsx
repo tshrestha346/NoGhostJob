@@ -51,6 +51,15 @@ export default function App() {
     }
   }
 
+  async function fetchUser() {
+    try {
+      const user = await fetchUser();
+      console.log("Current user:", user);
+    } catch (e) {
+      console.error("Failed to fetch user:", e);
+    }
+  }
+
   return (
     <div className={styles.wrap}>
       <h1 className={styles.h1}>Tasks</h1>
