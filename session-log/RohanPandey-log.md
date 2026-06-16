@@ -232,6 +232,7 @@ what i learned:
 
 questions :
 -->third exercise frontend not working
+--> nothing else
 
 
 
