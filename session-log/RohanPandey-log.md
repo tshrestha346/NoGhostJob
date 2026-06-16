@@ -218,3 +218,20 @@ what i learned:
 
 questions :
 -->nothing
+
+## Thrusday 16-06-2026
+
+Rohan
+What I worked on : 
+-->completed 2nd task
+--> completed 3rd task backend
+
+what i learned:
+--> postgresql 
+--> how to use it in the project
+
+questions :
+-->third exercise frontend not working
+
+
+
