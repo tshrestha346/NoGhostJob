@@ -160,3 +160,21 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 
 ## What I learned today:
 * Configuration of PostgreSql
 * Database connection with FastAPI
+
+# Tuesday 16-06-2026
+
+## What I worked on:
+* Creating User related schema and CRUD
+* Updating database tables when new tables/models are added
+
+## What I learned today:
+* How to add new schema and update database tables accordingly
+
+# Thursday 18-06-2026
+
+## What I worked on:
+* Connecting database and retrieving the data
+* Installing alembic and upgrading the migrations
+
+## What I learned today:
+* How to install alembic to constantly upgrade the tables of database when columns are added
