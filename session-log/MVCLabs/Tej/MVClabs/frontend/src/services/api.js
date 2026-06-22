@@ -10,13 +10,13 @@ export async function fetchTasks() {
   return response.json();
 }
 
-export async function createTask(title) {
+export async function createTask(title, owner_id) {
   const response = await fetch(`${BASE}/tasks`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, owner_id }),
   });
 
   if (!response.ok) {
@@ -34,4 +34,30 @@ export async function deleteTask(id) {
   if (!response.ok) {
     throw new Error("Failed to delete task");
   }
+}
+
+export async function fetchUsers() {
+  const response = await fetch(`${BASE}/users`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch users");
+  }
+
+  return response.json();
+}
+
+export async function createUser(name) {
+  const response = await fetch(`${BASE}/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create user");
+  }
+
+  return response.json();
 }

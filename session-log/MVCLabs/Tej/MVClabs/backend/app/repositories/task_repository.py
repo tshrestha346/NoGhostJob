@@ -26,30 +26,47 @@
 
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import Session, joinedload
+import json
 from app.models import Task
+from app.models import User
 
 class TaskRepository:
     def __init__(self, db: Session):
         self._db = db
-    
+
     def all(self) -> list[Task]:
-        return self._db.execute(select(Task)).scalars().all()
+
+        stmt = (
+            select(Task)
+            .options(joinedload(Task.owner))
+        )
+
+        tasks = self._db.execute(stmt).scalars().all()
+
+        return [
+            {
+                "id": task.id,
+                "title": task.title,
+                "owner_id": task.owner_id,
+                "owner_name": task.owner.name
+            }
+            for task in tasks
+        ]
 
     def find(self, task_id: int) -> Task | None:
         return self._db.get(Task, task_id)
     
-    def add(self, title: str) -> Task:
-        task = Task(title=title)
+    def add(self, title: str, owner_id: int) -> Task:
+        task = Task(title=title, owner_id=owner_id)
         self._db.add(task)
         self._db.commit()
         self._db.refresh(task)
         return task
 
-    def remove(self, task_id: int) -> bool:
+    def remove(self, task_id: int, owner_id: int) -> bool:
         task = self._db.get(Task, task_id)
-        if task:
+        if task and task.owner_id == owner_id:
             self._db.delete(task)
             self._db.commit()
             return True

@@ -1,15 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.controllers.task_controller import router as task_router
+from app.controllers.user_controller import router as user_router
 from sqlalchemy import create_engine, text
 import os
 
 from app.database import Base, engine
 from app import models
 
+from sqlalchemy import select
+from app.database import SessionLocal
+from app.models import User
+
 app = FastAPI(title="MVC Task API")
 
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 @app.get("/db-ping")
 def db_ping():
@@ -26,3 +31,13 @@ app.add_middleware(
 )
 
 app.include_router(task_router, prefix="/tasks", tags=["tasks"])
+app.include_router(user_router, prefix="/users", tags=["users"])
+
+
+def seed_users():
+    with SessionLocal() as session:
+        if not session.execute(select(User)).first():
+            session.add_all([User(name="Alice"), User(name="Bob")])
+            session.commit()
+
+seed_users()
