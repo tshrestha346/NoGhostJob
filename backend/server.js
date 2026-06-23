@@ -13,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", require("./routes/authrRoutes"));
+app.use("/api/", require("./routes/authrRoutes")); // Contact route
 
 // Protected test route
 const protect = require("./middleware/authMiddleware");
