@@ -79,7 +79,13 @@ const offices = [
 ];
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", company: "", subject: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    subject: "",
+    message: "",
+  });
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState(null);
 
@@ -107,8 +113,30 @@ export default function ContactPage() {
     marginBottom: "7px",
   };
 
-  const handleSubmit = () => {
-    if (form.name && form.email && form.message) setSubmitted(true);
+  // const handleSubmit = () => {
+  //   if (form.name && form.email && form.message) setSubmitted(true);
+  // };
+
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.message) return;
+
+    try {
+      const res = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSubmitted(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -160,8 +188,8 @@ export default function ContactPage() {
             margin: "0 auto",
           }}
         >
-          Whether you're exploring a new initiative or ready to engage, our team responds within
-          one business day.
+          Whether you're exploring a new initiative or ready to engage, our team
+          responds within one business day.
         </p>
       </section>
 
@@ -191,8 +219,16 @@ export default function ContactPage() {
 
           {[
             { icon: "✉", label: "General Inquiries", val: "hello@nexvara.com" },
-            { icon: "✉", label: "Business Development", val: "partners@nexvara.com" },
-            { icon: "☏", label: "Global Headquarters", val: "+1 (212) 555-0190" },
+            {
+              icon: "✉",
+              label: "Business Development",
+              val: "partners@nexvara.com",
+            },
+            {
+              icon: "☏",
+              label: "Global Headquarters",
+              val: "+1 (212) 555-0190",
+            },
             { icon: "☏", label: "Support Hotline", val: "+1 (800) 555-0444" },
           ].map((item, i) => (
             <div
@@ -236,7 +272,13 @@ export default function ContactPage() {
                 >
                   {item.label}
                 </div>
-                <div style={{ fontSize: "14px", color: colors.navy, fontWeight: 500 }}>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    color: colors.navy,
+                    fontWeight: 500,
+                  }}
+                >
                   {item.val}
                 </div>
               </div>
@@ -270,7 +312,8 @@ export default function ContactPage() {
                 style={{
                   marginBottom: i < 2 ? "16px" : 0,
                   paddingBottom: i < 2 ? "16px" : 0,
-                  borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                  borderBottom:
+                    i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
                 }}
               >
                 <div
@@ -281,7 +324,13 @@ export default function ContactPage() {
                     marginBottom: "3px",
                   }}
                 >
-                  <span style={{ fontSize: "13px", fontWeight: 600, color: colors.white }}>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: colors.white,
+                    }}
+                  >
                     {o.city}
                   </span>
                   <span
@@ -299,7 +348,9 @@ export default function ContactPage() {
                     {o.country}
                   </span>
                 </div>
-                <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>
+                <div
+                  style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}
+                >
                   {o.address}
                 </div>
               </div>
@@ -355,12 +406,28 @@ export default function ContactPage() {
               >
                 Message Received
               </h3>
-              <p style={{ color: colors.gray, fontSize: "15px", lineHeight: 1.7, margin: 0 }}>
-                Thank you, <strong>{form.name}</strong>. A member of our team will be in touch
-                within one business day.
+              <p
+                style={{
+                  color: colors.gray,
+                  fontSize: "15px",
+                  lineHeight: 1.7,
+                  margin: 0,
+                }}
+              >
+                Thank you, <strong>{form.name}</strong>. A member of our team
+                will be in touch within one business day.
               </p>
               <button
-                onClick={() => { setSubmitted(false); setForm({ name: "", email: "", company: "", subject: "", message: "" }); }}
+                onClick={() => {
+                  setSubmitted(false);
+                  setForm({
+                    name: "",
+                    email: "",
+                    company: "",
+                    subject: "",
+                    message: "",
+                  });
+                }}
                 style={{
                   marginTop: "8px",
                   padding: "10px 28px",
@@ -389,7 +456,14 @@ export default function ContactPage() {
               >
                 Send Us a Message
               </h3>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "16px",
+                  marginBottom: "16px",
+                }}
+              >
                 <div>
                   <label style={labelStyle}>Full Name *</label>
                   <input
@@ -408,21 +482,32 @@ export default function ContactPage() {
                     type="email"
                     placeholder="jane@company.com"
                     value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
                     onFocus={() => setFocused("email")}
                     onBlur={() => setFocused(null)}
                     style={inputStyle("email")}
                   />
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "16px",
+                  marginBottom: "16px",
+                }}
+              >
                 <div>
                   <label style={labelStyle}>Company</label>
                   <input
                     type="text"
                     placeholder="Acme Corp"
                     value={form.company}
-                    onChange={(e) => setForm({ ...form, company: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, company: e.target.value })
+                    }
                     onFocus={() => setFocused("company")}
                     onBlur={() => setFocused(null)}
                     style={inputStyle("company")}
@@ -434,7 +519,9 @@ export default function ContactPage() {
                     type="text"
                     placeholder="How can we help?"
                     value={form.subject}
-                    onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, subject: e.target.value })
+                    }
                     onFocus={() => setFocused("subject")}
                     onBlur={() => setFocused(null)}
                     style={inputStyle("subject")}
@@ -446,15 +533,29 @@ export default function ContactPage() {
                 <textarea
                   placeholder="Tell us about your project, goals, or any questions you have..."
                   value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, message: e.target.value })
+                  }
                   onFocus={() => setFocused("message")}
                   onBlur={() => setFocused(null)}
                   rows={5}
-                  style={{ ...inputStyle("message"), resize: "vertical", lineHeight: 1.6 }}
+                  style={{
+                    ...inputStyle("message"),
+                    resize: "vertical",
+                    lineHeight: 1.6,
+                  }}
                 />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "12px", color: colors.gray }}>* Required fields</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ fontSize: "12px", color: colors.gray }}>
+                  * Required fields
+                </span>
                 <button
                   onClick={handleSubmit}
                   style={{
@@ -491,7 +592,13 @@ export default function ContactPage() {
       >
         <p style={{ color: colors.gray, fontSize: "14px", margin: 0 }}>
           Prefer a direct conversation?{" "}
-          <span style={{ color: colors.blueMid, fontWeight: 600, cursor: "pointer" }}>
+          <span
+            style={{
+              color: colors.blueMid,
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
             Schedule a 30-minute discovery call
           </span>{" "}
           with one of our solutions consultants.
