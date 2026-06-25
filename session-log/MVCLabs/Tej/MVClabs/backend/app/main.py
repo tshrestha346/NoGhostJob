@@ -12,9 +12,11 @@ from sqlalchemy import select
 from app.database import SessionLocal
 from app.models import User
 
+from app.auth.hashing import hash_password
+
 app = FastAPI(title="MVC Task API")
 
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 @app.get("/db-ping")
 def db_ping():
@@ -39,5 +41,15 @@ def seed_users():
         if not session.execute(select(User)).first():
             session.add_all([User(name="Alice"), User(name="Bob")])
             session.commit()
+
+    with SessionLocal() as db:
+        if db.scalars(select(User)).first() is not None:
+            return
+        
+        db.add_all([
+            User(name="alice", password_hash=hash_password("password123")),
+            User(name="bob", password_hash=hash_password("password123")),
+        ])
+        db.commit()
 
 seed_users()

@@ -10,6 +10,8 @@ router = APIRouter()
 
 @router.get("/", response_model = list[UserSchema])
 def list_users(db: Session = Depends(get_db)):
+    if not db.scalars(select(User)).all():
+        raise HTTPException(status_code=404, detail="No users found!")
     return list(db.scalars(select(User)))
 
 @router.get("/{user_id}/tasks", response_model = list[TaskSchema])
