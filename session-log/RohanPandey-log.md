@@ -219,7 +219,7 @@ what i learned:
 questions :
 -->nothing
 
-## Thrusday 16-06-2026
+## Thrusday 11-06-2026
 
 Rohan
 What I worked on : 
@@ -234,5 +234,58 @@ questions :
 -->third exercise frontend not working
 --> nothing else
 
+## Tuesday 16-06-2026
+Rohan
+What I worked on : 
+-->completed 3rd task
+--> completed 4th exercise
+
+what i learned:
+--> postgresql 
+--> how to use it in the project
+
+questions :
+--> Frontend unable to load users
+--> nothing else
+
+## Thrusday 18-06-2026
+Rohan
+What I worked on : 
+-->Started with first exercise
+--> Partially completed that exercise
+
+what i learned:
+--> How to add authentication and authorisation in the project
+--> how to use it in the project
+
+questions :
+--> Unable to do full exercise
+--> nothing else
+
+## Tuesday 23-06-2026
+Rohan
+What I worked on : 
+-->integrated authorisation in  backend 
+--> connected dbeaver and password is showing
+
+what i learned:
+--> how to add password to our application
+--> how to use it in the project
+
+questions :
+--> unable to do exercise 2
+
+
+## Thrusday 25-06-2026
+Rohan
+What I worked on : 
+-->exercise 1 and 2
+
+what i learned:
+--> how to add password to our application
+--> how to use it in the project
+
+questions :
+--> unable to do exercise 2
 
 
