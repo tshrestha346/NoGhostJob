@@ -14,12 +14,48 @@ export default function ContactPage() {
     subject: "",
     message: "",
   });
+  // const [submitted, setSubmitted] = useState(false);
+  const [focused, setFocused] = useState(null);
+
+  const inputStyle = (field) => ({
+    width: "100%",
+    padding: "11px 14px",
+    borderRadius: "8px",
+    border: `1.5px solid ${focused === field ? colors.blueMid : colors.border}`,
+    background: focused === field ? colors.white : colors.offWhite,
+    fontSize: "14px",
+    color: colors.navy,
+    outline: "none",
+    boxSizing: "border-box",
+    transition: "border-color 0.2s, background 0.2s",
+    fontFamily: "inherit",
+  });
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = () => {
-    if (form.name && form.email && form.message) {
-      setSubmitted(true);
+  // const handleSubmit = () => {
+  //   if (form.name && form.email && form.message) setSubmitted(true);
+  // };
+
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.message) return;
+
+    try {
+      const res = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSubmitted(true);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -237,7 +273,7 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setForm({ ...form, message: e.target.value })
                   }
-                  className={⁠ ${inputClass} resize-y leading-7 ⁠}
+                  className={`${inputClass} resize-y leading-7`}
                 />
               </div>
 
