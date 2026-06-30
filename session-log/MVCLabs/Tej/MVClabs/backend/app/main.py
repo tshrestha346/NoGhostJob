@@ -13,6 +13,7 @@ from app.database import SessionLocal
 from app.models import User
 
 from app.auth.hashing import hash_password
+from app.controllers.auth_controller import router as auth_router
 
 app = FastAPI(title="MVC Task API")
 
@@ -34,7 +35,7 @@ app.add_middleware(
 
 app.include_router(task_router, prefix="/tasks", tags=["tasks"])
 app.include_router(user_router, prefix="/users", tags=["users"])
-
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 def seed_users():
     with SessionLocal() as session:

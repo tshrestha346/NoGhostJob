@@ -12,9 +12,12 @@ class UserRepository:
 
     def find(self, user_id: int) -> User | None:
         return self._db.get(User, user_id)
+    
+    def find_by_name(self, name: str) -> User | None:
+        return self._db.scalars(select(User).where(User.name == name)).first()
 
-    def add(self, name: str) -> User:
-        user = User(name=name)
+    def add(self, name: str, password_hash: str) -> User:
+        user = User(name=name, password_hash=hash(password_hash))
         self._db.add(user)
         self._db.commit()
         self._db.refresh(user)
@@ -23,6 +26,7 @@ class UserRepository:
     def remove(self, user_id: int) -> User | None:
         user = self._db.get(User, user_id)
         if user:
+
             self._db.delete(user)
             self._db.commit()
             return user
