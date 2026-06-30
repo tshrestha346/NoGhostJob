@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed": "node seed/seedData.js"
   },
   "keywords": [],
   "author": "Tej Bahadur Shrestha <tshrestha346@gmail.com> (https://github.com/tshrestha346/NoGhostJob)",

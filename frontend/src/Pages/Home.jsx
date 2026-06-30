@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  fetchJobs,
+  fetchCompanies,
+  fetchCategories,
+  fetchTestimonials,
+  subscribeNewsletter,
+} from "../services/api";
 
 function Counter({ end, suffix = "+" }) {
   const [val, setVal] = useState(0);
@@ -45,7 +52,9 @@ function Stars({ value }) {
       {[1, 2, 3, 4, 5].map((i) => (
         <span
           key={i}
-          className={`text-sm ${i <= Math.round(value) ? "text-amber-500" : "text-[#DDEAFC]"}`}
+          className={`text-sm ${
+            i <= Math.round(value) ? "text-amber-500" : "text-[#DDEAFC]"
+          }`}
         >
           ★
         </span>
@@ -69,70 +78,37 @@ const STATS = [
   { val: 75000, label: "Successful Hires", icon: "📈" },
 ];
 
-const CATEGORIES = [
-  { name: "Development", icon: "⌨️", jobs: 1245 },
-  { name: "Design", icon: "🎨", jobs: 892 },
-  { name: "Marketing", icon: "📣", jobs: 654 },
-  { name: "AI / ML", icon: "🤖", jobs: 432 },
-  { name: "Cybersecurity", icon: "🔒", jobs: 321 },
-  { name: "Finance", icon: "💰", jobs: 567 },
-];
-
-const COMPANIES = [
-  { name: "Google", initials: "G", color: "#4285F4", rating: 4.9, openings: 234 },
-  { name: "Microsoft", initials: "Ms", color: "#00A4EF", rating: 4.8, openings: 189 },
-  { name: "Amazon", initials: "A", color: "#FF9900", rating: 4.7, openings: 456 },
-  { name: "Apple", initials: "🍎", color: "#555", rating: 4.9, openings: 167 },
-  { name: "Meta", initials: "M", color: "#0866FF", rating: 4.6, openings: 234 },
-  { name: "Netflix", initials: "N", color: "#E50914", rating: 4.8, openings: 98 },
-];
-
-const JOBS = [
-  { title: "Senior React Developer", company: "Google", loc: "San Francisco", type: "Full Time", sal: "$130k–$160k", logo: "G", lc: "#4285F4" },
-  { title: "Product Designer", company: "LinkedIn", loc: "Remote", type: "Remote", sal: "$95k–$120k", logo: "in", lc: "#0077B5" },
-  { title: "AI / ML Engineer", company: "OpenAI", loc: "San Francisco", type: "Full Time", sal: "$155k–$185k", logo: "AI", lc: "#10a37f" },
-  { title: "Cybersecurity Analyst", company: "Microsoft", loc: "London", type: "Hybrid", sal: "$100k–$130k", logo: "Ms", lc: "#00A4EF" },
-  { title: "Frontend Engineer", company: "Stripe", loc: "New York", type: "Hybrid", sal: "$120k–$150k", logo: "S", lc: "#635BFF" },
-  { title: "Data Scientist", company: "Airbnb", loc: "Remote", type: "Remote", sal: "$115k–$140k", logo: "Ai", lc: "#FF5A5F" },
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Sarah Johnson",
-    role: "Senior Developer at Google",
-    initials: "SJ",
-    color: "#1565C0",
-    rating: 5,
-    text: "CareerHub helped me land my dream role at Google. The platform's job recommendations were spot-on and the process was incredibly smooth.",
-  },
-  {
-    name: "Michael Chen",
-    role: "Product Manager at Amazon",
-    initials: "MC",
-    color: "#FF9900",
-    rating: 5,
-    text: "Best job portal I've ever used. I had interviews within days and received multiple competing offers — couldn't be happier.",
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "UX Designer at Microsoft",
-    initials: "ER",
-    color: "#00A4EF",
-    rating: 5,
-    text: "The AI job matching is genuinely impressive. It found positions that perfectly matched my skills and long-term career goals.",
-  },
-];
-
 const FEATURES = [
-  { icon: "⚡", title: "Fast Hiring Process", desc: "Get matched with top companies in record time and skip the endless waiting." },
-  { icon: "✅", title: "Verified Companies", desc: "Every company on our platform is thoroughly vetted for legitimacy and culture." },
-  { icon: "🤖", title: "AI Job Matching", desc: "Smart algorithms analyze your profile and surface your most relevant opportunities." },
-  { icon: "🌐", title: "Remote Opportunities", desc: "Access thousands of remote-first positions from global leading companies." },
+  {
+    icon: "⚡",
+    title: "Fast Hiring Process",
+    desc: "Get matched with top companies in record time and skip the endless waiting.",
+  },
+  {
+    icon: "✅",
+    title: "Verified Companies",
+    desc: "Every company on our platform is thoroughly vetted for legitimacy and culture.",
+  },
+  {
+    icon: "🤖",
+    title: "AI Job Matching",
+    desc: "Smart algorithms analyze your profile and surface your most relevant opportunities.",
+  },
+  {
+    icon: "🌐",
+    title: "Remote Opportunities",
+    desc: "Access thousands of remote-first positions from global leading companies.",
+  },
 ];
 
-function Hero() {
+function Hero({ setJobs }) {
   const [kw, setKw] = useState("");
   const [loc, setLoc] = useState("");
+
+  async function handleSearch() {
+    const data = await fetchJobs(kw, loc);
+    setJobs(data);
+  }
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#07192E] via-[#0D2B4A] to-[#1565C0] px-5 py-20 text-center sm:px-8 lg:px-12 lg:py-24">
@@ -191,20 +167,12 @@ function Hero() {
             />
           </div>
 
-          <button className="rounded-xl bg-gradient-to-br from-blue-700 to-blue-400 px-7 py-3.5 text-sm font-bold text-white shadow-[0_6px_20px_rgba(21,101,192,0.35)]">
+          <button
+            onClick={handleSearch}
+            className="rounded-xl bg-gradient-to-br from-blue-700 to-blue-400 px-7 py-3.5 text-sm font-bold text-white shadow-[0_6px_20px_rgba(21,101,192,0.35)]"
+          >
             Search
           </button>
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-3">
-          {["React", "Python", "Product Design", "Remote", "AI/ML"].map((tag) => (
-            <span
-              key={tag}
-              className="cursor-pointer rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white/75"
-            >
-              {tag}
-            </span>
-          ))}
         </div>
       </div>
     </section>
@@ -216,7 +184,10 @@ function StatsStrip() {
     <section className="border-y border-blue-200 bg-blue-50 px-5 py-9 sm:px-8 lg:px-12">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 lg:grid-cols-4">
         {STATS.map((s) => (
-          <div key={s.label} className="text-center lg:border-r lg:border-blue-200 last:border-r-0">
+          <div
+            key={s.label}
+            className="text-center lg:border-r lg:border-blue-200 last:border-r-0"
+          >
             <div className="mb-1 text-3xl">{s.icon}</div>
             <div className="font-serif text-3xl font-extrabold leading-none text-blue-700">
               <Counter end={s.val} />
@@ -263,7 +234,11 @@ function JobCard({ job }) {
       <div className="flex items-center gap-2">
         <span className="text-base font-bold text-blue-700">{job.sal}</span>
         <span className="flex-1" />
-        <span className={`rounded-full border px-2.5 py-1 text-[11px] font-bold ${typeClass[job.type]}`}>
+        <span
+          className={`rounded-full border px-2.5 py-1 text-[11px] font-bold ${
+            typeClass[job.type] || "border-blue-200 bg-blue-50 text-blue-700"
+          }`}
+        >
           {job.type}
         </span>
       </div>
@@ -275,7 +250,7 @@ function JobCard({ job }) {
   );
 }
 
-function FeaturedJobs() {
+function FeaturedJobs({ jobs }) {
   return (
     <section className="bg-white px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
@@ -290,22 +265,20 @@ function FeaturedJobs() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {JOBS.map((j) => (
-            <JobCard key={`${j.title}-${j.company}`} job={j} />
-          ))}
-        </div>
-
-        <div className="mt-9 text-center">
-          <button className="rounded-xl border-[1.5px] border-[#DDEAFC] bg-transparent px-9 py-3 text-sm font-bold text-blue-700 transition hover:bg-blue-50">
-            View All Jobs →
-          </button>
+          {jobs.length > 0 ? (
+            jobs.map((j) => <JobCard key={j._id} job={j} />)
+          ) : (
+            <p className="col-span-full text-center text-slate-500">
+              No jobs found.
+            </p>
+          )}
         </div>
       </div>
     </section>
   );
 }
 
-function TopCompanies() {
+function TopCompanies({ companies }) {
   return (
     <section className="border-t border-[#DDEAFC] bg-[#F7FAFF] px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
@@ -320,13 +293,13 @@ function TopCompanies() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {COMPANIES.map((co) => (
+          {companies.map((co) => (
             <div
-              key={co.name}
+              key={co._id}
               className="cursor-pointer rounded-2xl border-[1.5px] border-[#DDEAFC] bg-white px-3 py-5 text-center transition-all duration-200 hover:-translate-y-1 hover:border-blue-400 hover:shadow-[0_8px_28px_rgba(21,101,192,0.12)]"
             >
               <div
-                className="mx-auto mb-3 flex h-13 w-13 items-center justify-center rounded-xl border text-base font-extrabold"
+                className="mx-auto mb-3 flex items-center justify-center rounded-xl border text-base font-extrabold"
                 style={{
                   width: 52,
                   height: 52,
@@ -338,7 +311,9 @@ function TopCompanies() {
                 {co.initials}
               </div>
 
-              <div className="mb-1 text-sm font-bold text-[#07192E]">{co.name}</div>
+              <div className="mb-1 text-sm font-bold text-[#07192E]">
+                {co.name}
+              </div>
               <Stars value={co.rating} />
               <div className="mt-1 text-[11px] text-slate-500">
                 {co.openings} openings
@@ -351,7 +326,7 @@ function TopCompanies() {
   );
 }
 
-function Categories() {
+function Categories({ categories }) {
   return (
     <section className="bg-white px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
@@ -364,9 +339,9 @@ function Categories() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <div
-              key={cat.name}
+              key={cat._id}
               className="group flex cursor-pointer items-center gap-4 rounded-2xl border-[1.5px] border-[#DDEAFC] bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-blue-300 hover:bg-blue-50 hover:shadow-[0_8px_28px_rgba(21,101,192,0.12)]"
             >
               <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-xl border border-blue-200 bg-blue-50 text-2xl">
@@ -378,7 +353,7 @@ function Categories() {
                   {cat.name}
                 </div>
                 <div className="text-sm text-slate-500">
-                  {cat.jobs.toLocaleString()} open positions
+                  {cat.jobs?.toLocaleString()} open positions
                 </div>
               </div>
 
@@ -428,9 +403,12 @@ function WhyUs() {
   );
 }
 
-function Testimonials() {
+function Testimonials({ testimonials }) {
   const [active, setActive] = useState(0);
-  const t = TESTIMONIALS[active];
+
+  if (!testimonials || testimonials.length === 0) return null;
+
+  const t = testimonials[active];
 
   return (
     <section className="bg-white px-5 py-20 sm:px-8 lg:px-12">
@@ -464,13 +442,15 @@ function Testimonials() {
 
           <div className="mt-6 flex items-center justify-center gap-2">
             <button
-              onClick={() => setActive((active - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
+              onClick={() =>
+                setActive((active - 1 + testimonials.length) % testimonials.length)
+              }
               className="flex h-7 w-7 items-center justify-center rounded-full border border-[#DDEAFC] text-slate-500"
             >
               ‹
             </button>
 
-            {TESTIMONIALS.map((_, i) => (
+            {testimonials.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
@@ -481,7 +461,7 @@ function Testimonials() {
             ))}
 
             <button
-              onClick={() => setActive((active + 1) % TESTIMONIALS.length)}
+              onClick={() => setActive((active + 1) % testimonials.length)}
               className="flex h-7 w-7 items-center justify-center rounded-full border border-[#DDEAFC] text-slate-500"
             >
               ›
@@ -496,6 +476,22 @@ function Testimonials() {
 function Newsletter() {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubscribe() {
+    try {
+      if (!email) return;
+
+      const data = await subscribeNewsletter(email);
+
+      if (data.message) {
+        setDone(true);
+        setError("");
+      }
+    } catch (err) {
+      setError("Subscription failed. Try again.");
+    }
+  }
 
   return (
     <section className="bg-white px-5 pb-20 sm:px-8 lg:px-12">
@@ -507,7 +503,8 @@ function Newsletter() {
             Stay Ahead of the Market
           </h2>
           <p className="mb-8 text-white/70">
-            Get curated job alerts and career insights delivered to your inbox weekly.
+            Get curated job alerts and career insights delivered to your inbox
+            weekly.
           </p>
 
           {done ? (
@@ -515,25 +512,35 @@ function Newsletter() {
               ✓ You're subscribed! Welcome aboard.
             </div>
           ) : (
-            <div className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row">
-              <div className="relative flex-1">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2">✉️</span>
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl bg-white/15 py-3.5 pl-11 pr-4 text-sm text-white outline-none placeholder:text-white/45"
-                />
+            <>
+              <div className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row">
+                <div className="relative flex-1">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2">
+                    ✉️
+                  </span>
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-xl bg-white/15 py-3.5 pl-11 pr-4 text-sm text-white outline-none placeholder:text-white/45"
+                  />
+                </div>
+
+                <button
+                  onClick={handleSubscribe}
+                  className="rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-blue-700"
+                >
+                  Subscribe
+                </button>
               </div>
 
-              <button
-                onClick={() => email && setDone(true)}
-                className="rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-blue-700"
-              >
-                Subscribe
-              </button>
-            </div>
+              {error && (
+                <p className="mt-3 text-sm font-semibold text-red-200">
+                  {error}
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -542,15 +549,56 @@ function Newsletter() {
 }
 
 export default function Home() {
+  const [jobs, setJobs] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  async function loadHomeData() {
+    try {
+      setLoading(true);
+
+      const [jobsData, companiesData, categoriesData, testimonialsData] =
+        await Promise.all([
+          fetchJobs(),
+          fetchCompanies(),
+          fetchCategories(),
+          fetchTestimonials(),
+        ]);
+
+      setJobs(jobsData);
+      setCompanies(companiesData);
+      setCategories(categoriesData);
+      setTestimonials(testimonialsData);
+    } catch (error) {
+      console.error("Failed to load home data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadHomeData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-xl font-bold text-blue-700">
+        Loading NoGhostJob...
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-hidden font-['Segoe_UI',system-ui,sans-serif]">
-      <Hero />
+      <Hero setJobs={setJobs} />
       <StatsStrip />
-      <FeaturedJobs />
-      <TopCompanies />
-      <Categories />
+      <FeaturedJobs jobs={jobs} />
+      <TopCompanies companies={companies} />
+      <Categories categories={categories} />
       <WhyUs />
-      <Testimonials />
+      <Testimonials testimonials={testimonials} />
       <Newsletter />
     </div>
   );
