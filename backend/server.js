@@ -14,7 +14,12 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", require("./routes/authrRoutes"));
 app.use("/api/", require("./routes/authrRoutes")); // Contact route
-
+app.use("/api/jobs", require("./routes/jobRoutes"));
+app.use("/api/companies", require("./routes/companyRoutes"));
+app.use("/api/categories", require("./routes/categoryRoutes"));
+app.use("/api/testimonials", require("./routes/testimonialRoutes"));
+app.use("/api/newsletter", require("./routes/newsletterRoutes"));
+app.use("/api/applications", require("./routes/applicationRoutes"));
 // Protected test route
 const protect = require("./middleware/authMiddleware");
 

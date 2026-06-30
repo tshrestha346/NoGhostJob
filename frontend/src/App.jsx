@@ -8,7 +8,7 @@ import ContactPage  from "./Pages/ContactUs";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter>     
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
