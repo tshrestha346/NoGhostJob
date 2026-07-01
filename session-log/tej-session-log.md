@@ -179,7 +179,7 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 
 ## What I learned today:
 * How to install alembic to constantly upgrade the tables of database when columns are added
 
-# Tuesday 25-06-2026
+# Tuesday 23-06-2026
 
 ## What I worked on:
 * Password hashing and User login (JWT/Authentication)
@@ -188,10 +188,18 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 
 * How to do password hashing and manage tokens
 * How to generate jwt token
 
-# Thursday 27-06-2026
+# Thursday 25-06-2026
 
 ## What I worked on:
 * Authentication and Authorization
 
 ## What I learned today:
 * How authentication and authorization works in project
+
+# Tuesday 30-06-2026
+
+## What I worked on:
+* Authentication and showing users' data only
+
+## What I learned today:
+* Authenticating users with token in localstorage

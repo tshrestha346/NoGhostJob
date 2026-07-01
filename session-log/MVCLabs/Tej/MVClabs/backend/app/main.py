@@ -40,17 +40,10 @@ app.include_router(auth_router, prefix="/auth", tags=["auth"])
 def seed_users():
     with SessionLocal() as session:
         if not session.execute(select(User)).first():
-            session.add_all([User(name="Alice"), User(name="Bob")])
+            session.add_all([
+                User(name="Alice", password_hash=hash_password("password123")), 
+                User(name="Bob", password_hash=hash_password("password123"))
+            ])
             session.commit()
-
-    with SessionLocal() as db:
-        if db.scalars(select(User)).first() is not None:
-            return
-        
-        db.add_all([
-            User(name="alice", password_hash=hash_password("password123")),
-            User(name="bob", password_hash=hash_password("password123")),
-        ])
-        db.commit()
 
 seed_users()

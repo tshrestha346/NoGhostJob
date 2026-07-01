@@ -8,6 +8,9 @@ from app.repositories.user_repository import UserRepository
 from app.schemas import User as UserSchema
 from app.controllers.task_controller import get_user_repo  #reuse the factory
 
+from app.auth.dependencies import get_current_user
+from app.models import User
+
 router = APIRouter()
 
 class TokenResponse(BaseModel):
@@ -33,3 +36,7 @@ def login(form: OAuth2PasswordRequestForm = Depends(), repo: UserRepository = De
         raise HTTPException(401, "Incorrect credentials")
     
     return TokenResponse(access_token=create_access_token(user.id))
+
+@router.get("/me", response_model=UserSchema)
+def me(user: User = Depends(get_current_user)):
+    return user

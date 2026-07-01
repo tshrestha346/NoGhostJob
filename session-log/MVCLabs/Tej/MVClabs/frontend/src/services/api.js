@@ -35,10 +35,30 @@ export function isLoggedIn(){
 }
 
 export async function fetchTasks() {
-  const response = await fetch(`${BASE}/tasks`);
+  const response = await fetch(`${BASE}/tasks`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json", ...authHeaders()
+    }
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch tasks");
+  }
+
+  return response.json();
+}
+
+export async function fetchUsersTasks(owner_id) {
+  const response = await fetch(`${BASE}/users/user-tasks/${owner_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json", ...authHeaders()
+    }
+  });
+  console.log('response', response)
+  if (!response.ok) {
+    throw new Error("Failed to fetch user tasks");
   }
 
   return response.json();
@@ -63,6 +83,9 @@ export async function createTask(title, owner_id) {
 export async function deleteTask(id) {
   const response = await fetch(`${BASE}/tasks/${id}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json", ...authHeaders()
+    }
   });
 
   if (!response.ok) {
@@ -71,7 +94,12 @@ export async function deleteTask(id) {
 }
 
 export async function fetchUsers() {
-  const response = await fetch(`${BASE}/users`);
+  const response = await fetch(`${BASE}/users`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json", ...authHeaders()
+    }
+  })
 
   if (!response.ok) {
     throw new Error("Failed to fetch users");
