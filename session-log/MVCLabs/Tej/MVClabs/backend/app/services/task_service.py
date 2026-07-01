@@ -34,3 +34,14 @@ class TaskService:
 
     def delete_task(self, task_id):
         return self._taskRepo.remove(task_id)
+    
+    # def get_user_task(self, owner_id: int):
+    #     print('get user tasksssss')
+    #     task = self._taskRepo.user_task(owner_id)
+
+    #     if not task:
+    #         raise TaskNotFoundError("User task not found!")
+    #     return task
+
+    def get_user_task(self, owner_id: int):
+        return self._taskRepo.user_task(owner_id)
