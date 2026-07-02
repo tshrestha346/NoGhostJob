@@ -163,6 +163,7 @@ export default function Register({ onRegisterSuccess }) {
     email: "",
     password: "",
     confirmPassword: "",
+    termsAndCondition: false,
   });
 
   const [errors, setErrors] = useState({});
@@ -222,6 +223,7 @@ export default function Register({ onRegisterSuccess }) {
           fullName: form.fullName,
           email: form.email,
           password: form.password,
+          termsAndCondition: agreed,
         }),
       });
 
