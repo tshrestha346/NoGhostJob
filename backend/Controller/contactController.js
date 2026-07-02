@@ -1,4 +1,4 @@
-const ContactMessage = require("../models/ContactMessage");
+const ContactMessage = require("../models/contactMessage");
 const sendContactEmail = require("../services/emailService");
 
 exports.createContactMessage = async (req, res) => {

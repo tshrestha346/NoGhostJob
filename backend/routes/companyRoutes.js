@@ -2,7 +2,7 @@ const express = require("express");
 const {
   getCompanies,
   createCompany
-} = require("../controller/companyController");
+} = require("../Controller/companyController");
 
 const router = express.Router();
 

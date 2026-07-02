@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.controllers.task_controller import router as task_router
+from app.Controllers.task_Controller import router as task_router
 
 app = FastAPI(title="MVC Task API")
 
