@@ -2,7 +2,7 @@ const express = require("express");
 const {
   getTestimonials,
   createTestimonial
-} = require("../controller/testimonialController");
+} = require("../Controller/testimonialController");
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ const express = require("express");
 const {
   applyJob,
   getApplications
-} = require("../controller/applicationController");
+} = require("../Controller/applicationController");
 
 const router = express.Router();
 
