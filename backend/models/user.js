@@ -1,20 +1,88 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  fullName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+
+    accountType: {
+      type: String,
+      required: true,
+      enum: ["user", "employer", "admin"],
+      default: "user",
+    },
+
+    address: {
+      type: String,
+      trim: true,
+    },
+
+    street: {
+      type: String,
+      trim: true,
+    },
+
+    houseNo: {
+      type: String,
+      trim: true,
+    },
+
+    postalCode: {
+      type: String,
+      trim: true,
+    },
+
+    country: {
+      type: String,
+      trim: true,
+    },
+
+    phoneNo: {
+      type: String,
+      trim: true,
+    },
+
+    termsAndCondition: {
+      type: Boolean,
+      required: true,
+      validate: {
+        validator: function (value) {
+          return value === true;
+        },
+        message: "You must accept the terms and conditions.",
+      },
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 module.exports =
   mongoose.models.User || mongoose.model("User", userSchema);
