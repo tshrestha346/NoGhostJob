@@ -289,3 +289,34 @@ questions :
 --> unable to do exercise 2
 
 
+## Tuesday 30-06-2026
+
+Rohan
+What I worked on : 
+-->exercise 3 and 4
+
+what i learned:
+--> how to add password to our application
+--> how to use it in the project
+--> how to authenticate using postman
+-->connected dbeaver
+
+questions :
+--> unable to do exercise 4 i.e if i am putting alice credential i m able yo edit bob also
+
+
+## Thrusday 02-07-2026
+Rohan
+What I worked on : 
+--> Did exercise  4 
+--> completely debugged my app 
+--> everything working fine
+-->authenticated using jwt.io
+
+
+what i learned:
+--> how to add password to our application
+--> how to use it in the project
+
+questions :
+--> everythong completed till exercise 4
