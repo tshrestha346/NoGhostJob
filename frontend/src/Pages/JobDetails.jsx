@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-// Assuming you have an api helper like fetchJobById or use your existing endpoints
 import { fetchJobs } from "../services/api"; 
+import { useParams } from "react-router-dom";
 
 function SectionLabel({ children }) {
   return (
@@ -10,8 +10,8 @@ function SectionLabel({ children }) {
   );
 }
 
-export default function JobDetailsPage({ jobId }) {
-  // NOTE: If using react-router-dom, extract jobId via: const { id } = useParams();
+export default function JobDetailsPage() {
+  const jobId = useParams().id;
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [applied, setApplied] = useState(false);
@@ -23,6 +23,7 @@ export default function JobDetailsPage({ jobId }) {
         setLoading(true);
         // Fallback or specific dynamic ID search via your api provider
         const allJobs = await fetchJobs();
+        console.log("Fetched all jobs:", allJobs);
         const foundJob = allJobs.find((j) => j._id === jobId);
         setJob(foundJob);
       } catch (error) {
