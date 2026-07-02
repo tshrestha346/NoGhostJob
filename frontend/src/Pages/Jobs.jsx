@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchJobs, fetchCategories } from "../services/api";
+import { Link } from "react-router-dom";
 
 function SectionLabel({ children }) {
   return (
@@ -86,9 +87,12 @@ function JobCard({ job }) {
         </span>
       </div>
 
-      <button className="w-full rounded-lg bg-gradient-to-br from-blue-700 to-blue-400 py-2.5 text-sm font-bold text-white opacity-90 transition-opacity group-hover:opacity-100">
-        Apply Now →
-      </button>
+      <Link
+        to={`/jobs/${job._id}`}
+        className="w-full text-center rounded-lg bg-gradient-to-br from-blue-700 to-blue-400 py-2.5 text-sm font-bold text-white opacity-90 transition-opacity group-hover:opacity-100"
+      >
+        View Details & Apply →
+      </Link>
     </div>
   );
 }
