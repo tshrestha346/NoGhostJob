@@ -5,6 +5,8 @@ import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import Home from "./Pages/Home";
 import ContactPage  from "./Pages/ContactUs";
+import CompaniesPage from "./Pages/Companies";
+import AboutPage from "./Pages/AboutPage";
 import JobsPage from "./Pages/Jobs";
 import JobDetailsPage from "./Pages/JobDetails";
 
@@ -17,6 +19,8 @@ function App() {
         <Route path="/Login" element={<LoginPage />} />
         <Route path="/Register" element={<RegisterPage />} />
         <Route path="/Contact" element={<ContactPage />} />
+        <Route path="/Companies" element={<CompaniesPage />} />
+        <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
       </Routes>
