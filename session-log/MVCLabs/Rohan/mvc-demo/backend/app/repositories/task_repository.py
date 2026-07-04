@@ -27,3 +27,6 @@ class TaskRepository:
             self._db.commit()
             return True
         return False
+    
+    def all_for_user(self, owner_id: int) -> list[Task]:
+        return list(self._db.scalars(select(Task).where(Task.owner_id == owner_id)))
