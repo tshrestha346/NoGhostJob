@@ -11,6 +11,7 @@ import {
   fetchUsersTasks
 } from "./services/api";
 import "./App.css";
+import { jwtDecode } from "jwt-decode";
 
 function LoginScreen({ onLogin }) {
   const [name, setName] = useState("");
@@ -77,6 +78,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState("");
+  const [tokenValid, setTokenValid] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -88,6 +90,16 @@ export default function App() {
 
         await loadUsers();
         await loadTasks();
+        console.log("Token:", storedToken);
+        try {
+          const { exp } = jwtDecode(storedToken);
+          console.log('date', Date.now() < exp * 1000)
+          const isTokenValid = Date.now() < exp * 1000;
+          console.log('isTokenValid', isTokenValid)
+          return isTokenValid;
+        } catch {
+          return false;
+        }
       }
 
       setLoading(false);
@@ -219,8 +231,13 @@ export default function App() {
   if (loading) {
     return <div>Loading tasks...</div>;
   }
-
-  if (!loggedIn && !token) {
+  if(!loggedIn && !tokenValid) {
+    console.log("Token is invalid or expired. Logging out.");
+    logout();
+  }
+  console.log('loggedIn', loggedIn, 'tokenValid', tokenValid)
+  if (!loggedIn) {
+    console.log("Not logged in, showing login screen");
     return <LoginScreen onLogin={handleLogin} />;
   }
 
