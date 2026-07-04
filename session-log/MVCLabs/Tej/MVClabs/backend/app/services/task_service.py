@@ -45,3 +45,19 @@ class TaskService:
 
     def get_user_task(self, owner_id: int):
         return self._taskRepo.user_task(owner_id)
+    
+    def get_another_user_and_task(self, task_id: int, current_user):
+        task = self._taskRepo.find(task_id)
+        if not task:
+            raise TaskNotFoundError(f"Task with id {task_id} not found!")
+        if task.owner_id != current_user.id:
+            raise TaskNotFoundError(f"Task with id {task_id} does not belong to the current user!")
+        return task
+    
+    def delete_others_task(self, task_id: int, current_user):
+        task = self._taskRepo.find(task_id)
+        if not task:
+            raise TaskNotFoundError(f"Task with id {task_id} not found!")
+        if task.owner_id != current_user.id:
+            raise TaskNotFoundError(f"Task with id {task_id} does not belong to the current user!")
+        return self._taskRepo.remove(task)

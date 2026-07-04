@@ -1,6 +1,8 @@
 # In-memory stand-ins for the repositories. Same interface, no database.
 #Used by the UNIT tests in Exercise 2.
 
+from sqlalchemy import select
+
 from app.models import Task, User
 
 class FakeTaskRepository:
@@ -29,6 +31,9 @@ class FakeTaskRepository:
             return False
         self._tasks.remove(task)
         return True
+    
+    def user_task(self, owner_id: int):
+        return [task for task in self._tasks if task.owner_id == owner_id]
     
 class FakeUserRepository:
     def __init__ (self, users: list[User] | None = None):
