@@ -44,6 +44,13 @@ export default function Navbar() {
           >
             Contact Us
           </Link>
+
+          <Link
+            to="/Jobs"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Jobs
+          </Link>
         </div>
 
         {/* Desktop Actions */}
