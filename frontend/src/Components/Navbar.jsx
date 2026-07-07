@@ -37,7 +37,20 @@ export default function Navbar() {
           >
             Home
           </Link>
-
+           {isLoggedIn ?(
+                <Link to="/CreateCv"
+                className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+              >
+                Create CV
+                </Link>
+                        ) : (
+             <></>
+            )} 
+          <Link to="/CreateCv"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Create CV
+          </Link>
           <Link
             to="/Jobs"
             className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
@@ -65,7 +78,8 @@ export default function Navbar() {
           >
             Contact
           </Link>
-        </div>
+       
+          </div>
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 lg:flex">
@@ -94,6 +108,7 @@ export default function Navbar() {
               </Link>
             </>
           )}
+
         </div>
 
         {/* Mobile Button */}
@@ -138,6 +153,7 @@ export default function Navbar() {
                 >
                   Log in
                 </Link>
+                  
 
                 <Link
                   to="/register"
