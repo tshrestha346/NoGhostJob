@@ -33,6 +33,9 @@ exports.registerUser = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       token: generateToken(user._id),
+      isActive: user.isActive,
+      isAdmin: user.isAdmin,
+      accountType: user.accountType,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -61,6 +64,9 @@ exports.loginUser = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       token: generateToken(user._id),
+      isActive: user.isActive,
+      isAdmin: user.isAdmin,
+      accountType: user.accountType,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });

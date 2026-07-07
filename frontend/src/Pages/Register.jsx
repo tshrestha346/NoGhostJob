@@ -240,6 +240,9 @@ export default function Register({ onRegisterSuccess }) {
           _id: data._id,
           fullName: data.fullName,
           email: data.email,
+          isActive: data.isActive,
+          isAdmin: data.isAdmin,
+          accountType: data.accountType,
         })
       );
 

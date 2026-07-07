@@ -6,6 +6,9 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
+  const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,55 +34,62 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden items-center gap-8 lg:flex">
-          <Link
-            to="/"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Home
-          </Link>
-           {isLoggedIn ?(
-                <Link to="/CreateCv"
-                className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-              >
-                Create CV
+          {!isLoggedIn ? (
+              <>
+                <Link
+                  to="/"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Home
                 </Link>
-                        ) : (
-             <></>
-            )} 
-          <Link to="/CreateCv"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Create CV
-          </Link>
-          <Link
-            to="/Jobs"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Jobs
-          </Link>
 
-          <Link
-            to="/Companies"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Companies
-          </Link>
+                <Link
+                  to="/Jobs"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Jobs
+                </Link>
 
-          <Link
-            to="/AboutPage"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            About
-          </Link>
-          
-          <Link
-            to="/Contact"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Contact
-          </Link>
-       
-          </div>
+                <Link
+                  to="/Companies"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Companies
+                </Link>
+
+                <Link
+                  to="/AboutPage"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  About
+                </Link>
+                
+                <Link
+                  to="/Contact"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Contact
+                </Link>
+              </>
+            ):(
+              <>
+                {user.accountType == "user" ? (
+                  <>
+                    <Link to="/CreateCv"
+                      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                    >
+                      Create CV
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                
+              </>
+            )
+          }
+        </div>
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 lg:flex">

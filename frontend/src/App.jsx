@@ -9,9 +9,13 @@ import CompaniesPage from "./Pages/Companies";
 import AboutPage from "./Pages/AboutPage";
 import JobsPage from "./Pages/Jobs";
 import JobDetailsPage from "./Pages/JobDetails";
+import UDashboard from "./Pages/User/UDashboard";
+import EDashboard from "./Pages/Employer/EDashboard";
 import CreateCv from "./Pages/CVBuilder";
 
 function App() {
+  const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
+  
   return (
     <BrowserRouter>     
       <Navbar />
@@ -24,21 +28,30 @@ function App() {
         <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
+
+        {/* User Routes */}
+        <Route path="/Udashboard" element={<UDashboard />} />
         <Route path="/CreateCv" element={<CreateCv />} />
+
+        {/* Employer Routes */}
+        <Route path="/EDashboard" element={<EDashboard />} />
       </Routes>
-      <Footer />
+      {!isLoggedIn ? (
+        <Footer />
+        ):(
+          <></>
+        )}
     </BrowserRouter>
   );
 }
 
 function LoginPage() {
-  const navigate = useNavigate();
-  return <Login onLoginSuccess={() => navigate("/")} />;
+  return <Login />;
 }
 
 function RegisterPage() {
   const navigate = useNavigate();
-  return <Register onRegisterSuccess={() => navigate("/")} />;
+  return <Register onRegisterSuccess={() => navigate("/Udashboard")} />;
 }
 
 export default App;
