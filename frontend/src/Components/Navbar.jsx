@@ -6,6 +6,9 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
+  const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -69,7 +72,21 @@ export default function Navbar() {
                 </Link>
               </>
             ):(
-              <></>
+              <>
+                {user.accountType == "user" ? (
+                  <>
+                    <Link to="/CreateCv"
+                      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                    >
+                      Create CV
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                
+              </>
             )
           }
         </div>
@@ -101,6 +118,7 @@ export default function Navbar() {
               </Link>
             </>
           )}
+
         </div>
 
         {/* Mobile Button */}
@@ -145,6 +163,7 @@ export default function Navbar() {
                 >
                   Log in
                 </Link>
+                  
 
                 <Link
                   to="/register"

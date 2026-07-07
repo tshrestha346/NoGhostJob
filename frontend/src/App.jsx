@@ -11,8 +11,11 @@ import JobsPage from "./Pages/Jobs";
 import JobDetailsPage from "./Pages/JobDetails";
 import UDashboard from "./Pages/User/UDashboard";
 import EDashboard from "./Pages/Employer/EDashboard";
+import CreateCv from "./Pages/CVBuilder";
 
 function App() {
+  const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
+  
   return (
     <BrowserRouter>     
       <Navbar />
@@ -28,11 +31,16 @@ function App() {
 
         {/* User Routes */}
         <Route path="/Udashboard" element={<UDashboard />} />
+        <Route path="/CreateCv" element={<CreateCv />} />
 
         {/* Employer Routes */}
         <Route path="/EDashboard" element={<EDashboard />} />
       </Routes>
-      <Footer />
+      {!isLoggedIn ? (
+        <Footer />
+        ):(
+          <></>
+        )}
     </BrowserRouter>
   );
 }

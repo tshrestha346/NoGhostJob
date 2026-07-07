@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/tshrestha346/NoGhostJob/issues"
   },
-  "homepage": "https://github.com/tshrestha346/NoGhostJob#readme"
+  "homepage": "https://github.com/tshrestha346/NoGhostJob#readme",
+  "dependencies": {
+    "html2canvas-pro": "^2.2.3",
+    "jspdf": "^4.2.1"
+  }
 }
