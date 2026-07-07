@@ -31,40 +31,47 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden items-center gap-8 lg:flex">
-          <Link
-            to="/"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Home
-          </Link>
+          {!isLoggedIn ? (
+              <>
+                <Link
+                  to="/"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Home
+                </Link>
 
-          <Link
-            to="/Jobs"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Jobs
-          </Link>
+                <Link
+                  to="/Jobs"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Jobs
+                </Link>
 
-          <Link
-            to="/Companies"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Companies
-          </Link>
+                <Link
+                  to="/Companies"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Companies
+                </Link>
 
-          <Link
-            to="/AboutPage"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            About
-          </Link>
-          
-          <Link
-            to="/Contact"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Contact
-          </Link>
+                <Link
+                  to="/AboutPage"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  About
+                </Link>
+                
+                <Link
+                  to="/Contact"
+                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+                >
+                  Contact
+                </Link>
+              </>
+            ):(
+              <></>
+            )
+          }
         </div>
 
         {/* Desktop Actions */}

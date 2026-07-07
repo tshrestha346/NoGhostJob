@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AuthInput({ label, name, type = "text", value, onChange, error }) {
   const [focused, setFocused] = useState(false);
@@ -88,6 +89,7 @@ function SocialBtn({ icon, label }) {
 }
 
 export default function Login({ onLoginSuccess }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -159,6 +161,9 @@ export default function Login({ onLoginSuccess }) {
             _id: data._id,
             fullName: data.fullName,
             email: data.email,
+            isActive: data.isActive,
+            isAdmin: data.isAdmin,
+            accountType: data.accountType,
           })
         );
       } else {
@@ -169,8 +174,17 @@ export default function Login({ onLoginSuccess }) {
             _id: data._id,
             fullName: data.fullName,
             email: data.email,
+            isActive: data.isActive,
+            isAdmin: data.isAdmin,
+            accountType: data.accountType,
           })
         );
+      }
+
+      if(data.accountType === "user") {
+        navigate("/Udashboard")
+      }else{
+        navigate("/EDashboard")
       }
 
       setLoading(false);
