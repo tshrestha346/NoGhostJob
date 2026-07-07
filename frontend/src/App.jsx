@@ -9,6 +9,7 @@ import CompaniesPage from "./Pages/Companies";
 import AboutPage from "./Pages/AboutPage";
 import JobsPage from "./Pages/Jobs";
 import JobDetailsPage from "./Pages/JobDetails";
+import CreateCv from "./Pages/CVBuilder";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
+        <Route path="/CreateCv" element={<CreateCv />} />
       </Routes>
       <Footer />
     </BrowserRouter>
