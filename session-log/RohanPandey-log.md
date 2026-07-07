@@ -289,8 +289,8 @@ questions :
 --> unable to do exercise 2
 
 
-## Tuesday 30-06-2026
 
+## Tuesday 30-06-2026
 Rohan
 What I worked on : 
 -->exercise 3 and 4
@@ -320,3 +320,18 @@ what i learned:
 
 questions :
 --> everythong completed till exercise 4
+
+## Tuesday 07-07-2026
+Rohan
+What I worked on : 
+-->testing exercise 2, 3 ,4
+
+what i learned:
+--> how to do testing of our application
+--> how to use it in the project
+
+
+
+questions :
+--> no questions all exercises completed
+
