@@ -4,7 +4,7 @@ from app.database import get_db
 from app.repositories.task_repository import TaskRepository
 from app.repositories.user_repository import UserRepository
 from app.schemas import Task, TaskCreate, TaskOut
-from app.services.task_service import TaskService
+from app.services.task_service import TaskNotFoundError, TaskService
 
 from app.auth.dependencies import get_current_user
 from app.models import User
@@ -26,10 +26,10 @@ def get_task(service: TaskService = Depends(get_task_service), user: User = Depe
 
 @router.get("/{task_id}", response_model=Task)
 def get_task(task_id: int, service: TaskService = Depends(get_task_service), user: User = Depends(get_current_user)):
-    task = service.get_task(task_id)
-    if not task:
+    try:
+        return service.get_task(task_id)
+    except TaskNotFoundError:
         raise HTTPException(status_code=404, detail="Task not found!")
-    return task
 
 @router.post("/", response_model=Task, status_code=201)
 def create_task(payload: TaskCreate, service: TaskService = Depends(get_task_service), user: User = Depends(get_current_user)):
