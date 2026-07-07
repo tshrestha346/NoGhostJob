@@ -203,3 +203,20 @@ localsite  | 172.18.0.1 - - [21/May/2026:18:21:31 +0000] "GET / HTTP/1.1" 304 0 
 
 ## What I learned today:
 * Authenticating users with token in localstorage
+
+# Thursday 02-07-2026
+
+## What I worked on:
+* Testing using pytest, temp SQLite and dependency overrides for auth
+
+## What I learned today:
+* How to run test in fastapi
+* How to test project without saving data in database
+
+# Tuseday 07-07-2026
+
+## What I worked on:
+* Testing api and authorization
+
+## What I learned today:
+* How to handle authorization and api routes

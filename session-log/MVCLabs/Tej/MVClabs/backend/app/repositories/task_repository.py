@@ -58,6 +58,25 @@ class TaskRepository:
     #     stmt = select(Task).where(Task.owner_id == owner_id)
     #     return self._db.execute(stmt).scalars().all()
 
+    # def user_task(self, owner_id: int):
+    #     stmt = select(Task).where(Task.owner_id == owner_id)
+    #     return self._db.scalars(stmt).all()
+
     def user_task(self, owner_id: int):
-        stmt = select(Task).where(Task.owner_id == owner_id)
-        return self._db.scalars(stmt).all()
+        stmt = (
+            select(Task)
+            .where(Task.owner_id == owner_id)
+            .options(joinedload(Task.owner))
+        )
+
+        tasks = self._db.execute(stmt).scalars().all()
+
+        return [
+            {
+                "id": task.id,
+                "title": task.title,
+                "owner_id": task.owner_id,
+                "owner_name": task.owner.name,
+            }
+            for task in tasks
+        ]
