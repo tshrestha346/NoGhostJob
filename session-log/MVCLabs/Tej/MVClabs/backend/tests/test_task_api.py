@@ -41,7 +41,9 @@ def test_delete_own_task_returns_204_then_get_returns_404(client):
     """
     post_response = client.post("/tasks/", json={"title": "read docs", "owner_id": 1})
     task_id = post_response.json()["id"]
+
     delete_response = client.delete(f"/tasks/{task_id}")
     assert delete_response.status_code == 204
+    
     get_response = client.get(f"/tasks/{task_id}")
     assert get_response.status_code == 404
