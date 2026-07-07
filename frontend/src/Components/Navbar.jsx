@@ -37,19 +37,33 @@ export default function Navbar() {
           >
             Home
           </Link>
-          
-           <Link
-            to="/Contact"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
-            Contact Us
-          </Link>
 
           <Link
             to="/Jobs"
             className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
           >
             Jobs
+          </Link>
+
+          <Link
+            to="/Companies"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Companies
+          </Link>
+
+          <Link
+            to="/AboutPage"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            About
+          </Link>
+          
+          <Link
+            to="/Contact"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Contact
           </Link>
         </div>
 
