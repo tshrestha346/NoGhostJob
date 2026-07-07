@@ -1,5 +1,5 @@
 import jwt 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Header
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
@@ -24,4 +24,15 @@ def get_current_user(
     if user is None:
         raise HTTPException(401, "User Not Found!")
     
+    return user
+
+def get_current_user_for_testing(
+    x_user_id: str = Header(..., alias="X-User-Id"),
+    db: Session = Depends(get_db),
+) -> User:
+    user = db.get(User, int(x_user_id))
+
+    if not user:
+        raise HTTPException(status_code=401, detail="User Not Found")
+
     return user
