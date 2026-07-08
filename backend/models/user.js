@@ -67,7 +67,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-
+    role: {
+      type: String,
+      trim: true,
+    },
+    cv: {
+  template: {
+    type: String,
+    default: "modern",
+  },
+  data: {
+    type: Object,
+    default: {},
+  },
+},
     termsAndCondition: {
       type: Boolean,
       required: true,

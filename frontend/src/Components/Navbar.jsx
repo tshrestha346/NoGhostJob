@@ -5,10 +5,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
-  const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
-
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const isLoggedIn = !!(
+    localStorage.getItem("token") || sessionStorage.getItem("token")
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -32,66 +31,62 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Links */}
+        {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 lg:flex">
-          {!isLoggedIn ? (
-              <>
-                <Link
-                  to="/"
-                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-                >
-                  Home
-                </Link>
+          <Link
+            to="/"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Home
+          </Link>
 
-                <Link
-                  to="/Jobs"
-                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-                >
-                  Jobs
-                </Link>
+          <Link
+            to="/Jobs"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Jobs
+          </Link>
 
-                <Link
-                  to="/Companies"
-                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-                >
-                  Companies
-                </Link>
+          <Link
+            to="/Companies"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Companies
+          </Link>
 
-                <Link
-                  to="/AboutPage"
-                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-                >
-                  About
-                </Link>
-                
-                <Link
-                  to="/Contact"
-                  className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-                >
-                  Contact
-                </Link>
-              </>
-            ):(
-              <>
-                {user.accountType == "user" ? (
-                  <>
-                    <Link to="/CreateCv"
-                      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-                    >
-                      Create CV
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                  </>
-                )}
-                
-              </>
-            )
-          }
+          <Link
+            to="/AboutPage"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            About
+          </Link>
+
+          <Link
+            to="/Contact"
+            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+          >
+            Contact
+          </Link>
+{isLoggedIn && (
+  <>
+    <Link
+      to="/CreateCV"
+      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+    >
+      Create CV
+    </Link>
+
+    <Link
+      to="/Profile"
+      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
+    >
+      Profile
+    </Link>
+  </>
+)}
         </div>
 
-        {/* Desktop Actions */}
+        {/* Desktop Right Side */}
         <div className="hidden items-center gap-3 lg:flex">
           {isLoggedIn ? (
             <button
@@ -118,15 +113,13 @@ export default function Navbar() {
               </Link>
             </>
           )}
-
         </div>
 
-        {/* Mobile Button */}
+        {/* Mobile Menu Button */}
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(!open)}
           className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#DDEAFC] bg-[#F7FAFF] text-[#07192E] lg:hidden"
-          aria-label="Toggle menu"
         >
           <span className="text-xl">{open ? "✕" : "☰"}</span>
         </button>
@@ -139,10 +132,69 @@ export default function Navbar() {
             <Link
               to="/"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] transition-colors hover:bg-blue-50 hover:text-blue-700"
+              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
             >
               Home
             </Link>
+
+            <Link
+              to="/Jobs"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+            >
+              Jobs
+            </Link>
+
+            <Link
+              to="/Companies"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+            >
+              Companies
+            </Link>
+
+            <Link
+              to="/AboutPage"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+            >
+              About
+            </Link>
+
+            <Link
+              to="/Contact"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+            >
+              Contact
+            </Link>
+
+
+ <Link
+                to="/Profile"
+                className="text-sm font-bold text-blue-700 hover:text-blue-500"
+              >
+                Profile
+              </Link>
+            {isLoggedIn && (
+              <Link
+                to="/CreateCV"
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+              >
+                Create CV
+              </Link>
+
+            )}
+            {isLoggedIn && (
+              <Link
+                to="/Profile"
+                className="text-sm font-bold text-blue-700 hover:text-blue-500"
+              >
+                Profile
+              </Link>
+
+            )}
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -157,16 +209,15 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
-                  to="/login"
+                  to="/Login"
                   onClick={() => setOpen(false)}
                   className="rounded-xl border border-[#DDEAFC] bg-[#F7FAFF] px-5 py-3 text-center text-sm font-bold text-blue-700"
                 >
                   Log in
                 </Link>
-                  
 
                 <Link
-                  to="/register"
+                  to="/Register"
                   onClick={() => setOpen(false)}
                   className="rounded-xl bg-gradient-to-br from-blue-700 to-blue-400 px-5 py-3 text-center text-sm font-bold text-white shadow-[0_6px_18px_rgba(21,101,192,0.25)]"
                 >
