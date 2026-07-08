@@ -5,9 +5,20 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const isLoggedIn = !!(
-    localStorage.getItem("token") || sessionStorage.getItem("token")
+  const user = JSON.parse(
+    localStorage.getItem("user") ||
+      sessionStorage.getItem("user") ||
+      "null"
   );
+
+  const isLoggedIn = !!(
+    localStorage.getItem("token") ||
+    sessionStorage.getItem("token") ||
+    user?.token
+  );
+
+  const dashboardRoute =
+    user?.accountType === "employer" ? "/EDashboard" : "/UDashboard";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -18,16 +29,9 @@ export default function Navbar() {
     navigate("/Login");
   };
 
-  const user = JSON.parse(
-  localStorage.getItem("user") ||
-  sessionStorage.getItem("user") ||
-  "null"
-);
-
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-[#DDEAFC] bg-white/90 backdrop-blur-md font-['Segoe_UI',system-ui,sans-serif]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-gradient-to-br from-blue-400 to-blue-700 text-base font-extrabold text-white shadow-sm">
             C
@@ -37,62 +41,49 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 lg:flex">
-          <Link
-            to="/"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
+          <Link to="/" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             Home
           </Link>
 
-          <Link
-            to="/Jobs"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
+          <Link to="/Jobs" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             Jobs
           </Link>
 
-          <Link
-            to="/Companies"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
+          <Link to="/Companies" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             Companies
           </Link>
 
-          <Link
-            to="/AboutPage"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
+          <Link to="/AboutPage" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             About
           </Link>
 
-          <Link
-            to="/Contact"
-            className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-          >
+          <Link to="/Contact" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             Contact
           </Link>
-{isLoggedIn && user?.accountType === "user" && (
-  <>
-    <Link
-      to="/CreateCV"
-      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-    >
-      Create CV
-    </Link>
 
-    <Link
-      to="/Profile"
-      className="text-sm font-semibold text-[#3D4A63] transition-colors hover:text-blue-700"
-    >
-      Profile
-    </Link>
-  </>
-)}
+          {isLoggedIn && (
+            <Link
+              to={dashboardRoute}
+              className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700"
+            >
+              Dashboard
+            </Link>
+          )}
+
+          {isLoggedIn && user?.accountType === "user" && (
+            <>
+              <Link to="/CreateCV" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
+                Create CV
+              </Link>
+
+              <Link to="/Profile" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
+                Profile
+              </Link>
+            </>
+          )}
         </div>
 
-        {/* Desktop Right Side */}
         <div className="hidden items-center gap-3 lg:flex">
           {isLoggedIn ? (
             <button
@@ -104,10 +95,7 @@ export default function Navbar() {
             </button>
           ) : (
             <>
-              <Link
-                to="/Login"
-                className="text-sm font-bold text-blue-700 transition-colors hover:text-blue-500"
-              >
+              <Link to="/Login" className="text-sm font-bold text-blue-700 hover:text-blue-500">
                 Log in
               </Link>
 
@@ -121,7 +109,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           type="button"
           onClick={() => setOpen(!open)}
@@ -131,75 +118,57 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {open && (
         <div className="border-t border-[#DDEAFC] bg-white px-5 py-5 shadow-lg lg:hidden">
           <div className="flex flex-col gap-2">
-            <Link
-              to="/"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
-            >
+            <Link to="/" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700">
               Home
             </Link>
 
-            <Link
-              to="/Jobs"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
-            >
+            <Link to="/Jobs" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700">
               Jobs
             </Link>
 
-            <Link
-              to="/Companies"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
-            >
+            <Link to="/Companies" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700">
               Companies
             </Link>
 
-            <Link
-              to="/AboutPage"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
-            >
+            <Link to="/AboutPage" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700">
               About
             </Link>
 
-            <Link
-              to="/Contact"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
-            >
+            <Link to="/Contact" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700">
               Contact
             </Link>
 
-
- <Link
-                to="/Profile"
-                className="text-sm font-bold text-blue-700 hover:text-blue-500"
-              >
-                Profile
-              </Link>
             {isLoggedIn && (
               <Link
-                to="/CreateCV"
+                to={dashboardRoute}
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
               >
-                Create CV
+                Dashboard
               </Link>
-
             )}
-            {isLoggedIn && (
-              <Link
-                to="/Profile"
-                className="text-sm font-bold text-blue-700 hover:text-blue-500"
-              >
-                Profile
-              </Link>
 
+            {isLoggedIn && user?.accountType === "user" && (
+              <>
+                <Link
+                  to="/CreateCV"
+                  onClick={() => setOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+                >
+                  Create CV
+                </Link>
+
+                <Link
+                  to="/Profile"
+                  onClick={() => setOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-semibold text-[#3D4A63] hover:bg-blue-50 hover:text-blue-700"
+                >
+                  Profile
+                </Link>
+              </>
             )}
           </div>
 
