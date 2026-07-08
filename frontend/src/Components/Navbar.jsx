@@ -18,6 +18,12 @@ export default function Navbar() {
     navigate("/Login");
   };
 
+  const user = JSON.parse(
+  localStorage.getItem("user") ||
+  sessionStorage.getItem("user") ||
+  "null"
+);
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-[#DDEAFC] bg-white/90 backdrop-blur-md font-['Segoe_UI',system-ui,sans-serif]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
