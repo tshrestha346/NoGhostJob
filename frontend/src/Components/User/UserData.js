@@ -44,7 +44,7 @@ export const NAV_ITEMS = [
   { key:"interviews",    icon:"📅", label:"Interviews"      },
   { key:"saved",         icon:"🔖", label:"Saved Jobs"      },
   { key:"recommended",   icon:"✨", label:"Recommended"     },
-  { key:"profile",       icon:"👤", label:"My Profile"      },
+  // { key:"profile",       icon:"👤", label:"My Profile"      },
 ];
 
 export const STATUS_META = {

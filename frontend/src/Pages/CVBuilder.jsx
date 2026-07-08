@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState,useEffect} from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import toast from "react-hot-toast";
@@ -34,6 +34,8 @@ const emptyProject = () => ({ id: createId(), name: "", link: "", description: "
 const emptyCertification = () => ({ id: createId(), name: "", issuer: "", year: "" });
 
 const LANGUAGE_LEVELS = ["Native", "Fluent", "Professional", "Conversational", "Basic"];
+
+
 
 const blankData = {
   personal: {
@@ -315,6 +317,8 @@ function ExperienceEditor({ items, onChange }) {
   function add() {
     onChange([...items, emptyExperience()]);
   }
+
+ 
 
   return (
     <div className="space-y-5">
@@ -1215,11 +1219,39 @@ function ExecutiveTemplate({ data }) {
 
 export default function CVBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState("modern");
-  const [data, setData] = useState(createInitialData);
+  const [data, setData] = useState(() => createInitialData());
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState("");
   const previewRef = useRef(null);
 
+    useEffect(() => {
+    async function loadSavedCV() {
+      try {
+        const user = getStoredUser();
+        if (!user?.token) return;
+
+        const response = await fetch("http://localhost:5000/api/auth/cv", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || "Could not load CV");
+
+        if (result.cv?.data) {
+          setData(result.cv.data);
+          setSelectedTemplate(result.cv.template || "modern");
+        } else {
+          setData(createInitialData());
+        }
+      } catch (error) {
+        toast.error(error.message || "Failed to load CV");
+        setData(createInitialData());
+      }
+    }
+    loadSavedCV();
+  }, []);
+  
   function updatePersonal(patch) {
     setData((prev) => ({ ...prev, personal: { ...prev.personal, ...patch } }));
   }
@@ -1246,7 +1278,7 @@ async function saveCVToBackend() {
     const user = getStoredUser();
 
     if (!user?.token) {
-      setSaveMessage("Please login again. Token missing.");
+      toast.error("Please login again.");
       return;
     }
 
@@ -1258,7 +1290,7 @@ async function saveCVToBackend() {
       },
       body: JSON.stringify({
         template: selectedTemplate,
-        data,
+        data: data,
       }),
     });
 
@@ -1268,9 +1300,9 @@ async function saveCVToBackend() {
       throw new Error(result.message || "Could not save CV");
     }
 
-toast.success("CV saved successfully!");
+    toast.success("CV saved successfully!");
   } catch (error) {
-   toast.error("Failed to save CV.");
+    toast.error(error.message || "Failed to save CV.");
   }
 }
 
