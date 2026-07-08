@@ -148,12 +148,15 @@ export default function Login({ onLoginSuccess }) {
       });
 
       const data = await res.json();
+      console.log(data,"sadsa")
 
       if (!res.ok) {
         throw new Error(data.message || "Login failed");
       }
 
+
       if (form.remember) {
+        console.log(data,"sjhshs")
         localStorage.setItem("token", data.token);
         localStorage.setItem(
           "user",
@@ -164,6 +167,7 @@ export default function Login({ onLoginSuccess }) {
             isActive: data.isActive,
             isAdmin: data.isAdmin,
             accountType: data.accountType,
+            token:data.token
           })
         );
       } else {
@@ -177,6 +181,7 @@ export default function Login({ onLoginSuccess }) {
             isActive: data.isActive,
             isAdmin: data.isAdmin,
             accountType: data.accountType,
+            token:data.token
           })
         );
       }

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
-
+import toast from "react-hot-toast";
 /* ============================================================
    DATA MODEL
    ============================================================ */
@@ -56,82 +56,30 @@ const blankData = {
 
 // Sample data so every template has something realistic to preview
 // before the person fills in their own details.
-const sampleData = {
-  personal: {
-    fullName: "Sofia Mendes",
-    jobTitle: "Senior Frontend Developer",
-    email: "sofia.mendes@email.com",
-    phone: "+49 176 1234 5678",
-    location: "Berlin, Germany",
-    linkedin: "linkedin.com/in/sofiamendes",
-    website: "sofiamendes.dev",
-  },
-  summary:
-    "Frontend developer with 6+ years building fast, accessible web apps in React and TypeScript. Led the redesign of a checkout flow that lifted conversion 18%, and enjoys mentoring junior engineers as much as shipping code.",
-  skills: ["React", "TypeScript", "Tailwind CSS", "Next.js", "GraphQL", "Node.js", "Figma", "Jest"],
-  experience: [
-    {
-      id: createId(),
-      role: "Senior Frontend Developer",
-      company: "Northwind Labs",
-      location: "Berlin, Germany",
-      start: "Jun 2022",
-      end: "",
-      current: true,
-      description:
-        "Lead a team of 4 engineers rebuilding the customer dashboard in React and TypeScript. Cut page load time by 40% through code-splitting and image optimization. Introduced a component library now used across 3 product teams.",
-    },
-    {
-      id: createId(),
-      role: "Frontend Developer",
-      company: "Acme Inc.",
-      location: "Remote",
-      start: "Mar 2019",
-      end: "May 2022",
-      current: false,
-      description:
-        "Built and maintained the marketing site and checkout flow, serving 200k+ monthly visitors. Partnered with design to ship a redesigned checkout that raised conversion by 18%.",
-    },
-  ],
-  education: [
-    {
-      id: createId(),
-      degree: "MSc Information Technology",
-      school: "MDH University of Applied Sciences",
-      location: "Stockholm, Sweden",
-      start: "2017",
-      end: "2019",
-      description: "Thesis on performance optimization in single-page applications.",
-    },
-    {
-      id: createId(),
-      degree: "BSc Computer Science",
-      school: "University of Lisbon",
-      location: "Lisbon, Portugal",
-      start: "2013",
-      end: "2017",
-      description: "",
-    },
-  ],
-  languages: [
-    { id: createId(), name: "Portuguese", level: "Native" },
-    { id: createId(), name: "English", level: "Fluent" },
-    { id: createId(), name: "German", level: "Conversational" },
-  ],
-  projects: [
-    {
-      id: createId(),
-      name: "Open Source Component Library",
-      link: "github.com/sofiamendes/uikit",
-      description: "A Tailwind-based React component library with 1,200+ GitHub stars, used by several small startups.",
-    },
-  ],
-  certifications: [
-    { id: createId(), name: "AWS Certified Developer – Associate", issuer: "Amazon Web Services", year: "2023" },
-  ],
+const getStoredUser = () => {
+  return JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user") || "null"
+  );
 };
 
-const initialData = sampleData;
+const createInitialData = () => {
+  const user = getStoredUser();
+
+  return {
+    ...blankData,
+    personal: {
+      fullName: user?.fullName || "",
+      jobTitle: user?.role || "",
+      email: user?.email || "",
+      phone: user?.phoneNo || "",
+      location: [user?.address, user?.postalCode, user?.country]
+        .filter(Boolean)
+        .join(", "),
+      linkedin: "",
+      website: "",
+    },
+  };
+};
 
 const templateList = [
   { id: "modern", name: "Modern Professional", desc: "Clean two-column layout, great for tech & product roles." },
@@ -1267,7 +1215,7 @@ function ExecutiveTemplate({ data }) {
 
 export default function CVBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState("modern");
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(createInitialData);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState("");
   const previewRef = useRef(null);
@@ -1289,6 +1237,42 @@ export default function CVBuilder() {
       setIsDownloading(false);
     }
   }
+  const [saveMessage, setSaveMessage] = useState("");
+
+async function saveCVToBackend() {
+  try {
+    setSaveMessage("");
+
+    const user = getStoredUser();
+
+    if (!user?.token) {
+      setSaveMessage("Please login again. Token missing.");
+      return;
+    }
+
+    const response = await fetch("http://localhost:5000/api/auth/cv", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({
+        template: selectedTemplate,
+        data,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Could not save CV");
+    }
+
+toast.success("CV saved successfully!");
+  } catch (error) {
+   toast.error("Failed to save CV.");
+  }
+}
 
   function renderTemplate() {
     switch (selectedTemplate) {
@@ -1427,6 +1411,19 @@ export default function CVBuilder() {
               {isDownloading ? "Generating PDF..." : "Download CV as PDF"}
             </button>
             {downloadError && <p className="text-center text-xs font-medium text-red-500">{downloadError}</p>}
+
+            <button
+  onClick={saveCVToBackend}
+  className="w-full rounded-xl bg-green-600 py-3 font-bold text-white shadow-lg hover:bg-green-700"
+>
+  Save CV
+</button>
+
+{saveMessage && (
+  <p className="text-center text-xs font-medium text-blue-600">
+    {saveMessage}
+  </p>
+)}
           </div>
 
           <div>

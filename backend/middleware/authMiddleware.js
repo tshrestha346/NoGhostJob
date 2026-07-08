@@ -15,15 +15,13 @@ const protect = async (req, res, next) => {
 
       req.user = await User.findById(decoded.id).select("-password");
 
-      next();
+      return next();
     } catch (err) {
-      res.status(401).json({ message: "Not authorized, token failed" });
+      return res.status(401).json({ message: "Not authorized, token failed" });
     }
   }
 
-  if (!token) {
-    res.status(401).json({ message: "No token provided" });
-  }
+  return res.status(401).json({ message: "No token provided" });
 };
 
 module.exports = protect;
