@@ -33,7 +33,7 @@ import {
 export default function UserDashboard() {
   const [page, setPage] = useState("overview");
 
-  const views = { overview:<Overview setPage={setPage}/>, applications:<ApplicationsView/>, interviews:<InterviewsView/>, saved:<SavedView/>, recommended:<RecommendedView/>, profile:<ProfileView/> };
+  const views = { overview:<Overview setPage={setPage}/>, applications:<ApplicationsView/>,  profile:<ProfileView/> };
 
   return (
     <div style={{ minHeight:"100vh", background:C.offWhite, fontFamily:"'Segoe UI', system-ui, sans-serif", display:"flex" }}>

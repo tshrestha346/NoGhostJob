@@ -2,23 +2,105 @@ const mongoose = require("mongoose");
 
 const applicationSchema = new mongoose.Schema(
   {
-    jobId: {
+    job: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Job",
-      required: true
+      required: true,
     },
-    name: String,
-    email: String,
-    phone: String,
-    resumeUrl: String,
-    message: String,
+
+    applicant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    // User information saved when applying
+   applicantSnapshot: {
+  fullName: {
+    type: String,
+    default: "",
+  },
+
+  email: {
+    type: String,
+    default: "",
+  },
+
+  phoneNo: {
+    type: String,
+    default: "",
+  },
+
+  cv: {
+    template: {
+      type: String,
+      default: "",
+    },
+
+    data: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+  },
+},
+
+    // Job information saved when applying
+    jobSnapshot: {
+      title: {
+        type: String,
+        required: true,
+      },
+      company: {
+        type: String,
+        required: true,
+      },
+      location: {
+        type: String,
+        default: "",
+      },
+      type: {
+        type: String,
+        default: "",
+      },
+    },
+
     status: {
       type: String,
-      enum: ["Pending", "Reviewed", "Accepted", "Rejected"],
-      default: "Pending"
-    }
+      enum: [
+        "Submitted",
+        "Under Review",
+        "Shortlisted",
+        "Interview",
+        "Rejected",
+        "Hired",
+      ],
+      default: "Submitted",
+    },
+
+    coverLetter: {
+      type: String,
+      default: "",
+    },
+
+    appliedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
+);
+
+// A user cannot apply for the same job twice
+applicationSchema.index(
+  {
+    job: 1,
+    applicant: 1,
+  },
+  {
+    unique: true,
+  }
 );
 
 module.exports = mongoose.model("Application", applicationSchema);

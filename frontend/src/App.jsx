@@ -21,6 +21,10 @@ import EDashboard from "./Pages/Employer/EDashboard";
 import CreateCv from "./Pages/CVBuilder";
 import Profile from "./Pages/Profile.";
 import { Toaster } from "react-hot-toast";
+import MyApplicationsPage from "./Pages/MyApplicationsPage";
+import CompanyJobsPage from "./Pages/CompanyJobsPage";
+function App() {
+  const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
 
 function App() {
   return (
@@ -72,9 +76,21 @@ function AppContent() {
         <Route path="/Register" element={<RegisterPage />} />
         <Route path="/Contact" element={<ContactPage />} />
         <Route path="/Companies" element={<CompaniesPage />} />
+        <Route path="/Companies" element={<CompaniesPage />} />
+        <Route
+    path="/companies/:companyId/jobs"
+    element={<CompanyJobsPage />}
+/>
         <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
+        <Route path="/Jobs" element={<JobsPage />} />
+        <Route
+          path="/my-applications"
+          element={
+            <MyApplicationsPage />
+          }
+        />
 
         {/* User Routes */}
         <Route path="/UDashboard" element={<UDashboard />} />

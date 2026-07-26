@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const applicationRoutes = require("./routes/applicationRoutes");
+
 
 dotenv.config();
 connectDB();
@@ -20,6 +22,8 @@ app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/testimonials", require("./routes/testimonialRoutes"));
 app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 app.use("/api/applications", require("./routes/applicationRoutes"));
+app.use("/api/applications",require("./routes/applicationRoutes"));
+app.use("/api/applications", applicationRoutes);
 // Protected test route
 const protect = require("./middleware/authMiddleware");
 
