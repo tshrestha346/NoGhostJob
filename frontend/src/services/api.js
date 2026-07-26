@@ -472,7 +472,7 @@ export async function deleteCompany(
 |--------------------------------------------------------------------------
 | Categories
 |--------------------------------------------------------------------------
-*/
+`*/
 
 export async function fetchCategories() {
   const response = await fetch(

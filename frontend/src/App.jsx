@@ -23,8 +23,6 @@ import Profile from "./Pages/Profile.";
 import { Toaster } from "react-hot-toast";
 import MyApplicationsPage from "./Pages/MyApplicationsPage";
 import CompanyJobsPage from "./Pages/CompanyJobsPage";
-function App() {
-  const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
 
 function App() {
   return (
@@ -38,7 +36,6 @@ function AppContent() {
   const location = useLocation();
 
   const shouldHideFooter =
-  
     location.pathname.startsWith("/UDashboard") ||
     location.pathname.startsWith("/EDashboard") ||
     location.pathname.startsWith("/Profile") ||
@@ -76,20 +73,16 @@ function AppContent() {
         <Route path="/Register" element={<RegisterPage />} />
         <Route path="/Contact" element={<ContactPage />} />
         <Route path="/Companies" element={<CompaniesPage />} />
-        <Route path="/Companies" element={<CompaniesPage />} />
         <Route
-    path="/companies/:companyId/jobs"
-    element={<CompanyJobsPage />}
-/>
+          path="/companies/:companyId/jobs"
+          element={<CompanyJobsPage />}
+        />
         <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
-        <Route path="/Jobs" element={<JobsPage />} />
         <Route
           path="/my-applications"
-          element={
-            <MyApplicationsPage />
-          }
+          element={<MyApplicationsPage />}
         />
 
         {/* User Routes */}
@@ -115,7 +108,7 @@ function RegisterPage() {
 
   return (
     <Register
-      onRegisterSuccess={() => navigate("/Udashboard")}
+      onRegisterSuccess={() => navigate("/UDashboard")}
     />
   );
 }
