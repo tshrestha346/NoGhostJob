@@ -1,4 +1,4 @@
-import { useRef, useState,useEffect} from "react";
+import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import toast from "react-hot-toast";
@@ -64,11 +64,14 @@ const getStoredUser = () => {
   );
 };
 
+const getStoredToken = () => {
+  return localStorage.getItem("token") || sessionStorage.getItem("token");
+};
+
 const createInitialData = () => {
   const user = getStoredUser();
 
   return {
-    ...blankData,
     personal: {
       fullName: user?.fullName || "",
       jobTitle: user?.role || "",
@@ -80,8 +83,66 @@ const createInitialData = () => {
       linkedin: "",
       website: "",
     },
+    summary: "",
+    skills: [],
+    experience: [emptyExperience()],
+    education: [emptyEducation()],
+    languages: [emptyLanguage()],
+    projects: [],
+    certifications: [],
   };
 };
+
+function normalizeCVData(savedData = {}) {
+  const initialData = createInitialData();
+
+  return {
+    personal: {
+      ...initialData.personal,
+      ...(savedData.personal || {}),
+    },
+    summary: typeof savedData.summary === "string" ? savedData.summary : "",
+    skills: Array.isArray(savedData.skills) ? savedData.skills : [],
+    experience:
+      Array.isArray(savedData.experience) && savedData.experience.length > 0
+        ? savedData.experience.map((item) => ({
+            ...emptyExperience(),
+            ...(item || {}),
+            id: item?.id || createId(),
+          }))
+        : [emptyExperience()],
+    education:
+      Array.isArray(savedData.education) && savedData.education.length > 0
+        ? savedData.education.map((item) => ({
+            ...emptyEducation(),
+            ...(item || {}),
+            id: item?.id || createId(),
+          }))
+        : [emptyEducation()],
+    languages:
+      Array.isArray(savedData.languages) && savedData.languages.length > 0
+        ? savedData.languages.map((item) => ({
+            ...emptyLanguage(),
+            ...(item || {}),
+            id: item?.id || createId(),
+          }))
+        : [emptyLanguage()],
+    projects: Array.isArray(savedData.projects)
+      ? savedData.projects.map((item) => ({
+          ...emptyProject(),
+          ...(item || {}),
+          id: item?.id || createId(),
+        }))
+      : [],
+    certifications: Array.isArray(savedData.certifications)
+      ? savedData.certifications.map((item) => ({
+          ...emptyCertification(),
+          ...(item || {}),
+          id: item?.id || createId(),
+        }))
+      : [],
+  };
+}
 
 const templateList = [
   { id: "modern", name: "Modern Professional", desc: "Clean two-column layout, great for tech & product roles." },
@@ -1224,32 +1285,57 @@ export default function CVBuilder() {
   const [downloadError, setDownloadError] = useState("");
   const previewRef = useRef(null);
 
-    useEffect(() => {
-    async function loadSavedCV() {
-      try {
-        const user = getStoredUser();
-        if (!user?.token) return;
+  useEffect(() => {
+    let active = true;
 
+    async function loadSavedCV() {
+      const token = getStoredToken();
+
+      if (!token) {
+        if (active) {
+          setData(createInitialData());
+        }
+        return;
+      }
+
+      try {
         const response = await fetch("http://localhost:5000/api/auth/cv", {
           method: "GET",
-          headers: { Authorization: `Bearer ${user.token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
         });
 
         const result = await response.json();
-        if (!response.ok) throw new Error(result.message || "Could not load CV");
+
+        if (!response.ok) {
+          throw new Error(result.message || "Could not load CV");
+        }
+
+        if (!active) return;
 
         if (result.cv?.data) {
-          setData(result.cv.data);
+          setData(normalizeCVData(result.cv.data));
           setSelectedTemplate(result.cv.template || "modern");
         } else {
           setData(createInitialData());
         }
       } catch (error) {
-        toast.error(error.message || "Failed to load CV");
-        setData(createInitialData());
+        console.error("Failed to load saved CV:", error);
+
+        if (active) {
+          toast.error(error.message || "Failed to load CV");
+          setData(createInitialData());
+        }
       }
     }
+
     loadSavedCV();
+
+    return () => {
+      active = false;
+    };
   }, []);
   
   function updatePersonal(patch) {
@@ -1271,51 +1357,57 @@ export default function CVBuilder() {
   }
   const [saveMessage, setSaveMessage] = useState("");
 
-async function saveCVToBackend() {
-  try {
-    setSaveMessage("");
+  async function saveCVToBackend() {
+    try {
+      setSaveMessage("");
 
-    const user = getStoredUser();
+      const token = getStoredToken();
 
-    if (!user?.token) {
-      toast.error("Please login again.");
-      return;
+      if (!token) {
+        toast.error("Please login again.");
+        return;
+      }
+
+      const normalizedData = normalizeCVData(data);
+
+      const response = await fetch("http://localhost:5000/api/auth/cv", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          template: selectedTemplate,
+          data: normalizedData,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Could not save CV");
+      }
+
+      setData(normalizedData);
+      toast.success("CV saved successfully!");
+    } catch (error) {
+      console.error("CV save error:", error);
+      toast.error(error.message || "Failed to save CV.");
     }
-
-    const response = await fetch("http://localhost:5000/api/auth/cv", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({
-        template: selectedTemplate,
-        data: data,
-      }),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Could not save CV");
-    }
-
-    toast.success("CV saved successfully!");
-  } catch (error) {
-    toast.error(error.message || "Failed to save CV.");
   }
-}
 
   function renderTemplate() {
+    const safeData = normalizeCVData(data);
+
     switch (selectedTemplate) {
       case "europass":
-        return <EuropassTemplate data={data} />;
+        return <EuropassTemplate data={safeData} />;
       case "minimal":
-        return <MinimalTemplate data={data} />;
+        return <MinimalTemplate data={safeData} />;
       case "executive":
-        return <ExecutiveTemplate data={data} />;
+        return <ExecutiveTemplate data={safeData} />;
       default:
-        return <ModernTemplate data={data} />;
+        return <ModernTemplate data={safeData} />;
     }
   }
 
@@ -1329,7 +1421,7 @@ async function saveCVToBackend() {
             type="button"
             onClick={() => {
               if (window.confirm("This will clear the sample CV and all your entries. Continue?")) {
-                setData(structuredClone(blankData));
+                setData(createInitialData());
               }
             }}
             className="mt-4 text-xs font-semibold text-blue-600 underline-offset-2 hover:underline"
@@ -1355,43 +1447,43 @@ async function saveCVToBackend() {
               <div className="grid grid-cols-2 gap-3">
                 <Field
                   label="Full name"
-                  value={data.personal.fullName}
+                  value={data.personal?.fullName || ""}
                   onChange={(e) => updatePersonal({ fullName: e.target.value })}
                   placeholder="Jane Doe"
                 />
                 <Field
                   label="Job title"
-                  value={data.personal.jobTitle}
+                  value={data.personal?.jobTitle || ""}
                   onChange={(e) => updatePersonal({ jobTitle: e.target.value })}
                   placeholder="Senior Frontend Developer"
                 />
                 <Field
                   label="Email"
-                  value={data.personal.email}
+                  value={data.personal?.email || ""}
                   onChange={(e) => updatePersonal({ email: e.target.value })}
                   placeholder="jane@email.com"
                 />
                 <Field
                   label="Phone"
-                  value={data.personal.phone}
+                  value={data.personal?.phone || ""}
                   onChange={(e) => updatePersonal({ phone: e.target.value })}
                   placeholder="+49 000 000000"
                 />
                 <Field
                   label="Location"
-                  value={data.personal.location}
+                  value={data.personal?.location || ""}
                   onChange={(e) => updatePersonal({ location: e.target.value })}
                   placeholder="Berlin, Germany"
                 />
                 <Field
                   label="LinkedIn"
-                  value={data.personal.linkedin}
+                  value={data.personal?.linkedin || ""}
                   onChange={(e) => updatePersonal({ linkedin: e.target.value })}
                   placeholder="linkedin.com/in/janedoe"
                 />
                 <Field
                   label="Website"
-                  value={data.personal.website}
+                  value={data.personal?.website || ""}
                   onChange={(e) => updatePersonal({ website: e.target.value })}
                   placeholder="janedoe.dev"
                 />
@@ -1402,37 +1494,37 @@ async function saveCVToBackend() {
               <TextAreaField
                 label="Summary"
                 rows={4}
-                value={data.summary}
+                value={data.summary || ""}
                 onChange={(e) => setData((p) => ({ ...p, summary: e.target.value }))}
                 placeholder="A short pitch about who you are and what you're great at."
               />
             </FormSection>
 
-            <FormSection title="Skills" subtitle={`${data.skills.length} added`}>
-              <SkillsEditor skills={data.skills} onChange={(skills) => setData((p) => ({ ...p, skills }))} />
+            <FormSection title="Skills" subtitle={`${Array.isArray(data.skills) ? data.skills.length : 0} added`}>
+              <SkillsEditor skills={Array.isArray(data.skills) ? data.skills : []} onChange={(skills) => setData((p) => ({ ...p, skills }))} />
             </FormSection>
 
-            <FormSection title="Work experience" subtitle={`${data.experience.length} role(s)`}>
-              <ExperienceEditor items={data.experience} onChange={(experience) => setData((p) => ({ ...p, experience }))} />
+            <FormSection title="Work experience" subtitle={`${Array.isArray(data.experience) ? data.experience.length : 0} role(s)`}>
+              <ExperienceEditor items={Array.isArray(data.experience) ? data.experience : []} onChange={(experience) => setData((p) => ({ ...p, experience }))} />
             </FormSection>
 
-            <FormSection title="Education" subtitle={`${data.education.length} entr${data.education.length === 1 ? "y" : "ies"}`}>
-              <EducationEditor items={data.education} onChange={(education) => setData((p) => ({ ...p, education }))} />
+            <FormSection title="Education" subtitle={`${Array.isArray(data.education) ? data.education.length : 0} entr${Array.isArray(data.education) && data.education.length === 1 ? "y" : "ies"}`}>
+              <EducationEditor items={Array.isArray(data.education) ? data.education : []} onChange={(education) => setData((p) => ({ ...p, education }))} />
             </FormSection>
 
             <FormSection title="Projects" subtitle="optional">
-              <ProjectsEditor items={data.projects} onChange={(projects) => setData((p) => ({ ...p, projects }))} />
+              <ProjectsEditor items={Array.isArray(data.projects) ? data.projects : []} onChange={(projects) => setData((p) => ({ ...p, projects }))} />
             </FormSection>
 
             <FormSection title="Certifications" subtitle="optional">
               <CertificationsEditor
-                items={data.certifications}
+                items={Array.isArray(data.certifications) ? data.certifications : []}
                 onChange={(certifications) => setData((p) => ({ ...p, certifications }))}
               />
             </FormSection>
 
             <FormSection title="Languages">
-              <LanguagesEditor items={data.languages} onChange={(languages) => setData((p) => ({ ...p, languages }))} />
+              <LanguagesEditor items={Array.isArray(data.languages) ? data.languages : []} onChange={(languages) => setData((p) => ({ ...p, languages }))} />
             </FormSection>
 
             <button

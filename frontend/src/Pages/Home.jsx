@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   fetchJobs,
   fetchCompanies,
@@ -6,6 +7,59 @@ import {
   fetchTestimonials,
   subscribeNewsletter,
 } from "../services/api";
+
+
+function extractArray(response, key) {
+  if (Array.isArray(response)) return response;
+  if (Array.isArray(response?.[key])) return response[key];
+  if (Array.isArray(response?.data)) return response.data;
+  if (Array.isArray(response?.data?.[key])) return response.data[key];
+  return [];
+}
+
+function getText(value, fallback = "") {
+  if (typeof value === "string" || typeof value === "number") {
+    return String(value);
+  }
+
+  if (value && typeof value === "object") {
+    return (
+      value.name ||
+      value.title ||
+      value.companyName ||
+      value.label ||
+      fallback
+    );
+  }
+
+  return fallback;
+}
+
+function getJobDisplayData(job) {
+  const company = getText(job.company, getText(job.companyName, "Company"));
+  const location = getText(
+    job.loc || job.location || job.city || job.jobLocation,
+    "Location not specified"
+  );
+  const type = getText(job.type || job.jobType || job.employmentType, "Full Time");
+  const salary = getText(
+    job.sal || job.salary || job.salaryRange || job.compensation,
+    "Salary not specified"
+  );
+
+  return {
+    id: job._id || job.id,
+    title: getText(job.title || job.jobTitle, "Untitled position"),
+    company,
+    location,
+    type,
+    salary,
+    logo: job.logo || company.slice(0, 2).toUpperCase() || "💼",
+    colour: job.lc || job.color || "#1565C0",
+    description: getText(job.description || job.summary),
+    featured: Boolean(job.isFeatured || job.featured),
+  };
+}
 
 function Counter({ end, suffix = "+" }) {
   const [val, setVal] = useState(0);
@@ -101,13 +155,23 @@ const FEATURES = [
   },
 ];
 
-function Hero({ setJobs }) {
+function Hero() {
+  const navigate = useNavigate();
   const [kw, setKw] = useState("");
   const [loc, setLoc] = useState("");
 
-  async function handleSearch() {
-    const data = await fetchJobs(kw, loc);
-    setJobs(data);
+  function handleSearch(event) {
+    event.preventDefault();
+
+    const params = new URLSearchParams();
+    const cleanKeyword = kw.trim();
+    const cleanLocation = loc.trim();
+
+    if (cleanKeyword) params.set("keyword", cleanKeyword);
+    if (cleanLocation) params.set("location", cleanLocation);
+
+    const query = params.toString();
+    navigate(query ? `/jobs?${query}` : "/jobs");
   }
 
   return (
@@ -146,7 +210,10 @@ function Hero({ setJobs }) {
           skills, ambitions, and lifestyle.
         </p>
 
-        <div className="mx-auto mb-8 grid max-w-3xl gap-2 rounded-2xl border border-[#DDEAFC] bg-white p-3 shadow-[0_20px_60px_rgba(7,25,46,0.25)] md:grid-cols-[1fr_1fr_auto] md:gap-0">
+        <form
+          onSubmit={handleSearch}
+          className="mx-auto mb-8 grid max-w-3xl gap-2 rounded-2xl border border-[#DDEAFC] bg-white p-3 shadow-[0_20px_60px_rgba(7,25,46,0.25)] md:grid-cols-[1fr_1fr_auto] md:gap-0"
+        >
           <div className="relative md:border-r md:border-[#DDEAFC]">
             <span className="absolute left-4 top-1/2 -translate-y-1/2">🔍</span>
             <input
@@ -168,12 +235,12 @@ function Hero({ setJobs }) {
           </div>
 
           <button
-            onClick={handleSearch}
+            type="submit"
             className="rounded-xl bg-gradient-to-br from-blue-700 to-blue-400 px-7 py-3.5 text-sm font-bold text-white shadow-[0_6px_20px_rgba(21,101,192,0.35)]"
           >
-            Search
+            Find Job Positions
           </button>
-        </div>
+        </form>
       </div>
     </section>
   );
@@ -201,56 +268,101 @@ function StatsStrip() {
 }
 
 function JobCard({ job }) {
+  const data = getJobDisplayData(job);
+
   const typeClass = {
     "Full Time": "border-blue-200 bg-blue-50 text-blue-700",
+    "Full-Time": "border-blue-200 bg-blue-50 text-blue-700",
     Remote: "border-green-200 bg-green-100 text-green-700",
     Hybrid: "border-amber-200 bg-amber-100 text-amber-700",
+    "Part Time": "border-purple-200 bg-purple-50 text-purple-700",
+    "Part-Time": "border-purple-200 bg-purple-50 text-purple-700",
+    Internship: "border-pink-200 bg-pink-50 text-pink-700",
   };
 
   return (
-    <div className="group flex flex-col gap-3 rounded-2xl border-[1.5px] border-[#DDEAFC] bg-white p-5 shadow-[0_2px_10px_rgba(10,30,60,0.05)] transition-all duration-200 hover:-translate-y-1 hover:border-blue-400 hover:shadow-[0_12px_40px_rgba(21,101,192,0.13)]">
-      <div className="flex items-center gap-3">
+    <article className="group flex flex-col gap-3 rounded-2xl border-[1.5px] border-[#DDEAFC] bg-white p-5 shadow-[0_2px_10px_rgba(10,30,60,0.05)] transition-all duration-200 hover:-translate-y-1 hover:border-blue-400 hover:shadow-[0_12px_40px_rgba(21,101,192,0.13)]">
+      <div className="flex items-start gap-3">
         <div
           className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border text-sm font-extrabold"
           style={{
-            backgroundColor: `${job.lc}18`,
-            borderColor: `${job.lc}30`,
-            color: job.lc,
+            backgroundColor: `${data.colour}18`,
+            borderColor: `${data.colour}30`,
+            color: data.colour,
           }}
         >
-          {job.logo}
+          {data.logo}
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-serif text-base font-bold text-[#07192E]">
-            {job.title}
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="truncate font-serif text-base font-bold text-[#07192E]">
+              {data.title}
+            </h3>
+            {data.featured && (
+              <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-blue-700">
+                Featured
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-xs text-slate-500">
-            🏢 {job.company} · 📍 {job.loc}
+            🏢 {data.company} · 📍 {data.location}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <span className="text-base font-bold text-blue-700">{job.sal}</span>
+      {data.description && (
+        <p className="line-clamp-2 text-xs leading-5 text-slate-600">
+          {data.description}
+        </p>
+      )}
+
+      <div className="mt-auto flex items-center gap-2 border-t border-slate-100 pt-3">
+        <span className="text-sm font-bold text-blue-700">{data.salary}</span>
         <span className="flex-1" />
         <span
           className={`rounded-full border px-2.5 py-1 text-[11px] font-bold ${
-            typeClass[job.type] || "border-blue-200 bg-blue-50 text-blue-700"
+            typeClass[data.type] || "border-blue-200 bg-blue-50 text-blue-700"
           }`}
         >
-          {job.type}
+          {data.type}
         </span>
       </div>
 
-      <button className="w-full rounded-lg bg-gradient-to-br from-blue-700 to-blue-400 py-2.5 text-sm font-bold text-white opacity-90 transition-opacity group-hover:opacity-100">
-        Apply Now →
-      </button>
-    </div>
+      {data.id ? (
+        <Link
+          to={`/jobs/${data.id}`}
+          className="w-full rounded-lg bg-gradient-to-br from-blue-700 to-blue-400 py-2.5 text-center text-sm font-bold text-white opacity-90 transition-opacity group-hover:opacity-100"
+        >
+          View Job →
+        </Link>
+      ) : (
+        <button
+          type="button"
+          disabled
+          className="w-full cursor-not-allowed rounded-lg bg-slate-300 py-2.5 text-sm font-bold text-white"
+        >
+          Job unavailable
+        </button>
+      )}
+    </article>
   );
 }
 
 function FeaturedJobs({ jobs }) {
+  const featuredJobs = jobs.filter(
+    (job) => job?.isFeatured === true || job?.featured === true
+  );
+
+  const jobsToShow = (featuredJobs.length > 0 ? featuredJobs : jobs)
+    .slice()
+    .sort((a, b) => {
+      const dateA = new Date(a?.createdAt || a?.postedAt || 0).getTime();
+      const dateB = new Date(b?.createdAt || b?.postedAt || 0).getTime();
+      return dateB - dateA;
+    })
+    .slice(0, 6);
+
   return (
     <section className="bg-white px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
@@ -265,14 +377,27 @@ function FeaturedJobs({ jobs }) {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {jobs.length > 0 ? (
-            jobs.map((j) => <JobCard key={j._id} job={j} />)
+          {jobsToShow.length > 0 ? (
+            jobsToShow.map((job) => (
+              <JobCard key={job._id || job.id} job={job} />
+            ))
           ) : (
             <p className="col-span-full text-center text-slate-500">
               No jobs found.
             </p>
           )}
         </div>
+
+        {jobs.length > jobsToShow.length && (
+          <div className="mt-10 text-center">
+            <Link
+              to="/jobs"
+              className="inline-flex rounded-xl border border-blue-200 bg-blue-50 px-6 py-3 text-sm font-bold text-blue-700 transition hover:bg-blue-100"
+            >
+              View All Job Positions →
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -567,10 +692,10 @@ export default function Home() {
           fetchTestimonials(),
         ]);
 
-      setJobs(jobsData);
-      setCompanies(companiesData);
-      setCategories(categoriesData);
-      setTestimonials(testimonialsData);
+      setJobs(extractArray(jobsData, "jobs"));
+      setCompanies(extractArray(companiesData, "companies"));
+      setCategories(extractArray(categoriesData, "categories"));
+      setTestimonials(extractArray(testimonialsData, "testimonials"));
     } catch (error) {
       console.error("Failed to load home data:", error);
     } finally {
@@ -592,7 +717,7 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden font-['Segoe_UI',system-ui,sans-serif]">
-      <Hero setJobs={setJobs} />
+      <Hero />
       <StatsStrip />
       <FeaturedJobs jobs={jobs} />
       <TopCompanies companies={companies} />
