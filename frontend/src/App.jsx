@@ -1,4 +1,11 @@
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Navbar from "./Components/Navbar";
@@ -19,11 +26,29 @@ import CompanyJobsPage from "./Pages/CompanyJobsPage";
 function App() {
   const isLoggedIn = !!(localStorage.getItem("token") || sessionStorage.getItem("token"));
 
+function App() {
   return (
     <BrowserRouter>
-       
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+
+  const shouldHideFooter =
+  
+    location.pathname.startsWith("/UDashboard") ||
+    location.pathname.startsWith("/EDashboard") ||
+    location.pathname.startsWith("/Profile") ||
+    location.pathname.startsWith("/CreateCV");
+
+  return (
+    <>
       <Navbar />
-         <Toaster
+
+      <Toaster
         position="top-right"
         toastOptions={{
           duration: 3000,
@@ -44,6 +69,7 @@ function App() {
           },
         }}
       />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Login" element={<LoginPage />} />
@@ -67,21 +93,16 @@ function App() {
         />
 
         {/* User Routes */}
-        <Route path="/Udashboard" element={<UDashboard />} />
-        <Route path="/CreateCv" element={<CreateCv />} />
-        <Route path="/Profile"
-          element={<Profile />}
-        />
+        <Route path="/UDashboard" element={<UDashboard />} />
+        <Route path="/CreateCV" element={<CreateCv />} />
+        <Route path="/Profile" element={<Profile />} />
 
         {/* Employer Routes */}
         <Route path="/EDashboard" element={<EDashboard />} />
       </Routes>
-      {!isLoggedIn ? (
-        <Footer />
-      ) : (
-        <></>
-      )}
-    </BrowserRouter>
+
+      {!shouldHideFooter && <Footer />}
+    </>
   );
 }
 
@@ -91,7 +112,12 @@ function LoginPage() {
 
 function RegisterPage() {
   const navigate = useNavigate();
-  return <Register onRegisterSuccess={() => navigate("/Udashboard")} />;
+
+  return (
+    <Register
+      onRegisterSuccess={() => navigate("/Udashboard")}
+    />
+  );
 }
 
 export default App;

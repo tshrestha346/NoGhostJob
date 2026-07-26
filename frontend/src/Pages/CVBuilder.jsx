@@ -311,15 +311,17 @@ function TemplateCard({ template, selected, onClick }) {
 
 function SkillsEditor({ skills, onChange }) {
   const [draft, setDraft] = useState("");
+  const safeSkills = Array.isArray(skills) ? skills : [];
+
 
   function addSkill() {
     const value = draft.trim();
-    if (!value || skills.includes(value)) return;
-    onChange([...skills, value]);
+    if (!value || safeSkills.includes(value)) return;
+    onChange([...safeSkills, value]);
     setDraft("");
   }
   function removeSkill(skill) {
-    onChange(skills.filter((s) => s !== skill));
+    onChange(safeSkills.filter((s) => s !== skill));
   }
 
   return (
@@ -346,7 +348,7 @@ function SkillsEditor({ skills, onChange }) {
         </button>
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
-        {skills.map((skill) => (
+        {safeSkills.map((skill) => (
           <span
             key={skill}
             className="flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700"
@@ -362,30 +364,32 @@ function SkillsEditor({ skills, onChange }) {
             </button>
           </span>
         ))}
-        {skills.length === 0 && <p className="text-xs text-slate-400">No skills added yet.</p>}
+        {safeSkills.length === 0 && <p className="text-xs text-slate-400">No skills added yet.</p>}
       </div>
     </div>
   );
 }
 
 function ExperienceEditor({ items, onChange }) {
+    const safeItems = Array.isArray(items) ? items : [];
+
   function update(id, patch) {
-    onChange(items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+    onChange(safeItems.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   }
   function remove(id) {
-    onChange(items.filter((item) => item.id !== id));
+    onChange(safeItems.filter((item) => item.id !== id));
   }
   function add() {
-    onChange([...items, emptyExperience()]);
+    onChange([...safeItems, emptyExperience()]);
   }
 
  
 
   return (
     <div className="space-y-5">
-      {items.map((item, index) => (
+      {safeItems.map((item, index) => (
         <div key={item.id} className="relative rounded-xl border border-blue-100 bg-[#F7FAFF] p-4">
-          {items.length > 1 && (
+          {safeItems.length > 1 && (
             <button
               type="button"
               onClick={() => remove(item.id)}
@@ -461,21 +465,23 @@ function ExperienceEditor({ items, onChange }) {
 }
 
 function EducationEditor({ items, onChange }) {
+    const safeItems = Array.isArray(items) ? items : [];
+
   function update(id, patch) {
-    onChange(items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+    onChange(safeItems.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   }
   function remove(id) {
-    onChange(items.filter((item) => item.id !== id));
+    onChange(safeItems.filter((item) => item.id !== id));
   }
   function add() {
-    onChange([...items, emptyEducation()]);
+    onChange([...safeItems, emptyEducation()]);
   }
 
   return (
     <div className="space-y-5">
-      {items.map((item, index) => (
+      {safeItems.map((item, index) => (
         <div key={item.id} className="relative rounded-xl border border-blue-100 bg-[#F7FAFF] p-4">
-          {items.length > 1 && (
+          {safeItems.length > 1 && (
             <button
               type="button"
               onClick={() => remove(item.id)}
@@ -542,19 +548,20 @@ function EducationEditor({ items, onChange }) {
 }
 
 function LanguagesEditor({ items, onChange }) {
+  const safeItems = Array.isArray(items) ? items : [];
   function update(id, patch) {
-    onChange(items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+    onChange(safeItems.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   }
   function remove(id) {
-    onChange(items.filter((item) => item.id !== id));
+    onChange(safeItems.filter((item) => item.id !== id));
   }
   function add() {
-    onChange([...items, emptyLanguage()]);
+    onChange([...safeItems, emptyLanguage()]);
   }
 
   return (
     <div className="space-y-3">
-      {items.map((item, index) => (
+      {safeItems.map((item, index) => (
         <div key={item.id} className="flex items-end gap-2 rounded-xl border border-blue-100 bg-[#F7FAFF] p-3">
           <div className="flex-1">
             <Field
@@ -573,7 +580,7 @@ function LanguagesEditor({ items, onChange }) {
               ))}
             </SelectField>
           </div>
-          {items.length > 1 && (
+          {safeItems.length > 1 && (
             <button
               type="button"
               onClick={() => remove(item.id)}
@@ -596,19 +603,21 @@ function LanguagesEditor({ items, onChange }) {
 }
 
 function ProjectsEditor({ items, onChange }) {
+  const safeItems = Array.isArray(items) ? items : [];
+
   function update(id, patch) {
-    onChange(items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+    onChange(safeItems.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   }
   function remove(id) {
-    onChange(items.filter((item) => item.id !== id));
+    onChange(safeItems.filter((item) => item.id !== id));
   }
   function add() {
-    onChange([...items, emptyProject()]);
+    onChange([...safeItems, emptyProject()]);
   }
 
   return (
     <div className="space-y-5">
-      {items.map((item, index) => (
+      {safeItems.map((item, index) => (
         <div key={item.id} className="relative rounded-xl border border-blue-100 bg-[#F7FAFF] p-4">
           <button
             type="button"
@@ -655,19 +664,21 @@ function ProjectsEditor({ items, onChange }) {
 }
 
 function CertificationsEditor({ items, onChange }) {
+  const safeItems = Array.isArray(items) ? items : [];
+
   function update(id, patch) {
-    onChange(items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+    onChange(safeItems.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   }
   function remove(id) {
-    onChange(items.filter((item) => item.id !== id));
+    onChange(safeItems.filter((item) => item.id !== id));
   }
   function add() {
-    onChange([...items, emptyCertification()]);
+    onChange([...safeItems, emptyCertification()]);
   }
 
   return (
     <div className="space-y-3">
-      {items.map((item, index) => (
+      {safeItems.map((item, index) => (
         <div key={item.id} className="relative grid grid-cols-3 gap-2 rounded-xl border border-blue-100 bg-[#F7FAFF] p-3">
           <Field
             label={`Certification ${index + 1}`}
@@ -712,7 +723,7 @@ function CertificationsEditor({ items, onChange }) {
    ============================================================ */
 
 function ModernTemplate({ data }) {
-  const { personal, summary, skills, experience, education, languages, projects, certifications } = data;
+  const { personal = [], summary = [], skills = [], experience = [], education = [], languages = [], projects = [], certifications = [] } = data;
   const hasExperience = experience.filter((e) => e.role || e.company).length > 0;
   const hasEducation = education.filter((e) => e.degree || e.school).length > 0;
   const namedLanguages = languages.filter((l) => l.name);
@@ -864,7 +875,7 @@ function ModernTemplate({ data }) {
 }
 
 function EuropassTemplate({ data }) {
-  const { personal, summary, skills, experience, education, languages, projects, certifications } = data;
+  const { personal = [], summary = [], skills = [], experience = [], education = [], languages = [], projects = [], certifications = [] } = data;
   const hasExperience = experience.filter((e) => e.role || e.company).length > 0;
   const hasEducation = education.filter((e) => e.degree || e.school).length > 0;
   const namedLanguages = languages.filter((l) => l.name);
@@ -1006,7 +1017,7 @@ function EuropassTemplate({ data }) {
 }
 
 function MinimalTemplate({ data }) {
-  const { personal, summary, skills, experience, education, languages, projects, certifications } = data;
+  const { personal = [], summary = [], skills = [], experience = [], education = [], languages = [], projects = [], certifications = [] } = data;
   const hasExperience = experience.filter((e) => e.role || e.company).length > 0;
   const hasEducation = education.filter((e) => e.degree || e.school).length > 0;
   const namedLanguages = languages.filter((l) => l.name);
@@ -1123,8 +1134,8 @@ function MinimalTemplate({ data }) {
   );
 }
 
-function ExecutiveTemplate({ data }) {
-  const { personal, summary, skills, experience, education, languages, projects, certifications } = data;
+function ExecutiveTemplate({ data = [] }) {
+  const { personal = [], summary = [], skills = [], experience = [], education = [], languages = [], projects = [], certifications = [] } = data;
   const hasExperience = experience.filter((e) => e.role || e.company).length > 0;
   const hasEducation = education.filter((e) => e.degree || e.school).length > 0;
   const namedLanguages = languages.filter((l) => l.name);
@@ -1346,7 +1357,7 @@ export default function CVBuilder() {
     setDownloadError("");
     setIsDownloading(true);
     try {
-      const filename = `${data.personal.fullName || "my-cv"}.pdf`.trim().replace(/\s+/g, "-").toLowerCase();
+      const filename = `${data?.personal?.fullName || "my-cv"}.pdf`.trim().replace(/\s+/g, "-").toLowerCase();
       await generatePdfFromElement(previewRef.current, filename);
     } catch (err) {
       console.error(err);
