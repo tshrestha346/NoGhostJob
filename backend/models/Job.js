@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const jobSchema = new mongoose.Schema(
   {
+    job_id: {type: Number, unique: true},
     title: { type: String, required: true },
     company: { type: String, required: true },
     loc: { type: String, required: true },
@@ -16,7 +17,8 @@ const jobSchema = new mongoose.Schema(
     category: String,
     description: String,
     requirements: [String],
-    isFeatured: { type: Boolean, default: true }
+    isFeatured: { type: Boolean, default: true },
+    is_active: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
