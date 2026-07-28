@@ -27,7 +27,7 @@ const NAV_ITEMS = [
   { key:"jobs",         icon:"💼", label:"Job Listings"    },
   { key:"applicants",   icon:"👥", label:"Applicants"      },
   { key:"post",         icon:"✏️", label:"Post a Job"      },
-  { key:"analytics",    icon:"📊", label:"Analytics"       },
+  // { key:"analytics",    icon:"📊", label:"Analytics"       },
   { key:"settings",     icon:"⚙️", label:"Settings"        },
 ];
 

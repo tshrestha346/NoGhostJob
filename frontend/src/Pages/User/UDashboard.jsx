@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import Overview from './Overview';
 import ApplicationsView from "./ApplicationsView";
+import MyApplicationsPage from "../MyApplicationsPage.jsx";
 import InterviewsView from "./InterviewsView";
 import SavedView from "./SavedView";
 import RecommendedView from "./RecommendedView.jsx";
@@ -33,7 +34,7 @@ import {
 export default function UserDashboard() {
   const [page, setPage] = useState("overview");
 
-  const views = { overview:<Overview setPage={setPage}/>, applications:<ApplicationsView/>,  profile:<ProfileView/> };
+  const views = { overview:<Overview setPage={setPage}/>, applications:<MyApplicationsPage/>,  profile:<ProfileView/> };
 
   return (
     <div style={{ minHeight:"100vh", background:C.offWhite, fontFamily:"'Segoe UI', system-ui, sans-serif", display:"flex" }}>

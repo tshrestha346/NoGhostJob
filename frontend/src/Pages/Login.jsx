@@ -129,80 +129,126 @@ export default function Login({ onLoginSuccess }) {
     setErrors(e);
     return Object.keys(e).length === 0;
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
+  if (!validate()) return;
 
-    setLoading(true);
-    setServerError("");
+  setLoading(true);
+  setServerError("");
+  setSuccess(false);
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+  try {
+    const res = await fetch(
+      "http://localhost:5000/api/auth/login",
+      {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          email: form.email,
+          email: form.email.trim().toLowerCase(),
           password: form.password,
         }),
-      });
-
-      const data = await res.json();
-      console.log(data,"sadsa")
-
-      if (!res.ok) {
-        throw new Error(data.message || "Login failed");
       }
+    );
 
+    const data = await res.json();
 
-      if (form.remember) {
-        console.log(data,"sjhshs")
-        localStorage.setItem("token", data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            _id: data._id,
-            fullName: data.fullName,
-            email: data.email,
-            isActive: data.isActive,
-            isAdmin: data.isAdmin,
-            accountType: data.accountType,
-            token:data.token
-          })
-        );
-      } else {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem(
-          "user",
-          JSON.stringify({
-            _id: data._id,
-            fullName: data.fullName,
-            email: data.email,
-            isActive: data.isActive,
-            isAdmin: data.isAdmin,
-            accountType: data.accountType,
-            token:data.token
-          })
-        );
-      }
+    console.log("Login API response:", data);
 
-      if(data.accountType === "user") {
-        navigate("/Udashboard")
-      }else{
-        navigate("/EDashboard")
-      }
-
-      setLoading(false);
-      setSuccess(true);
-
-      if (onLoginSuccess) {
-        setTimeout(() => onLoginSuccess(data), 1400);
-      }
-    } catch (err) {
-      setLoading(false);
-      setServerError(err.message || "Something went wrong. Please try again.");
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Login failed"
+      );
     }
-  };
+
+    if (!data.token) {
+      throw new Error(
+        "Login succeeded, but no token was returned."
+      );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Clear previous login data
+    |--------------------------------------------------------------------------
+    */
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+
+    /*
+    |--------------------------------------------------------------------------
+    | Store the complete API response
+    |--------------------------------------------------------------------------
+    */
+
+    const storage = form.remember
+      ? localStorage
+      : sessionStorage;
+
+    storage.setItem("token", data.token);
+    storage.setItem(
+      "user",
+      JSON.stringify(data)
+    );
+
+    console.log(
+      "Stored user:",
+      JSON.parse(storage.getItem("user"))
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect according to account type
+    |--------------------------------------------------------------------------
+    */
+
+    setSuccess(true);
+
+    if (data.accountType === "user") {
+      navigate("/Udashboard", {
+        replace: true,
+      });
+    } else if (
+      data.accountType === "employer"
+    ) {
+      if (
+        !data.companyId &&
+        !data.company?._id
+      ) {
+        throw new Error(
+          "Employer login succeeded, but no company is linked to this account."
+        );
+      }
+
+      navigate("/EDashboard", {
+        replace: true,
+      });
+    } else {
+      navigate("/", {
+        replace: true,
+      });
+    }
+
+    if (onLoginSuccess) {
+      onLoginSuccess(data);
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+
+    setServerError(
+      err.message ||
+        "Something went wrong. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-['Segoe_UI',system-ui,sans-serif]">

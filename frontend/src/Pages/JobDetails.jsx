@@ -15,13 +15,13 @@ function getStoredToken() {
     localStorage.getItem("token") ||
     sessionStorage.getItem("token")
   );
-}
+}   
 
 export default function JobDetailsPage() {
   const { id: jobId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-
+``
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState("");
@@ -280,7 +280,7 @@ export default function JobDetailsPage() {
             <span>
               🏢{" "}
               <strong className="text-white">
-                {job.company}
+                {job.company?.name || "Company not specified"}
               </strong>
             </span>
 
@@ -370,7 +370,7 @@ export default function JobDetailsPage() {
 
             <div className="min-w-0">
               <h3 className="max-w-[180px] truncate font-serif text-sm font-bold text-[#07192E]">
-                {job.company}
+                {job.company?.name || "Company not specified"}
               </h3>
 
               <p className="text-xs text-slate-400">
