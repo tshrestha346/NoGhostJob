@@ -45,9 +45,7 @@ export default function Navbar() {
           <Link to="/" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             Home
           </Link>
-  <Link to="/my-applications" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
-            Applications
-          </Link>
+
           <Link to="/Jobs" className="text-sm font-semibold text-[#3D4A63] hover:text-blue-700">
             Jobs
           </Link>

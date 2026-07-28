@@ -29,7 +29,7 @@ export default function RecommendedView() {
               <LogoBox logo={job.logo} lc={job.lc} size={48} />
               <div>
                 <div style={{ fontSize:"17px", fontWeight:700, color:C.navy, fontFamily:"'Georgia', serif" }}>{job.title}</div>
-                <div style={{ fontSize:"12px", color:C.gray }}>{job.company} · {job.loc || "Remote"}</div>
+                <div style={{ fontSize:"12px", color:C.gray }}>{job.company?.name || "Company not specified"} · {job.loc || "Remote"}</div>
               </div>
             </div>
             <div style={{ display:"flex", gap:"8px", marginBottom:"14px", flexWrap:"wrap" }}>

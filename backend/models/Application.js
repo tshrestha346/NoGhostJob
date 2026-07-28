@@ -15,7 +15,7 @@ const applicationSchema = new mongoose.Schema(
     },
 
     // User information saved when applying
-   applicantSnapshot: {
+applicantSnapshot: {
   fullName: {
     type: String,
     default: "",
@@ -32,15 +32,18 @@ const applicationSchema = new mongoose.Schema(
   },
 
   cv: {
-    template: {
-      type: String,
-      default: "",
-    },
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
 
-    data: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {},
-    },
+  cvPdfUrl: {
+    type: String,
+    default: "",
+  },
+
+  cvPdfFilename: {
+    type: String,
+    default: "",
   },
 },
 
@@ -63,7 +66,11 @@ const applicationSchema = new mongoose.Schema(
         default: "",
       },
     },
-
+rejectionReason: {
+  type: String,
+  default: "",
+  trim: true,
+},
     status: {
       type: String,
       enum: [

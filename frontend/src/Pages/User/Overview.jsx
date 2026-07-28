@@ -119,7 +119,7 @@ export default function Overview({ setPage }) {
               <div style={{ position:"absolute", top:"10px", right:"10px", background:C.greenPale, border:`1px solid ${C.greenBd}`, color:C.green, fontSize:"10px", fontWeight:800, padding:"2px 7px", borderRadius:"20px" }}>{job.match}% match</div>
               <LogoBox logo={job.logo} lc={job.lc} size={38} />
               <div style={{ fontSize:"13px", fontWeight:700, color:C.navy, marginTop:"10px", marginBottom:"3px" }}>{job.title}</div>
-              <div style={{ fontSize:"11px", color:C.gray, marginBottom:"8px" }}>{job.company}</div>
+              <div style={{ fontSize:"11px", color:C.gray, marginBottom:"8px" }}>{job.company?.name || "Company not specified"}</div>
               <div style={{ fontSize:"12px", fontWeight:700, color:C.blue, marginBottom:"10px" }}>{job.salary}</div>
               <button style={{ width:"100%", padding:"8px 0", borderRadius:"7px", border:"none", background:`linear-gradient(135deg,${C.blue},${C.blueAcc})`, color:"#fff", fontSize:"12px", fontWeight:700, cursor:"pointer" }}>Apply Now</button>
             </div>

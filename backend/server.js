@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const applicationRoutes = require("./routes/applicationRoutes");
-
+const path = require("path");
 
 dotenv.config();
 connectDB();
@@ -16,7 +16,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", require("./routes/authrRoutes"));
 app.use("/api/", require("./routes/authrRoutes")); // Contact route
-app.use("/api/jobs", require("./routes/jobRoutes"));
+app.use("/api/jobs", require("./routes/jobRoutes"));  
 app.use("/api/companies", require("./routes/companyRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/testimonials", require("./routes/testimonialRoutes"));
@@ -33,6 +33,13 @@ app.get("/api/dashboard", protect, (req, res) => {
     user: req.user,
   });
 });
+
+app.use(
+  "/uploads",
+  express.static(
+    path.join(__dirname, "uploads")
+  )
+);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`)
