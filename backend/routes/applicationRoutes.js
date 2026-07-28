@@ -6,6 +6,7 @@ const {
   getMyApplications,
   getApplicationsForJob,
   updateApplicationStatus,
+  getAllApplications,
 } = require("../Controller/applicationController");
 
 const protect = require(
@@ -46,6 +47,12 @@ router.patch(
   "/:applicationId/status",
   protect,
   updateApplicationStatus
+);
+
+router.get(
+  "/getAllApplications",
+  protect,
+  getAllApplications
 );
 
 module.exports = router;

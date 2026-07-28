@@ -76,6 +76,7 @@ exports.applyForJob = async (
     });
   }
 };
+
 exports.getApplicationStatus = async (
   req,
   res
@@ -239,6 +240,20 @@ exports.updateApplicationStatus = async (req, res) => {
 
     return res.status(500).json({
       message: "Failed to update application status.",
+      error: error.message,
+    });
+  }
+};
+
+exports.getAllApplications = async (req, res) => {
+  try {
+    const application = await Application.find()
+    console.log('Application', application)
+  } catch (error) {
+    console.error('Error', error)
+
+    return res.status(500).json({
+      message: "Failed to fetch all applications.",
       error: error.message,
     });
   }

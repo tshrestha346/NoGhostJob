@@ -338,26 +338,13 @@ export default function Login({ onLoginSuccess }) {
           ) : (
             <>
               <div className="mb-8">
-                <h1 className="font-serif text-3xl font-bold text-[#07192E] mb-2 tracking-tight">
+                <h1 className="font-serif text-3xl font-bold text-[#07192E] mb-2 tracking-tight text-center">
                   Welcome back
                 </h1>
-                <p className="text-slate-500 text-sm leading-6">
+                <p className="text-slate-500 text-sm leading-6 text-center">
                   Log in to continue your job search and access your saved
                   roles.
                 </p>
-              </div>
-
-              <div className="flex gap-2.5 mb-6">
-                <SocialBtn icon="🔵" label="Google" />
-                <SocialBtn icon="🔗" label="LinkedIn" />
-              </div>
-
-              <div className="flex items-center gap-3 mb-6">
-                <div className="flex-1 h-px bg-[#DDEAFC]" />
-                <span className="text-xs text-slate-500 font-semibold whitespace-nowrap">
-                  or continue with email
-                </span>
-                <div className="flex-1 h-px bg-[#DDEAFC]" />
               </div>
 
               {serverError && (

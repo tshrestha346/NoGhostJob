@@ -4,6 +4,7 @@ import {
   Route,
   useNavigate,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 
 import Login from "./Pages/Login";
@@ -32,6 +33,14 @@ function App() {
   );
 }
 
+function ProtectedRoute({ children }) {
+  const isLoggedIn = !!(
+    localStorage.getItem("token") || sessionStorage.getItem("token")
+  );
+
+  return isLoggedIn ? children : <Navigate to="/" replace />;
+}
+
 function AppContent() {
   const location = useLocation();
 
@@ -40,6 +49,10 @@ function AppContent() {
     location.pathname.startsWith("/EDashboard") ||
     location.pathname.startsWith("/Profile") ||
     location.pathname.startsWith("/CreateCV");
+
+  const isLoggedIn = !!(
+    localStorage.getItem("token") || sessionStorage.getItem("token")
+  );
 
   return (
     <>
@@ -80,18 +93,52 @@ function AppContent() {
         <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
-        <Route
-          path="/my-applications"
-          element={<MyApplicationsPage />}
-        />
 
         {/* User Routes */}
-        <Route path="/UDashboard" element={<UDashboard />} />
-        <Route path="/CreateCV" element={<CreateCv />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route
+          path="/UDashboard"
+          element={
+            <ProtectedRoute>
+              <UDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/CreateCV"
+          element={
+            <ProtectedRoute>
+              <CreateCv />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/Profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-applications"
+          element={
+            <ProtectedRoute>
+              <MyApplicationsPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Employer Routes */}
-        <Route path="/EDashboard" element={<EDashboard />} />
+        <Route
+          path="/EDashboard"
+          element={
+            <ProtectedRoute>
+              <EDashboard />
+            </ProtectedRoute>
+          }
+        />
+        
       </Routes>
 
       {!shouldHideFooter && <Footer />}
@@ -106,11 +153,7 @@ function LoginPage() {
 function RegisterPage() {
   const navigate = useNavigate();
 
-  return (
-    <Register
-      onRegisterSuccess={() => navigate("/UDashboard")}
-    />
-  );
+  return <Register onRegisterSuccess={() => navigate("/UDashboard")} />;
 }
 
 export default App;

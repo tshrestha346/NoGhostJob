@@ -15,34 +15,34 @@ const applicationSchema = new mongoose.Schema(
     },
 
     // User information saved when applying
-   applicantSnapshot: {
-  fullName: {
-    type: String,
-    default: "",
-  },
+    applicantSnapshot: {
+      fullName: {
+        type: String,
+        default: "",
+      },
 
-  email: {
-    type: String,
-    default: "",
-  },
+      email: {
+        type: String,
+        default: "",
+      },
 
-  phoneNo: {
-    type: String,
-    default: "",
-  },
+      phoneNo: {
+        type: String,
+        default: "",
+      },
 
-  cv: {
-    template: {
-      type: String,
-      default: "",
+      cv: {
+        template: {
+          type: String,
+          default: "",
+        },
+
+        data: {
+          type: mongoose.Schema.Types.Mixed,
+          default: {},
+        },
+      },
     },
-
-    data: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {},
-    },
-  },
-},
 
     // Job information saved when applying
     jobSnapshot: {
@@ -89,7 +89,7 @@ const applicationSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // A user cannot apply for the same job twice
@@ -100,7 +100,7 @@ applicationSchema.index(
   },
   {
     unique: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Application", applicationSchema);

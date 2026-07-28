@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Overview from "./Overview";
 import JobListings from "./JobListings";
 import ApplicantsView from "./ApplicantsView";
 import PostJob from "./PostJob";
 import Analytics from "./Analytics";
+import axios from 'axios';
 
 // ─── TOKENS ───────────────────────────────────────────────────────────────────
 const C = {
@@ -18,14 +19,6 @@ const C = {
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const EMPLOYER = { name:"TechCorp Inc.", logo:"TC", industry:"Technology", email:"hr@techcorp.com", plan:"Pro" };
-
-const initJobs = [
-  { id:1, title:"Senior React Developer",  dept:"Engineering",  type:"Full Time", loc:"Remote",         salary:"$120k–$150k", posted:"May 10, 2025", status:"Active",   apps:34, views:820 },
-  { id:2, title:"Product Designer",        dept:"Design",        type:"Hybrid",    loc:"San Francisco",  salary:"$90k–$120k",  posted:"May 14, 2025", status:"Active",   apps:21, views:540 },
-  { id:3, title:"Backend Engineer",        dept:"Engineering",  type:"Full Time", loc:"New York",       salary:"$130k–$160k", posted:"May 18, 2025", status:"Active",   apps:18, views:390 },
-  { id:4, title:"Marketing Manager",       dept:"Marketing",     type:"Remote",    loc:"Remote",         salary:"$80k–$100k",  posted:"Apr 28, 2025", status:"Closed",   apps:52, views:1200 },
-  { id:5, title:"DevOps Engineer",         dept:"Engineering",  type:"Full Time", loc:"Austin, TX",     salary:"$110k–$140k", posted:"May 20, 2025", status:"Draft",    apps:0,  views:0 },
-];
 
 const APPLICANTS = [
   { id:1, name:"Alex Johnson",  initials:"AJ", role:"Senior React Developer", jobId:1, applied:"May 18",  exp:"5 yrs", loc:"SF, CA",   salary:"$130k", status:"Interview",  score:92, skills:["React","TS","Node"] },
@@ -50,15 +43,50 @@ const NAV_ITEMS = [
 // ─── MAIN EMPLOYER DASHBOARD ──────────────────────────────────────────────────
 export default function EmployerDashboard() {
   const [page,       setPage]      = useState("overview");
-  const [jobs,       setJobs]      = useState(initJobs);
+  const [jobs,       setJobs]      = useState();
   const [applicants, setApplicants]= useState(APPLICANTS);
   const [editJob,    setEditJob]   = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleSetPage = p => { setPage(p); if (p !== "post") setEditJob(null); };
 
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+          const response = await axios.get(
+              "http://localhost:5000/api/jobs"
+          );
+
+          setJobs(response.data);
+      } catch (err) {
+          console.error(err);
+      } finally {
+          setLoading(false);
+      }
+    };
+
+    const fetchApplications = async () => {
+      try {
+          const response = await axios.get(
+              "http://localhost:5000/api/getAllApplications"
+          );
+          console.log('response', response.data)
+      } catch (err) {
+          console.error(err);
+      } finally {
+          setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  if (loading) {
+    return <div></div>;
+  }
   const views = {
-    overview:   <Overview    jobs={jobs} applicants={applicants} setPage={handleSetPage} />,
     jobs:       <JobListings  jobs={jobs} setJobs={setJobs} setPage={handleSetPage} setPostEditJob={j=>{ setEditJob(j); setPage("post"); }} />,
+    overview:   <Overview    jobs={jobs} applicants={applicants} setPage={handleSetPage} />,
     applicants: <ApplicantsView applicants={applicants} setApplicants={setApplicants} />,
     post:       <PostJob jobs={jobs} setJobs={setJobs} editJob={editJob} setEditJob={setEditJob} setPage={handleSetPage} />,
     analytics:  <Analytics jobs={jobs} applicants={applicants} />,

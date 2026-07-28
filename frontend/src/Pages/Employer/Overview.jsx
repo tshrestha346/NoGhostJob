@@ -64,7 +64,8 @@ function SectionHeader({ title, sub, action, onAction }) {
 
 // ─── OVERVIEW ─────────────────────────────────────────────────────────────────
 export default function Overview({ jobs, applicants, setPage }) {
-  const activeJobs = jobs.filter(j => j.status === "Active").length;
+  // const activeJobs = jobs.filter(j => j.status === "Active").length;
+  const activeJobs = (jobs || []).filter(j => j.is_active).length;
   const totalApps  = applicants.length;
   const interviews = applicants.filter(a => a.status === "Interview").length;
   const offers     = applicants.filter(a => a.status === "Offered").length;
