@@ -500,7 +500,7 @@ function WhyUs() {
         <div className="mb-12 text-center">
           <SectionLabel>Our Edge</SectionLabel>
           <h2 className="mb-2.5 font-serif text-3xl font-bold tracking-tight text-[#07192E] sm:text-4xl">
-            Why Choose CareerHub
+            Why Choose NoGhostJob
           </h2>
           <p className="text-slate-500">
             We make your job search experience exceptional
@@ -710,7 +710,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center text-xl font-bold text-blue-700">
-        Loading NoGhostJob...
+        Loading NoGhostJobb...
       </div>
     );
   }

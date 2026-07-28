@@ -44,7 +44,7 @@ export default function UserDashboard() {
         <div style={{ padding:"24px 20px 20px", borderBottom:"1px solid rgba(255,255,255,0.08)" }}>
           <div style={{ display:"flex", alignItems:"center", gap:"9px" }}>
             <div style={{ width:"32px", height:"32px", borderRadius:"8px", background:"linear-gradient(135deg,#42A5F5,#1565C0)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"14px", fontWeight:800, color:"#fff" }}>C</div>
-            <span style={{ color:"#fff", fontFamily:"'Georgia', serif", fontSize:"18px", fontWeight:700 }}>CareerHub</span>
+            <span style={{ color:"#fff", fontFamily:"'Georgia', serif", fontSize:"18px", fontWeight:700 }}>NoGhostJob</span>
           </div>
         </div>
 
@@ -70,12 +70,7 @@ export default function UserDashboard() {
           })}
         </nav>
 
-        {/* Logout */}
-        <div style={{ padding:"14px 10px", borderTop:"1px solid rgba(255,255,255,0.08)" }}>
-          <button style={{ width:"100%", display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", borderRadius:"9px", border:"none", background:"rgba(220,38,38,0.12)", color:"rgba(248,113,113,0.9)", fontSize:"13px", fontWeight:600, cursor:"pointer" }}>
-            <span style={{ fontSize:"16px" }}>🚪</span> Sign Out
-          </button>
-        </div>
+
       </div>
 
       {/* ── MAIN CONTENT ────────────────────────── */}
@@ -84,14 +79,10 @@ export default function UserDashboard() {
         <div style={{ background:C.white, borderBottom:`1px solid ${C.border}`, padding:"16px 32px", display:"flex", justifyContent:"space-between", alignItems:"center", position:"sticky", top:0, zIndex:20 }}>
           <div>
             <div style={{ fontSize:"20px", fontWeight:700, color:C.navy, fontFamily:"'Georgia', serif" }}>{NAV_ITEMS.find(n=>n.key===page)?.label}</div>
-            <div style={{ fontSize:"12px", color:C.gray }}>CareerHub · Job Seeker Portal</div>
+            <div style={{ fontSize:"12px", color:C.gray }}>NoGhostJob · Job Seeker Portal</div>
           </div>
           <div style={{ display:"flex", gap:"10px", alignItems:"center" }}>
-            <button style={{ position:"relative", padding:"8px 12px", borderRadius:"8px", border:`1px solid ${C.border}`, background:"transparent", cursor:"pointer", fontSize:"16px" }}>
-              🔔
-              <span style={{ position:"absolute", top:"5px", right:"5px", width:"7px", height:"7px", borderRadius:"50%", background:C.red, border:"1.5px solid #fff" }} />
-            </button>
-            <button style={{ padding:"8px 18px", borderRadius:"8px", border:"none", background:`linear-gradient(135deg,${C.blue},${C.blueAcc})`, color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer" }}>Browse Jobs</button>
+            
           </div>
         </div>
 

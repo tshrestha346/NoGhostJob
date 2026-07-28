@@ -235,7 +235,7 @@ const testimonials = [
     initials: "SJ",
     color: "#1565C0",
     rating: 5,
-    text: "CareerHub helped me land my dream role at Google.",
+    text: "NoGhostJo helped me land my dream role at Google.",
   },
   {
     name: "Michael Chen",

@@ -157,7 +157,7 @@ export default function EmployerDashboard() {
         <div style={{ padding: "24px 20px 20px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#42A5F5,#1565C0)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, color: "#fff" }}>C</div>
-            <span style={{ color: "#fff", fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 700 }}>CareerHub</span>
+            <span style={{ color: "#fff", fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 700 }}>NoGhostJob</span>
           </div>
         </div>
 
@@ -191,7 +191,7 @@ export default function EmployerDashboard() {
         <div style={{ background: C.white, borderBottom: `1px solid ${C.border}`, padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, zIndex: 20 }}>
           <div>
             <div style={{ fontSize: 20, fontWeight: 700, color: C.navy, fontFamily: "Georgia, serif" }}>{NAV_ITEMS.find((n) => n.key === page)?.label}</div>
-            <div style={{ fontSize: 12, color: C.gray }}>{selectedJob && page === "applicants" ? selectedJob.title : "CareerHub · Employer Portal"}</div>
+            <div style={{ fontSize: 12, color: C.gray }}>{selectedJob && page === "applicants" ? selectedJob.title : "NoGhostJob · Employer Portal"}</div>
           </div>
           <button onClick={() => handleSetPage("post")} style={{ padding: "8px 20px", borderRadius: 8, border: "none", background: `linear-gradient(135deg,${C.blue},${C.blueAcc})`, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Post a Job</button>
         </div>

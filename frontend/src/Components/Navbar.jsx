@@ -37,7 +37,7 @@ export default function Navbar() {
             C
           </div>
           <span className="font-serif text-2xl font-bold tracking-tight text-[#07192E]">
-            CareerHub
+            NoGhostJob
           </span>
         </Link>
 
