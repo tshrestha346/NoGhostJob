@@ -41,9 +41,9 @@ export const INTERVIEWS = [
 export const NAV_ITEMS = [
   { key:"overview",      icon:"⊞",  label:"Overview"        },
   { key:"applications",  icon:"📋", label:"Applications"    },
-  { key:"interviews",    icon:"📅", label:"Interviews"      },
-  { key:"saved",         icon:"🔖", label:"Saved Jobs"      },
-  { key:"recommended",   icon:"✨", label:"Recommended"     },
+  // { key:"interviews",    icon:"📅", label:"Interviews"      },
+  // { key:"saved",         icon:"🔖", label:"Saved Jobs"      }, 
+  // { key:"recommended",   icon:"✨", label:"Recommended"     },
   // { key:"profile",       icon:"👤", label:"My Profile"      },
 ];
 

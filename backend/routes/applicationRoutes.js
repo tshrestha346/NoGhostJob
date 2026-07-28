@@ -49,10 +49,4 @@ router.patch(
   updateApplicationStatus
 );
 
-router.get(
-  "/getAllApplications",
-  protect,
-  getAllApplications
-);
-
 module.exports = router;

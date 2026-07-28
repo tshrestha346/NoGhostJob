@@ -63,7 +63,11 @@ const applicationSchema = new mongoose.Schema(
         default: "",
       },
     },
-
+rejectionReason: {
+  type: String,
+  default: "",
+  trim: true,
+},
     status: {
       type: String,
       enum: [

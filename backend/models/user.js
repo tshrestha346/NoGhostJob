@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    user_id: {type: Number, unique: true},
+    user_id: {
+      type: Number,
+      unique: true,
+      sparse: true,
+    },
+
     fullName: {
       type: String,
       required: true,
@@ -35,61 +40,99 @@ const userSchema = new mongoose.Schema(
     accountType: {
       type: String,
       required: true,
-      enum: ["user", "employer", "admin", "superadmin"],
+      enum: [
+        "user",
+        "employer",
+        "admin",
+        "superadmin",
+      ],
       default: "user",
+    },
+
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      default: null,
     },
 
     address: {
       type: String,
       trim: true,
+      default: "",
     },
 
     street: {
       type: String,
       trim: true,
+      default: "",
     },
 
     houseNo: {
       type: String,
       trim: true,
+      default: "",
     },
 
     postalCode: {
       type: String,
       trim: true,
+      default: "",
     },
 
     country: {
       type: String,
       trim: true,
+      default: "",
     },
 
     phoneNo: {
       type: String,
       trim: true,
+      default: "",
     },
+
     role: {
       type: String,
       trim: true,
+      default: "",
     },
+
     cv: {
-  template: {
-    type: String,
-    default: "modern",
-  },
-  data: {
-    type: Object,
-    default: {},
-  },
+      template: {
+        type: String,
+        default: "modern",
+      },
+
+      data: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
+      },
+      cvPdfUrl: {
+  type: String,
+  default: "",
 },
+
+cvPdfFilename: {
+  type: String,
+  default: "",
+},
+
+cvUpdatedAt: {
+  type: Date,
+  default: null,
+},
+    },
+
     termsAndCondition: {
       type: Boolean,
       required: true,
       validate: {
-        validator: function (value) {
+        validator(value) {
           return value === true;
         },
-        message: "You must accept the terms and conditions.",
+
+        message:
+          "You must accept the terms and conditions.",
       },
     },
   },
@@ -99,4 +142,5 @@ const userSchema = new mongoose.Schema(
 );
 
 module.exports =
-  mongoose.models.User || mongoose.model("User", userSchema);
+  mongoose.models.User ||
+  mongoose.model("User", userSchema);

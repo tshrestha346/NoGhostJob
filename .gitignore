@@ -1,39 +1,22 @@
-# Environment variables — never commit secrets
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
 .env
 .env.*
 !.env.example
 
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.egg-info/
 dist/
 build/
-.venv/
-venv/
-*.pyc
+uploads/
 
-# Node / JavaScript
-node_modules/
-npm-debug.log*
-yarn-error.log
-.pnp/
-.pnp.js
-.next/
-.nuxt/
-dist/
+*.log
+*.zip
+*.rar
+*.7z
 
-# Editor
 .vscode/
-.idea/
-*.swp
-*.swo
 .DS_Store
 Thumbs.db
-
-# Docker
-*.log
-
-# OS
-.DS_Store
+backend/chrome/
+**/chrome/
