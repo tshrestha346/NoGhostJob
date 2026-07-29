@@ -6,6 +6,7 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const path = require("path");
 const adminRoutes = require("./routes/adminRoutes");
 const employerRoutes = require("./routes/employerRoutes");
+const memberRoutes = require("./routes/memberRoutes");
 
 dotenv.config();
 connectDB();
@@ -28,6 +29,7 @@ app.use("/api/applications",require("./routes/applicationRoutes"));
 app.use("/api/applications", applicationRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/employers", employerRoutes);
+app.use("/api/admin/members", memberRoutes);
 
 // Protected test route
 const protect = require("./middleware/authMiddleware");

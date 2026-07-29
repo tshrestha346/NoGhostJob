@@ -1,29 +1,6 @@
-const teamMembers = [
-  {
-    name: "Alexandra Morgan",
-    title: "Chief Executive Officer",
-    initials: "AM",
-    bio: "20+ years leading enterprise technology firms across North America and Europe.",
-  },
-  {
-    name: "David Chen",
-    title: "Chief Technology Officer",
-    initials: "DC",
-    bio: "Former Google engineer. Architect of our core infrastructure and product roadmap.",
-  },
-  {
-    name: "Priya Nair",
-    title: "Head of Design",
-    initials: "PN",
-    bio: "Award-winning designer with a passion for human-centered product experiences.",
-  },
-  {
-    name: "Marcus Williams",
-    title: "VP of Operations",
-    initials: "MW",
-    bio: "Operational strategist ensuring seamless delivery for 200+ enterprise clients.",
-  },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
+const API_BASE = "http://localhost:5000/api";
 
 const stats = [
   { value: "12+", label: "Years of Excellence" },
@@ -63,6 +40,42 @@ const offices = [
 
 // ─── ABOUT PAGE ──────────────────────────────────────────────────────────────
 export default function AboutPage() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [members, setMembers] = useState([]);
+
+  const loadMembers = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await axios.get(`${API_BASE}/admin/members`);
+      const rows = res.data?.members || res.data?.data || [];
+      setMembers(rows);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || "Failed to load members.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadMembers();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F7FAFF]">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-700" />
+
+          <p className="mt-4 font-semibold text-[#3D4A63]">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="bg-white min-h-screen">
       {/* Hero */}
@@ -177,23 +190,23 @@ export default function AboutPage() {
               Meet the Team
             </h2>
           </div>
-          <div className="grid grid-cols-4 gap-5">
-            {teamMembers.map((m, i) => (
+          <div className="grid grid-cols-5 gap-5">
+            {members.map((m, i) => (
               <div
                 key={i}
                 className="bg-white rounded-xl border border-[#DDEAFC] px-6 py-7 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(21,101,192,0.12)]"
               >
                 <div className="w-[60px] h-[60px] rounded-full bg-[#E3F2FD] border-2 border-[#BBDEFB] flex items-center justify-center font-bold text-base text-[#1565C0] mx-auto mb-3.5">
-                  {m.initials}
-                </div>
-                <div className="text-[15px] font-semibold text-[#0A2540] mb-1">
-                  {m.name}
-                </div>
-                <div className="text-xs text-[#1976D2] font-medium tracking-[0.3px] mb-3 uppercase">
                   {m.title}
                 </div>
+                <div className="text-[15px] font-semibold text-[#0A2540] mb-1">
+                  {m.full_name}
+                </div>
+                <div className="text-xs text-[#1976D2] font-medium tracking-[0.3px] mb-3 uppercase">
+                  {m.designation}
+                </div>
                 <p className="text-[13px] text-[#6B7A99] leading-[1.65] m-0">
-                  {m.bio}
+                  {m.description}
                 </p>
               </div>
             ))}
