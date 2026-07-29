@@ -7,83 +7,55 @@ import {
 
 /*
 |--------------------------------------------------------------------------
-| Design tokens
-|--------------------------------------------------------------------------
-*/
-
-const C = {
-  navy: "#07192E",
-  navyMid: "#0D2B4A",
-  blue: "#1565C0",
-  blueMid: "#1976D2",
-  blueAcc: "#2196F3",
-  bluePale: "#E3F2FD",
-  blueSoft: "#BBDEFB",
-  white: "#FFFFFF",
-  offWhite: "#F7FAFF",
-  border: "#DDEAFC",
-  gray: "#6B7A99",
-  grayLight: "#EEF2F7",
-  grayDark: "#3D4A63",
-  green: "#15803D",
-  greenPale: "#DCFCE7",
-  greenBd: "#BBF7D0",
-  amber: "#B45309",
-  amberPale: "#FEF3C7",
-  amberBd: "#FDE68A",
-  red: "#DC2626",
-  redPale: "#FEF2F2",
-  redBd: "#FECACA",
-  purple: "#7C3AED",
-  purplePale: "#EDE9FE",
-};
-
-/*
-|--------------------------------------------------------------------------
 | Status configuration
 |--------------------------------------------------------------------------
 */
 
 const STATUS_META = {
   Applied: {
-    color: C.blue,
-    bg: C.bluePale,
-    border: C.blueSoft,
     icon: "📩",
+    badge:
+      "border-blue-200 bg-blue-50 text-blue-700",
+    button:
+      "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100",
   },
 
   Shortlisted: {
-    color: C.amber,
-    bg: C.amberPale,
-    border: C.amberBd,
     icon: "⭐",
+    badge:
+      "border-amber-200 bg-amber-50 text-amber-700",
+    button:
+      "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100",
   },
 
   Interview: {
-    color: C.purple,
-    bg: C.purplePale,
-    border: "#C4B5FD",
     icon: "🎙️",
+    badge:
+      "border-violet-200 bg-violet-50 text-violet-700",
+    button:
+      "border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100",
   },
 
   Offered: {
-    color: C.green,
-    bg: C.greenPale,
-    border: C.greenBd,
     icon: "🎉",
+    badge:
+      "border-green-200 bg-green-50 text-green-700",
+    button:
+      "border-green-200 bg-green-50 text-green-700 hover:bg-green-100",
   },
 
   Rejected: {
-    color: C.red,
-    bg: C.redPale,
-    border: C.redBd,
     icon: "✕",
+    badge:
+      "border-red-200 bg-red-50 text-red-700",
+    button:
+      "border-red-200 bg-red-50 text-red-700 hover:bg-red-100",
   },
 };
 
 /*
 |--------------------------------------------------------------------------
-| Backend to frontend status mapping
+| General helpers
 |--------------------------------------------------------------------------
 */
 
@@ -101,12 +73,6 @@ function backendStatusToFrontend(status) {
 
   return statusMap[status] || "Applied";
 }
-
-/*
-|--------------------------------------------------------------------------
-| Date formatting
-|--------------------------------------------------------------------------
-*/
 
 function formatApplicationDate(value) {
   if (!value) {
@@ -126,12 +92,6 @@ function formatApplicationDate(value) {
   });
 }
 
-/*
-|--------------------------------------------------------------------------
-| Name initials
-|--------------------------------------------------------------------------
-*/
-
 function createInitials(name) {
   const cleanName = String(name || "").trim();
 
@@ -147,27 +107,160 @@ function createInitials(name) {
     .toUpperCase();
 }
 
+function safeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function safeText(value) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+  return String(value);
+}
+
+function hasObjectContent(value) {
+  return (
+    value &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    Object.keys(value).length > 0
+  );
+}
+
 /*
 |--------------------------------------------------------------------------
-| Get nested CV information
+| Check whether CV contains meaningful information
+|--------------------------------------------------------------------------
+*/
+
+function hasCvContent(cv) {
+  if (!cv || typeof cv !== "object") {
+    return false;
+  }
+
+  const data =
+    cv?.data &&
+    typeof cv.data === "object"
+      ? cv.data
+      : cv;
+
+  if (
+    !data ||
+    typeof data !== "object" ||
+    Array.isArray(data)
+  ) {
+    return false;
+  }
+
+  const personal =
+    data.personal &&
+    typeof data.personal === "object"
+      ? data.personal
+      : {};
+
+  const hasPersonalInformation =
+    Object.values(personal).some(
+      (value) =>
+        typeof value === "string" &&
+        value.trim()
+    );
+
+  const hasSummary =
+    typeof data.summary === "string" &&
+    data.summary.trim();
+
+  const hasExperience =
+    Array.isArray(data.experience) &&
+    data.experience.some(
+      (item) =>
+        item?.role ||
+        item?.position ||
+        item?.company ||
+        item?.description
+    );
+
+  const hasEducation =
+    Array.isArray(data.education) &&
+    data.education.some(
+      (item) =>
+        item?.degree ||
+        item?.school ||
+        item?.institution
+    );
+
+  const hasSkills =
+    Array.isArray(data.skills) &&
+    data.skills.length > 0;
+
+  const hasProjects =
+    Array.isArray(data.projects) &&
+    data.projects.length > 0;
+
+  return Boolean(
+    hasPersonalInformation ||
+      hasSummary ||
+      hasExperience ||
+      hasEducation ||
+      hasSkills ||
+      hasProjects
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Select CV
+|--------------------------------------------------------------------------
+| Snapshot CV is used only when it actually contains information.
+| Otherwise, the current populated applicant CV is used.
+|--------------------------------------------------------------------------
+*/
+
+function getSelectedCv(application) {
+  const snapshotCv =
+    application?.applicantSnapshot?.cv;
+
+  const populatedApplicantCv =
+    application?.applicant?.cv;
+
+  const applicationCv =
+    application?.cv;
+
+  if (hasCvContent(snapshotCv)) {
+    return snapshotCv;
+  }
+
+  if (hasCvContent(populatedApplicantCv)) {
+    return populatedApplicantCv;
+  }
+
+  if (hasCvContent(applicationCv)) {
+    return applicationCv;
+  }
+
+  return (
+    populatedApplicantCv ||
+    snapshotCv ||
+    applicationCv ||
+    null
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Get CV summary information
 |--------------------------------------------------------------------------
 */
 
 function getCvData(application) {
-  const populatedApplicantCv =
-    application?.applicant?.cv;
+  const cv = getSelectedCv(application);
 
-  const snapshotCv =
-    application?.applicantSnapshot?.cv;
-
-  const cv =
-    snapshotCv ||
-    populatedApplicantCv ||
-    {};
-
-  if (typeof cv === "string") {
+  if (!cv) {
     return {
-      url: cv,
+      cv: null,
       template: "",
       skills: [],
       experience: "",
@@ -181,44 +274,46 @@ function getCvData(application) {
       : cv;
 
   const experienceItems =
-    Array.isArray(actualData?.experience)
-      ? actualData.experience
-      : [];
+    safeArray(actualData?.experience);
 
   const experienceText =
     experienceItems
       .filter(
         (item) =>
           item?.role ||
+          item?.position ||
           item?.company
       )
-      .map((item) =>
-        [
-          item.role,
-          item.company,
-        ]
+      .map((item) => {
+        const role =
+          item?.role ||
+          item?.position ||
+          item?.jobTitle ||
+          "";
+
+        const company =
+          item?.company ||
+          item?.organisation ||
+          item?.organization ||
+          "";
+
+        return [role, company]
           .filter(Boolean)
-          .join(" at ")
-      )
+          .join(" at ");
+      })
+      .filter(Boolean)
       .join(", ");
 
   return {
-    url:
-      cv?.url ||
-      cv?.fileUrl ||
-      cv?.downloadUrl ||
-      cv?.path ||
-      "",
+    cv,
 
     template:
       cv?.template ||
       cv?.templateName ||
-      "",
+      "modern",
 
     skills:
-      Array.isArray(actualData?.skills)
-        ? actualData.skills
-        : [],
+      safeArray(actualData?.skills),
 
     experience:
       experienceText ||
@@ -226,13 +321,10 @@ function getCvData(application) {
       "",
   };
 }
+
 /*
 |--------------------------------------------------------------------------
-| Normalize one application
-|--------------------------------------------------------------------------
-| Supports both:
-| 1. Raw API objects
-| 2. Already-mapped frontend objects
+| Normalize applicant
 |--------------------------------------------------------------------------
 */
 
@@ -243,12 +335,14 @@ function normalizeApplicant(application) {
   const snapshot =
     application?.applicantSnapshot || {};
 
-  
   const job =
     application?.job || {};
 
   const jobSnapshot =
     application?.jobSnapshot || {};
+
+  const cvData =
+    getCvData(application);
 
   const fullName =
     applicant?.fullName ||
@@ -270,27 +364,6 @@ function normalizeApplicant(application) {
     snapshot?.phone ||
     application?.phone ||
     "";
-
-  const cvData =
-    getCvData(application);
-
-  /*
-  |--------------------------------------------------------------------------
-  | Read generated PDF URL
-  |--------------------------------------------------------------------------
-  */
-
-  const cvPdfUrl =
-    snapshot?.cvPdfUrl ||
-    applicant?.cvPdfUrl ||
-    application?.cvPdfUrl ||
-    "";
-
-  const cvPdfFilename =
-    snapshot?.cvPdfFilename ||
-    applicant?.cvPdfFilename ||
-    application?.cvPdfFilename ||
-    "Applicant-CV.pdf";
 
   const jobTitle =
     job?.title ||
@@ -333,7 +406,9 @@ function normalizeApplicant(application) {
   const frontendStatus =
     STATUS_META[rawStatus]
       ? rawStatus
-      : backendStatusToFrontend(rawStatus);
+      : backendStatusToFrontend(
+          rawStatus
+        );
 
   const scoreValue =
     Number(
@@ -358,7 +433,6 @@ function normalizeApplicant(application) {
       createInitials(fullName),
 
     email,
-
     phone,
 
     role:
@@ -370,14 +444,9 @@ function normalizeApplicant(application) {
     backendStatus:
       rawStatus,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Rejection reason (only meaningful when status is "Rejected")
-    |--------------------------------------------------------------------------
-    */
-
     rejectionReason:
-      application?.rejectionReason || "",
+      application?.rejectionReason ||
+      "",
 
     applied:
       application?.applied ||
@@ -410,16 +479,15 @@ function normalizeApplicant(application) {
 
     /*
     |--------------------------------------------------------------------------
-    | CV fields
+    | Full CV object for direct rendering
     |--------------------------------------------------------------------------
     */
 
-    cvUrl:
-      cvData.url,
+    cv:
+      cvData.cv,
 
-    cvPdfUrl,
-
-    cvPdfFilename,
+    hasCv:
+      hasCvContent(cvData.cv),
 
     cvTemplate:
       cvData.template,
@@ -436,7 +504,6 @@ function normalizeApplicant(application) {
 
     jobId:
       job?._id ||
-      application?.job ||
       application?.jobId ||
       "",
 
@@ -446,8 +513,7 @@ function normalizeApplicant(application) {
       "",
 
     company:
-      typeof job?.company ===
-      "object"
+      typeof job?.company === "object"
         ? job.company?.name
         : jobSnapshot?.companyName ||
           jobSnapshot?.company ||
@@ -472,21 +538,10 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "4px",
-        padding: "3px 10px",
-        borderRadius: "20px",
-        background: meta.bg,
-        border: `1px solid ${meta.border}`,
-        color: meta.color,
-        fontSize: "11px",
-        fontWeight: 700,
-        whiteSpace: "nowrap",
-      }}
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-bold ${meta.badge}`}
     >
-      {meta.icon} {status}
+      <span>{meta.icon}</span>
+      {status}
     </span>
   );
 }
@@ -504,40 +559,16 @@ function SectionHeader({
   onAction,
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent:
-          "space-between",
-        alignItems: "center",
-        marginBottom: "18px",
-        gap: "16px",
-        flexWrap: "wrap",
-      }}
-    >
+    <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
       <div>
-        <div
-          style={{
-            fontSize: "19px",
-            fontWeight: 700,
-            color: C.navy,
-            fontFamily:
-              "'Georgia', serif",
-          }}
-        >
+        <h2 className="font-serif text-xl font-bold text-slate-900">
           {title}
-        </div>
+        </h2>
 
         {sub && (
-          <div
-            style={{
-              fontSize: "13px",
-              color: C.gray,
-              marginTop: "2px",
-            }}
-          >
+          <p className="mt-1 text-sm text-slate-500">
             {sub}
-          </div>
+          </p>
         )}
       </div>
 
@@ -545,16 +576,7 @@ function SectionHeader({
         <button
           type="button"
           onClick={onAction}
-          style={{
-            padding: "8px 18px",
-            borderRadius: "8px",
-            border: "none",
-            background: `linear-gradient(135deg, ${C.blue}, ${C.blueAcc})`,
-            color: "#fff",
-            fontSize: "13px",
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
+          className="rounded-lg bg-gradient-to-r from-blue-700 to-blue-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:from-blue-800 hover:to-blue-600"
         >
           {action}
         </button>
@@ -565,144 +587,98 @@ function SectionHeader({
 
 /*
 |--------------------------------------------------------------------------
-| Reject modal (collects a required rejection reason)
+| Reject modal
 |--------------------------------------------------------------------------
 */
 
-function RejectModal({ applicantName, onConfirm, onCancel }) {
-  const [reason, setReason] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+function RejectModal({
+  applicantName,
+  onConfirm,
+  onCancel,
+}) {
+  const [reason, setReason] =
+    useState("");
 
-  const trimmedReason = reason.trim();
+  const [submitting, setSubmitting] =
+    useState(false);
 
-  const handleConfirm = async () => {
-    if (!trimmedReason) {
-      return;
-    }
+  const trimmedReason =
+    reason.trim();
 
-    setSubmitting(true);
+  const handleConfirm =
+    async () => {
+      if (!trimmedReason) {
+        return;
+      }
 
-    try {
-      await onConfirm(trimmedReason);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+      setSubmitting(true);
+
+      try {
+        await onConfirm(
+          trimmedReason
+        );
+      } finally {
+        setSubmitting(false);
+      }
+    };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(7,25,46,0.5)",
-        zIndex: 999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          background: C.white,
-          borderRadius: "16px",
-          padding: "28px 32px",
-          maxWidth: "420px",
-          width: "100%",
-          boxShadow: "0 20px 60px rgba(7,25,46,0.2)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "16px",
-            fontWeight: 700,
-            color: C.navy,
-            marginBottom: "6px",
-            fontFamily: "'Georgia', serif",
-          }}
-        >
-          Reject {applicantName}'s application
-        </div>
+    <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-950/60 p-5 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-2xl bg-white p-7 shadow-2xl">
+        <h3 className="font-serif text-lg font-bold text-slate-900">
+          Reject {applicantName}
+          &apos;s application
+        </h3>
 
-        <div
-          style={{
-            fontSize: "12.5px",
-            color: C.gray,
-            marginBottom: "14px",
-          }}
-        >
-          This reason will be visible to the applicant. Please be clear and
-          respectful.
-        </div>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          This reason will be
+          visible to the
+          applicant. Please be
+          clear and respectful.
+        </p>
 
         <textarea
           value={reason}
-          onChange={(event) => setReason(event.target.value)}
-          placeholder="e.g. We're moving forward with candidates whose experience more closely matches the role's requirements."
+          onChange={(event) =>
+            setReason(
+              event.target.value
+            )
+          }
+          placeholder="Explain why the application is being rejected."
           rows={5}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: "9px",
-            border: `1.5px solid ${C.border}`,
-            fontSize: "13px",
-            fontFamily: "inherit",
-            resize: "vertical",
-            outline: "none",
-            boxSizing: "border-box",
-          }}
+          className="mt-4 w-full resize-y rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
         />
 
         {!trimmedReason && (
-          <div
-            style={{
-              fontSize: "11px",
-              color: C.red,
-              marginTop: "6px",
-            }}
-          >
-            A reason is required before rejecting.
-          </div>
+          <p className="mt-2 text-xs font-medium text-red-600">
+            A rejection reason is
+            required.
+          </p>
         )}
 
-        <div style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
+        <div className="mt-6 flex gap-3">
           <button
             type="button"
             onClick={onCancel}
-            style={{
-              flex: 1,
-              padding: "11px",
-              borderRadius: "9px",
-              border: `1.5px solid ${C.border}`,
-              background: "transparent",
-              color: C.grayDark,
-              fontSize: "14px",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
+            className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
           >
             Cancel
           </button>
 
           <button
             type="button"
-            onClick={handleConfirm}
-            disabled={!trimmedReason || submitting}
-            style={{
-              flex: 1,
-              padding: "11px",
-              borderRadius: "9px",
-              border: "none",
-              background: C.red,
-              color: "#fff",
-              fontSize: "14px",
-              fontWeight: 700,
-              cursor:
-                !trimmedReason || submitting ? "not-allowed" : "pointer",
-              opacity: !trimmedReason || submitting ? 0.6 : 1,
-            }}
+            onClick={
+              handleConfirm
+            }
+            disabled={
+              !trimmedReason ||
+              submitting
+            }
+            className="flex-1 rounded-xl bg-red-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {submitting ? "Rejecting..." : "Reject Application"}
+            {submitting
+              ? "Rejecting..."
+              : "Reject Application"}
           </button>
         </div>
       </div>
@@ -712,7 +688,7 @@ function RejectModal({ applicantName, onConfirm, onCancel }) {
 
 /*
 |--------------------------------------------------------------------------
-| Confirmation modal
+| Confirm modal
 |--------------------------------------------------------------------------
 */
 
@@ -724,76 +700,21 @@ function ConfirmModal({
   danger = false,
 }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background:
-          "rgba(7,25,46,0.5)",
-        zIndex: 999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          background: C.white,
-          borderRadius: "16px",
-          padding: "32px 36px",
-          maxWidth: "380px",
-          width: "100%",
-          boxShadow:
-            "0 20px 60px rgba(7,25,46,0.2)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "28px",
-            textAlign: "center",
-            marginBottom: "12px",
-          }}
-        >
+    <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-950/60 p-5 backdrop-blur-sm">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-8 text-center shadow-2xl">
+        <div className="text-4xl">
           {danger ? "⚠️" : "❓"}
         </div>
 
-        <div
-          style={{
-            fontSize: "16px",
-            fontWeight: 700,
-            color: C.navy,
-            textAlign: "center",
-            marginBottom: "8px",
-            fontFamily:
-              "'Georgia', serif",
-          }}
-        >
+        <h3 className="mt-4 font-serif text-lg font-bold text-slate-900">
           {msg}
-        </div>
+        </h3>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            marginTop: "24px",
-          }}
-        >
+        <div className="mt-7 flex gap-3">
           <button
             type="button"
             onClick={onCancel}
-            style={{
-              flex: 1,
-              padding: "11px",
-              borderRadius: "9px",
-              border: `1.5px solid ${C.border}`,
-              background:
-                "transparent",
-              color: C.grayDark,
-              fontSize: "14px",
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
+            className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
           >
             Cancel
           </button>
@@ -801,23 +722,781 @@ function ConfirmModal({
           <button
             type="button"
             onClick={onConfirm}
-            style={{
-              flex: 1,
-              padding: "11px",
-              borderRadius: "9px",
-              border: "none",
-              background: danger
-                ? C.red
-                : C.blue,
-              color: "#fff",
-              fontSize: "14px",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
+            className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold text-white transition ${
+              danger
+                ? "bg-red-600 hover:bg-red-700"
+                : "bg-blue-700 hover:bg-blue-800"
+            }`}
           >
             {confirmLabel}
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| CV helpers
+|--------------------------------------------------------------------------
+*/
+
+function normalizeSkill(skill) {
+  if (
+    typeof skill === "string"
+  ) {
+    return skill;
+  }
+
+  return (
+    skill?.name ||
+    skill?.skill ||
+    skill?.title ||
+    ""
+  );
+}
+
+function CvSection({
+  title,
+  children,
+}) {
+  return (
+    <section className="mt-8 break-inside-avoid">
+      <h2 className="border-b border-slate-300 pb-2 text-sm font-extrabold uppercase tracking-[0.16em] text-slate-800">
+        {title}
+      </h2>
+
+      <div className="mt-4">
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function CvEntry({
+  title,
+  subtitle,
+  date,
+  description,
+  link,
+}) {
+  return (
+    <article className="mb-6 break-inside-avoid last:mb-0">
+      <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-start">
+        <div>
+          {title && (
+            <h3 className="font-bold text-slate-900">
+              {title}
+            </h3>
+          )}
+
+          {subtitle && (
+            <p className="mt-1 text-sm font-medium text-slate-600">
+              {subtitle}
+            </p>
+          )}
+        </div>
+
+        {date && (
+          <span className="shrink-0 text-xs font-semibold text-slate-500">
+            {date}
+          </span>
+        )}
+      </div>
+
+      {description && (
+        <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-700">
+          {description}
+        </p>
+      )}
+
+      {link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-2 inline-block break-all text-sm font-semibold text-blue-700 hover:underline"
+        >
+          {link}
+        </a>
+      )}
+    </article>
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Applicant CV preview
+|--------------------------------------------------------------------------
+*/
+
+function ApplicantCvModal({
+  app,
+  onClose,
+}) {
+  if (!app) {
+    return null;
+  }
+
+  const cv =
+    app.cv || {};
+
+  const cvData =
+    cv?.data &&
+    typeof cv.data === "object"
+      ? cv.data
+      : cv;
+
+  const personal =
+    cvData?.personal &&
+    typeof cvData.personal ===
+      "object"
+      ? cvData.personal
+      : {};
+
+  const fullName =
+    personal.fullName ||
+    personal.name ||
+    app.name ||
+    "Applicant";
+
+  const jobTitle =
+    personal.jobTitle ||
+    personal.title ||
+    personal.role ||
+    app.role ||
+    "";
+
+  const email =
+    personal.email ||
+    app.email ||
+    "";
+
+  const phone =
+    personal.phone ||
+    personal.phoneNo ||
+    app.phone ||
+    "";
+
+  const location =
+    personal.location ||
+    personal.address ||
+    app.loc ||
+    "";
+
+  const website =
+    personal.website ||
+    personal.portfolio ||
+    personal.linkedin ||
+    "";
+
+  const summary =
+    safeText(
+      cvData?.summary ||
+        cvData?.profile ||
+        cvData?.about
+    );
+
+  const skills =
+    safeArray(cvData?.skills)
+      .map(normalizeSkill)
+      .filter(Boolean);
+
+  const experience =
+    safeArray(
+      cvData?.experience
+    );
+
+  const education =
+    safeArray(
+      cvData?.education
+    );
+
+  const projects =
+    safeArray(
+      cvData?.projects
+    );
+
+  const languages =
+    safeArray(
+      cvData?.languages
+    );
+
+  const certifications =
+    safeArray(
+      cvData?.certifications
+    );
+
+  const achievements =
+    safeArray(
+      cvData?.achievements
+    );
+
+  const references =
+    safeArray(
+      cvData?.references
+    );
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const cvHasContent =
+    hasCvContent(cv);
+
+  return (
+    <div
+      className="fixed inset-0 z-[1200] overflow-y-auto bg-slate-950/75 px-4 py-6 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <style>
+        {`
+          @media print {
+            body * {
+              visibility: hidden !important;
+            }
+
+            #applicant-cv-print,
+            #applicant-cv-print * {
+              visibility: visible !important;
+            }
+
+            #applicant-cv-print {
+              position: absolute !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 100% !important;
+              max-width: none !important;
+              margin: 0 !important;
+              padding: 32px !important;
+              box-shadow: none !important;
+              border-radius: 0 !important;
+            }
+
+            .cv-no-print {
+              display: none !important;
+            }
+          }
+        `}
+      </style>
+
+      <div
+        className="mx-auto w-full max-w-5xl"
+        onClick={(event) =>
+          event.stopPropagation()
+        }
+      >
+        <div className="cv-no-print mb-4 flex flex-wrap justify-end gap-3">
+          <button
+            type="button"
+            onClick={handlePrint}
+            disabled={
+              !cvHasContent
+            }
+            className="rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Print / Save as PDF
+          </button>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-white/30 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 shadow-lg transition hover:bg-slate-100"
+          >
+            Close
+          </button>
+        </div>
+
+        {!cvHasContent ? (
+          <div className="rounded-2xl bg-white p-12 text-center shadow-2xl">
+            <div className="text-5xl">
+              📄
+            </div>
+
+            <h2 className="mt-5 text-2xl font-bold text-slate-900">
+              CV data is not
+              available
+            </h2>
+
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-500">
+              The application was
+              loaded successfully,
+              but no saved CV data
+              was found in either
+              the applicant snapshot
+              or the current user
+              profile.
+            </p>
+
+            <div className="mt-6 rounded-xl bg-amber-50 p-4 text-left text-sm text-amber-800">
+              The backend response
+              must include{" "}
+              <code className="rounded bg-amber-100 px-1.5 py-0.5">
+                applicant.cv
+              </code>{" "}
+              or{" "}
+              <code className="rounded bg-amber-100 px-1.5 py-0.5">
+                applicantSnapshot.cv
+              </code>
+              .
+            </div>
+          </div>
+        ) : (
+          <article
+            id="applicant-cv-print"
+            className="rounded-2xl bg-white p-7 text-slate-800 shadow-2xl sm:p-10 lg:p-14"
+          >
+            <header className="flex flex-col justify-between gap-6 border-b-4 border-blue-700 pb-7 sm:flex-row sm:items-start">
+              <div>
+                <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
+                  {fullName}
+                </h1>
+
+                {jobTitle && (
+                  <p className="mt-2 text-lg font-semibold text-blue-700">
+                    {jobTitle}
+                  </p>
+                )}
+
+                {app.cvTemplate && (
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Template:{" "}
+                    {app.cvTemplate}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1 text-sm leading-6 text-slate-600 sm:text-right">
+                {email && (
+                  <p>{email}</p>
+                )}
+
+                {phone && (
+                  <p>{phone}</p>
+                )}
+
+                {location && (
+                  <p>{location}</p>
+                )}
+
+                {website && (
+                  <a
+                    href={website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block break-all font-semibold text-blue-700 hover:underline"
+                  >
+                    {website}
+                  </a>
+                )}
+              </div>
+            </header>
+
+            {summary && (
+              <CvSection title="Professional Profile">
+                <p className="whitespace-pre-line text-sm leading-7 text-slate-700">
+                  {summary}
+                </p>
+              </CvSection>
+            )}
+
+            {skills.length > 0 && (
+              <CvSection title="Skills">
+                <div className="flex flex-wrap gap-2">
+                  {skills.map(
+                    (
+                      skill,
+                      index
+                    ) => (
+                      <span
+                        key={`${skill}-${index}`}
+                        className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700"
+                      >
+                        {skill}
+                      </span>
+                    )
+                  )}
+                </div>
+              </CvSection>
+            )}
+
+            {experience.length >
+              0 && (
+              <CvSection title="Professional Experience">
+                {experience.map(
+                  (
+                    item,
+                    index
+                  ) => {
+                    const role =
+                      item?.role ||
+                      item?.position ||
+                      item?.jobTitle ||
+                      item?.title ||
+                      "";
+
+                    const company =
+                      item?.company ||
+                      item?.organisation ||
+                      item?.organization ||
+                      "";
+
+                    const itemLocation =
+                      item?.location ||
+                      "";
+
+                    const start =
+                      item?.startDate ||
+                      item?.start ||
+                      item?.from ||
+                      "";
+
+                    const end =
+                      item?.endDate ||
+                      item?.end ||
+                      item?.to ||
+                      "";
+
+                    return (
+                      <CvEntry
+                        key={
+                          item?._id ||
+                          item?.id ||
+                          index
+                        }
+                        title={role}
+                        subtitle={[
+                          company,
+                          itemLocation,
+                        ]
+                          .filter(
+                            Boolean
+                          )
+                          .join(" · ")}
+                        date={[
+                          start,
+                          end,
+                        ]
+                          .filter(
+                            Boolean
+                          )
+                          .join(" – ")}
+                        description={
+                          item?.description ||
+                          item?.details ||
+                          ""
+                        }
+                      />
+                    );
+                  }
+                )}
+              </CvSection>
+            )}
+
+            {education.length >
+              0 && (
+              <CvSection title="Education">
+                {education.map(
+                  (
+                    item,
+                    index
+                  ) => {
+                    const degree =
+                      item?.degree ||
+                      item?.qualification ||
+                      item?.course ||
+                      item?.title ||
+                      "";
+
+                    const school =
+                      item?.school ||
+                      item?.institution ||
+                      item?.university ||
+                      "";
+
+                    const start =
+                      item?.startDate ||
+                      item?.start ||
+                      item?.from ||
+                      "";
+
+                    const end =
+                      item?.endDate ||
+                      item?.end ||
+                      item?.to ||
+                      "";
+
+                    return (
+                      <CvEntry
+                        key={
+                          item?._id ||
+                          item?.id ||
+                          index
+                        }
+                        title={degree}
+                        subtitle={school}
+                        date={[
+                          start,
+                          end,
+                        ]
+                          .filter(
+                            Boolean
+                          )
+                          .join(" – ")}
+                        description={
+                          item?.description ||
+                          item?.details ||
+                          ""
+                        }
+                      />
+                    );
+                  }
+                )}
+              </CvSection>
+            )}
+
+            {projects.length > 0 && (
+              <CvSection title="Projects">
+                {projects.map(
+                  (
+                    item,
+                    index
+                  ) => (
+                    <CvEntry
+                      key={
+                        item?._id ||
+                        item?.id ||
+                        index
+                      }
+                      title={
+                        item?.name ||
+                        item?.title ||
+                        "Project"
+                      }
+                      subtitle={
+                        item?.technologies ||
+                        item?.technology ||
+                        ""
+                      }
+                      description={
+                        item?.description ||
+                        item?.details ||
+                        ""
+                      }
+                      link={
+                        item?.link ||
+                        item?.url ||
+                        ""
+                      }
+                    />
+                  )
+                )}
+              </CvSection>
+            )}
+
+            {certifications.length >
+              0 && (
+              <CvSection title="Certifications">
+                <div className="space-y-3">
+                  {certifications.map(
+                    (
+                      item,
+                      index
+                    ) => {
+                      const title =
+                        typeof item ===
+                        "string"
+                          ? item
+                          : item?.name ||
+                            item?.title ||
+                            item?.certificate ||
+                            "";
+
+                      const issuer =
+                        typeof item ===
+                        "object"
+                          ? item?.issuer ||
+                            item?.organization ||
+                            ""
+                          : "";
+
+                      const date =
+                        typeof item ===
+                        "object"
+                          ? item?.date ||
+                            item?.year ||
+                            ""
+                          : "";
+
+                      return (
+                        <div
+                          key={
+                            item?._id ||
+                            item?.id ||
+                            index
+                          }
+                          className="flex flex-col justify-between gap-1 rounded-xl bg-slate-50 px-4 py-3 sm:flex-row"
+                        >
+                          <div>
+                            <p className="font-bold text-slate-900">
+                              {title}
+                            </p>
+
+                            {issuer && (
+                              <p className="mt-1 text-sm text-slate-600">
+                                {
+                                  issuer
+                                }
+                              </p>
+                            )}
+                          </div>
+
+                          {date && (
+                            <span className="text-xs font-semibold text-slate-500">
+                              {date}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              </CvSection>
+            )}
+
+            {languages.length >
+              0 && (
+              <CvSection title="Languages">
+                <div className="flex flex-wrap gap-2">
+                  {languages.map(
+                    (
+                      item,
+                      index
+                    ) => {
+                      const language =
+                        typeof item ===
+                        "string"
+                          ? item
+                          : item?.name ||
+                            item?.language ||
+                            "";
+
+                      const level =
+                        typeof item ===
+                        "object"
+                          ? item?.level ||
+                            item?.proficiency ||
+                            ""
+                          : "";
+
+                      return (
+                        <span
+                          key={
+                            item?._id ||
+                            item?.id ||
+                            index
+                          }
+                          className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700"
+                        >
+                          {language}
+                          {level
+                            ? ` — ${level}`
+                            : ""}
+                        </span>
+                      );
+                    }
+                  )}
+                </div>
+              </CvSection>
+            )}
+
+            {achievements.length >
+              0 && (
+              <CvSection title="Achievements">
+                <ul className="list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
+                  {achievements.map(
+                    (
+                      item,
+                      index
+                    ) => (
+                      <li
+                        key={
+                          item?._id ||
+                          item?.id ||
+                          index
+                        }
+                      >
+                        {typeof item ===
+                        "string"
+                          ? item
+                          : item?.title ||
+                            item?.description ||
+                            ""}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </CvSection>
+            )}
+
+            {references.length >
+              0 && (
+              <CvSection title="References">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {references.map(
+                    (
+                      item,
+                      index
+                    ) => (
+                      <div
+                        key={
+                          item?._id ||
+                          item?.id ||
+                          index
+                        }
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                      >
+                        <p className="font-bold text-slate-900">
+                          {item?.name ||
+                            "Reference"}
+                        </p>
+
+                        {item?.position && (
+                          <p className="mt-1 text-sm text-slate-600">
+                            {
+                              item.position
+                            }
+                          </p>
+                        )}
+
+                        {item?.company && (
+                          <p className="text-sm text-slate-600">
+                            {
+                              item.company
+                            }
+                          </p>
+                        )}
+
+                        {item?.email && (
+                          <p className="mt-2 break-all text-sm text-blue-700">
+                            {item.email}
+                          </p>
+                        )}
+
+                        {item?.phone && (
+                          <p className="text-sm text-slate-600">
+                            {item.phone}
+                          </p>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+              </CvSection>
+            )}
+          </article>
+        )}
       </div>
     </div>
   );
@@ -834,113 +1513,52 @@ function ApplicantModal({
   onClose,
   onStatus,
   onReject,
+  onViewCv,
 }) {
   if (!app) {
     return null;
   }
 
   const nextStatuses =
-    Object.keys(STATUS_META).filter(
+    Object.keys(
+      STATUS_META
+    ).filter(
       (status) =>
         status !== app.status
     );
 
   return (
     <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background:
-          "rgba(7,25,46,0.5)",
-        zIndex: 998,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "20px",
-      }}
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        style={{
-          background: C.white,
-          borderRadius: "18px",
-          padding: "32px 36px",
-          maxWidth: "620px",
-          width: "100%",
-          boxShadow:
-            "0 24px 80px rgba(7,25,46,0.25)",
-          maxHeight: "90vh",
-          overflowY: "auto",
-        }}
+        className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl sm:p-8"
         onClick={(event) =>
           event.stopPropagation()
         }
       >
-        <div
-          style={{
-            display: "flex",
-            justifyContent:
-              "space-between",
-            alignItems: "flex-start",
-            marginBottom: "24px",
-            gap: "15px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              gap: "14px",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "50%",
-                background: `linear-gradient(135deg, ${C.blue}, ${C.blueAcc})`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent:
-                  "center",
-                fontSize: "18px",
-                fontWeight: 800,
-                color: "#fff",
-                flexShrink: 0,
-              }}
-            >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-700 to-blue-400 text-lg font-extrabold text-white shadow-md">
               {app.initials}
             </div>
 
             <div>
-              <div
-                style={{
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  color: C.navy,
-                  fontFamily:
-                    "'Georgia', serif",
-                }}
-              >
+              <h2 className="font-serif text-xl font-bold text-slate-900">
                 {app.name}
-              </div>
+              </h2>
 
-              <div
-                style={{
-                  fontSize: "13px",
-                  color: C.gray,
-                }}
-              >
-                Applied for: {app.role}
-              </div>
+              <p className="mt-1 text-sm text-slate-500">
+                Applied for:{" "}
+                {app.role}
+              </p>
 
-              <div
-                style={{
-                  marginTop: "6px",
-                }}
-              >
+              <div className="mt-2">
                 <StatusBadge
-                  status={app.status}
+                  status={
+                    app.status
+                  }
                 />
               </div>
             </div>
@@ -949,65 +1567,29 @@ function ApplicantModal({
           <button
             type="button"
             onClick={onClose}
-            style={{
-              background: "none",
-              border: "none",
-              fontSize: "20px",
-              cursor: "pointer",
-              color: C.gray,
-              padding: "4px",
-            }}
+            className="rounded-lg p-2 text-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
           >
             ✕
           </button>
         </div>
 
-        {app.status === "Rejected" &&
+        {app.status ===
+          "Rejected" &&
           app.rejectionReason && (
-            <div
-              style={{
-                padding: "12px 14px",
-                borderRadius: "9px",
-                background: C.redPale,
-                border: `1px solid ${C.redBd}`,
-                marginBottom: "20px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  color: C.red,
-                  letterSpacing: "0.4px",
-                  textTransform: "uppercase",
-                  marginBottom: "4px",
-                }}
-              >
+            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-red-700">
                 Rejection reason
-              </div>
+              </p>
 
-              <div
-                style={{
-                  fontSize: "13px",
-                  color: C.grayDark,
-                  lineHeight: 1.6,
-                  whiteSpace: "pre-wrap",
-                }}
-              >
-                {app.rejectionReason}
-              </div>
+              <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                {
+                  app.rejectionReason
+                }
+              </p>
             </div>
           )}
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "10px",
-            marginBottom: "20px",
-          }}
-        >
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {[
             [
               "🗓 Applied",
@@ -1025,256 +1607,116 @@ function ApplicantModal({
               "💰 Salary",
               app.salary,
             ],
-          ].map(([label, value]) => (
-            <div
-              key={label}
-              style={{
-                padding: "11px 14px",
-                borderRadius: "9px",
-                background: C.offWhite,
-                border: `1px solid ${C.border}`,
-              }}
-            >
+          ].map(
+            ([label, value]) => (
               <div
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  color: C.gray,
-                  letterSpacing:
-                    "0.4px",
-                  textTransform:
-                    "uppercase",
-                  marginBottom: "3px",
-                }}
+                key={label}
+                className="rounded-xl border border-blue-100 bg-slate-50 p-4"
               >
-                {label}
-              </div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                  {label}
+                </p>
 
-              <div
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: C.navy,
-                  overflowWrap:
-                    "anywhere",
-                }}
-              >
-                {value ||
-                  "Not specified"}
+                <p className="mt-1 break-words text-sm font-semibold text-slate-900">
+                  {value ||
+                    "Not specified"}
+                </p>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
 
-        <div
-          style={{
-            marginBottom: "20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "13px",
-              color: C.grayDark,
-              padding: "10px 12px",
-              borderRadius: "8px",
-              background: C.offWhite,
-            }}
-          >
-            <strong>Email:</strong>{" "}
-            {app.email ||
-              "Not provided"}
-          </div>
+        <div className="mt-5 space-y-3">
+          <InfoRow
+            label="Email"
+            value={
+              app.email ||
+              "Not provided"
+            }
+          />
 
-          <div
-            style={{
-              fontSize: "13px",
-              color: C.grayDark,
-              padding: "10px 12px",
-              borderRadius: "8px",
-              background: C.offWhite,
-            }}
-          >
-            <strong>Phone:</strong>{" "}
-            {app.phone ||
-              "Not provided"}
-          </div>
+          <InfoRow
+            label="Phone"
+            value={
+              app.phone ||
+              "Not provided"
+            }
+          />
 
           {app.jobType && (
-            <div
-              style={{
-                fontSize: "13px",
-                color: C.grayDark,
-                padding: "10px 12px",
-                borderRadius: "8px",
-                background: C.offWhite,
-              }}
-            >
-              <strong>
-                Job type:
-              </strong>{" "}
-              {app.jobType}
-            </div>
+            <InfoRow
+              label="Job type"
+              value={
+                app.jobType
+              }
+            />
           )}
 
           {app.coverLetter && (
-            <div
-              style={{
-                padding: "12px",
-                borderRadius: "9px",
-                background: C.offWhite,
-                border: `1px solid ${C.border}`,
-                fontSize: "13px",
-                lineHeight: 1.6,
-              }}
-            >
-              <strong>
-                Cover letter:
-              </strong>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+              <p className="font-bold text-slate-900">
+                Cover letter
+              </p>
 
-              <br />
-
-              {app.coverLetter}
+              <p className="mt-2 whitespace-pre-wrap">
+                {
+                  app.coverLetter
+                }
+              </p>
             </div>
           )}
 
-          {app.cvTemplate && (
-            <div
-              style={{
-                fontSize: "13px",
-                color: C.grayDark,
-              }}
-            >
-              <strong>
-                CV template:
-              </strong>{" "}
-              {app.cvTemplate}
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-bold text-slate-900">
+                  Applicant CV
+                </p>
+
+                <p className="mt-1 text-xs text-slate-600">
+                  {app.hasCv
+                    ? "CV data is available and can be displayed directly."
+                    : "No saved CV data was found."}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  onViewCv(app)
+                }
+                className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-800"
+              >
+                {app.hasCv
+                  ? "View CV"
+                  : "Check CV"}
+              </button>
             </div>
-          )}
-
-        
-          {app.cvPdfUrl ? (
-  <div
-    style={{
-      display: "flex",
-      gap: "10px",
-      flexWrap: "wrap",
-      marginTop: "12px",
-    }}
-  >
-    <a
-      href={app.cvPdfUrl}
-      target="_blank"
-      rel="noreferrer"
-      style={{
-        flex: 1,
-        minWidth: "140px",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        background: C.blue,
-        color: "#fff",
-        fontSize: "13px",
-        fontWeight: 700,
-        textAlign: "center",
-        textDecoration: "none",
-      }}
-    >
-      👁 View CV
-    </a>
-
-    <a
-      href={app.cvPdfUrl}
-      download={
-        app.cvPdfFilename ||
-        "Applicant-CV.pdf"
-      }
-      style={{
-        flex: 1,
-        minWidth: "140px",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        border: `1px solid ${C.blueSoft}`,
-        background: C.bluePale,
-        color: C.blue,
-        fontSize: "13px",
-        fontWeight: 700,
-        textAlign: "center",
-        textDecoration: "none",
-      }}
-    >
-      ⬇ Download CV
-    </a>
-  </div>
-) : (
-  <div
-    style={{
-      padding: "10px",
-      borderRadius: "8px",
-      background: C.grayLight,
-      color: C.gray,
-      fontSize: "13px",
-    }}
-  >
-    No CV PDF was included in this
-    application.
-  </div>
-)}
+          </div>
         </div>
 
-        <div
-          style={{
-            background: C.offWhite,
-            border: `1px solid ${C.border}`,
-            borderRadius: "10px",
-            padding: "14px 16px",
-            marginBottom: "20px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent:
-                "space-between",
-              marginBottom: "8px",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                color: C.navy,
-              }}
-            >
+        <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-900">
               Profile Match Score
             </span>
 
             <span
-              style={{
-                fontSize: "14px",
-                fontWeight: 800,
-                color:
-                  app.score >= 85
-                    ? C.green
-                    : app.score >= 70
-                      ? C.amber
-                      : C.red,
-              }}
+              className={`text-sm font-extrabold ${
+                app.score >= 85
+                  ? "text-green-700"
+                  : app.score >= 70
+                    ? "text-amber-700"
+                    : "text-red-700"
+              }`}
             >
               {app.score}%
             </span>
           </div>
 
-          <div
-            style={{
-              height: "6px",
-              borderRadius: "6px",
-              background: C.grayLight,
-              overflow: "hidden",
-            }}
-          >
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
             <div
+              className="h-full rounded-full bg-gradient-to-r from-blue-700 to-blue-400 transition-all duration-500"
               style={{
                 width: `${Math.min(
                   100,
@@ -1283,101 +1725,81 @@ function ApplicantModal({
                     app.score
                   )
                 )}%`,
-                height: "100%",
-                borderRadius: "6px",
-                background: `linear-gradient(90deg, ${C.blue}, ${C.blueAcc})`,
-                transition:
-                  "width 0.5s",
               }}
             />
           </div>
         </div>
 
-        <div
-          style={{
-            marginBottom: "24px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "13px",
-              fontWeight: 700,
-              color: C.navy,
-              marginBottom: "8px",
-            }}
-          >
+        <div className="mt-6">
+          <h3 className="text-sm font-bold text-slate-900">
             Skills
-          </div>
+          </h3>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "6px",
-              flexWrap: "wrap",
-            }}
-          >
-            {app.skills.length > 0 ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {app.skills.length >
+            0 ? (
               app.skills.map(
-                (skill, index) => (
-                  <span
-                    key={`${skill}-${index}`}
-                    style={{
-                      padding:
-                        "4px 12px",
-                      borderRadius:
-                        "6px",
-                      background:
-                        C.bluePale,
-                      border: `1px solid ${C.blueSoft}`,
-                      color: C.blue,
-                      fontSize: "12px",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {skill}
-                  </span>
-                )
+                (
+                  skill,
+                  index
+                ) => {
+                  const label =
+                    normalizeSkill(
+                      skill
+                    );
+
+                  if (!label) {
+                    return null;
+                  }
+
+                  return (
+                    <span
+                      key={`${label}-${index}`}
+                      className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700"
+                    >
+                      {label}
+                    </span>
+                  );
+                }
               )
             ) : (
-              <span
-                style={{
-                  color: C.gray,
-                  fontSize: "13px",
-                }}
-              >
-                No skills provided.
+              <span className="text-sm text-slate-500">
+                No skills
+                provided.
               </span>
             )}
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="mt-7 flex flex-wrap gap-2">
           {nextStatuses
             .filter(
               (status) =>
-                status !== "Applied"
+                status !==
+                "Applied"
             )
             .map((status) => {
               const meta =
-                STATUS_META[status];
+                STATUS_META[
+                  status
+                ];
 
               const isRejected =
-                status === "Rejected";
+                status ===
+                "Rejected";
 
               return (
                 <button
                   key={status}
                   type="button"
                   onClick={async () => {
-                    if (isRejected) {
+                    if (
+                      isRejected
+                    ) {
                       onClose();
-                      onReject(app.id);
+                      onReject(
+                        app.id
+                      );
                       return;
                     }
 
@@ -1388,36 +1810,31 @@ function ApplicantModal({
 
                     onClose();
                   }}
-                  style={{
-                    flex: 1,
-                    minWidth: "110px",
-                    padding: "10px",
-                    borderRadius: "9px",
-                    border: `1.5px solid ${
-                      isRejected
-                        ? C.redBd
-                        : meta.border
-                    }`,
-                    background:
-                      isRejected
-                        ? C.redPale
-                        : meta.bg,
-                    color: isRejected
-                      ? C.red
-                      : meta.color,
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    whiteSpace:
-                      "nowrap",
-                  }}
+                  className={`min-w-[120px] flex-1 rounded-xl border px-4 py-2.5 text-xs font-bold transition ${meta.button}`}
                 >
-                  {meta.icon} {status}
+                  {meta.icon}{" "}
+                  {status}
                 </button>
               );
             })}
         </div>
       </div>
+    </div>
+  );
+}
+
+function InfoRow({
+  label,
+  value,
+}) {
+  return (
+    <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
+      <span className="font-bold text-slate-900">
+        {label}:
+      </span>{" "}
+      <span className="break-words">
+        {value}
+      </span>
     </div>
   );
 }
@@ -1446,23 +1863,30 @@ export default function ApplicantsView({
   const [rejectId, setRejectId] =
     useState(null);
 
-  const [statusUpdatingId, setStatusUpdatingId] =
-    useState(null);
+  const [
+    cvApplicant,
+    setCvApplicant,
+  ] = useState(null);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Convert raw backend application records into UI records
-  |--------------------------------------------------------------------------
-  */
+  const [
+    statusUpdatingId,
+    setStatusUpdatingId,
+  ] = useState(null);
 
   const normalizedApplicants =
     useMemo(() => {
-      if (!Array.isArray(applicants)) {
+      if (
+        !Array.isArray(
+          applicants
+        )
+      ) {
         return [];
       }
 
       return applicants
-        .map(normalizeApplicant)
+        .map(
+          normalizeApplicant
+        )
         .filter(
           (application) =>
             application.id
@@ -1492,7 +1916,9 @@ export default function ApplicantsView({
 
   const statuses = [
     "All",
-    ...Object.keys(STATUS_META),
+    ...Object.keys(
+      STATUS_META
+    ),
   ];
 
   const filtered =
@@ -1516,58 +1942,101 @@ export default function ApplicantsView({
     rejectionReason = ""
   ) => {
     try {
-      setStatusUpdatingId(applicationId);
-
-      const backendStatus =
-        frontendStatusToBackend(frontendStatus);
-
-      const response = await updateApplicationStatus(
-        applicationId,
-        backendStatus,
-        rejectionReason
+      setStatusUpdatingId(
+        applicationId
       );
 
-      if (typeof setApplicants === "function") {
-        setApplicants((currentApplicants) => {
-          if (!Array.isArray(currentApplicants)) {
-            return [];
-          }
+      const backendStatus =
+        frontendStatusToBackend(
+          frontendStatus
+        );
 
-          return currentApplicants.map((application) => {
-            const currentId =
-              application?._id || application?.id;
+      const response =
+        await updateApplicationStatus(
+          applicationId,
+          backendStatus,
+          rejectionReason
+        );
 
-            if (currentId !== applicationId) {
-              return application;
+      if (
+        typeof setApplicants ===
+        "function"
+      ) {
+        setApplicants(
+          (
+            currentApplicants
+          ) => {
+            if (
+              !Array.isArray(
+                currentApplicants
+              )
+            ) {
+              return [];
             }
 
-            return {
-              ...application,
-              status: response?.application?.status || backendStatus,
-              backendStatus: response?.application?.status || backendStatus,
-              rejectionReason:
-                response?.application?.rejectionReason ?? "",
-            };
-          });
-        });
+            return currentApplicants.map(
+              (application) => {
+                const currentId =
+                  application?._id ||
+                  application?.id;
+
+                if (
+                  currentId !==
+                  applicationId
+                ) {
+                  return application;
+                }
+
+                return {
+                  ...application,
+
+                  status:
+                    response
+                      ?.application
+                      ?.status ||
+                    backendStatus,
+
+                  backendStatus:
+                    response
+                      ?.application
+                      ?.status ||
+                    backendStatus,
+
+                  rejectionReason:
+                    response
+                      ?.application
+                      ?.rejectionReason ??
+                    "",
+                };
+              }
+            );
+          }
+        );
       }
 
       return response;
     } catch (error) {
-      console.error("Status update failed:", error);
-      window.alert(error.message || "Failed to update application status.");
+      console.error(
+        "Status update failed:",
+        error
+      );
+
+      window.alert(
+        error.message ||
+          "Failed to update application status."
+      );
+
       throw error;
     } finally {
-      setStatusUpdatingId(null);
+      setStatusUpdatingId(
+        null
+      );
     }
   };
 
   /*
   |--------------------------------------------------------------------------
-  | Remove from current frontend list
-  |--------------------------------------------------------------------------
-  | This only removes the applicant from the displayed state.
-  | It does not delete the MongoDB application unless a delete API is added.
+  | Remove applicant from frontend state
   |--------------------------------------------------------------------------
   */
 
@@ -1579,7 +2048,9 @@ export default function ApplicantsView({
       "function"
     ) {
       setApplicants(
-        (currentApplicants) => {
+        (
+          currentApplicants
+        ) => {
           if (
             !Array.isArray(
               currentApplicants
@@ -1601,23 +2072,42 @@ export default function ApplicantsView({
     setConfirmId(null);
 
     if (
-      selectedId === applicationId
+      selectedId ===
+      applicationId
     ) {
       setSelectedId(null);
     }
   };
 
   return (
-    <div>
+    <div className="w-full">
       {selected && (
         <ApplicantModal
           app={selected}
           onClose={() =>
-            setSelectedId(null)
+            setSelectedId(
+              null
+            )
           }
-          onStatus={updateStatus}
+          onStatus={
+            updateStatus
+          }
           onReject={(id) =>
             setRejectId(id)
+          }
+          onViewCv={(app) => {
+            setCvApplicant(app);
+          }}
+        />
+      )}
+
+      {cvApplicant && (
+        <ApplicantCvModal
+          app={cvApplicant}
+          onClose={() =>
+            setCvApplicant(
+              null
+            )
           }
         />
       )}
@@ -1631,7 +2121,9 @@ export default function ApplicantsView({
             )
           }
           onCancel={() =>
-            setConfirmId(null)
+            setConfirmId(
+              null
+            )
           }
           confirmLabel="Remove"
           danger
@@ -1640,11 +2132,15 @@ export default function ApplicantsView({
 
       {rejectTarget && (
         <RejectModal
-          applicantName={rejectTarget.name}
+          applicantName={
+            rejectTarget.name
+          }
           onCancel={() =>
             setRejectId(null)
           }
-          onConfirm={async (reason) => {
+          onConfirm={async (
+            reason
+          ) => {
             await updateStatus(
               rejectTarget.id,
               "Rejected",
@@ -1678,490 +2174,345 @@ export default function ApplicantsView({
         onAction={onShowAll}
       />
 
-      <div
-        style={{
-          display: "flex",
-          gap: "6px",
-          marginBottom: "20px",
-          flexWrap: "wrap",
-        }}
-      >
-        {statuses.map((status) => {
-          const meta =
-            STATUS_META[status];
+      <div className="mb-5 flex flex-wrap gap-2">
+        {statuses.map(
+          (status) => {
+            const meta =
+              STATUS_META[
+                status
+              ];
 
-          const active =
-            filter === status;
+            const active =
+              filter === status;
 
-          const count =
-            status === "All"
-              ? normalizedApplicants.length
-              : normalizedApplicants.filter(
-                  (application) =>
-                    application.status ===
-                    status
-                ).length;
+            const count =
+              status === "All"
+                ? normalizedApplicants.length
+                : normalizedApplicants.filter(
+                    (
+                      application
+                    ) =>
+                      application.status ===
+                      status
+                  ).length;
 
-          return (
-            <button
-              key={status}
-              type="button"
-              onClick={() =>
-                setFilter(status)
-              }
-              style={{
-                padding: "6px 16px",
-                borderRadius: "20px",
-                border: `1.5px solid ${
+            return (
+              <button
+                key={status}
+                type="button"
+                onClick={() =>
+                  setFilter(status)
+                }
+                className={`rounded-full border px-4 py-2 text-sm transition ${
                   active
-                    ? meta?.border ||
-                      C.border
-                    : C.border
-                }`,
-                background: active
-                  ? meta?.bg ||
-                    C.bluePale
-                  : "transparent",
-                color: active
-                  ? meta?.color ||
-                    C.blue
-                  : C.gray,
-                fontSize: "13px",
-                fontWeight: active
-                  ? 700
-                  : 500,
-                cursor: "pointer",
-                transition:
-                  "all 0.15s",
-              }}
-            >
-              {status !== "All" &&
-                `${meta?.icon || ""} `}
+                    ? meta?.badge ||
+                      "border-blue-200 bg-blue-50 font-bold text-blue-700"
+                    : "border-slate-200 bg-white font-medium text-slate-500 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                }`}
+              >
+                {status !==
+                  "All" &&
+                  `${
+                    meta?.icon ||
+                    ""
+                  } `}
 
-              {status} ({count})
-            </button>
-          );
-        })}
+                {status} ({count})
+              </button>
+            );
+          }
+        )}
       </div>
 
-      {filtered.length === 0 ? (
-        <div
-          style={{
-            padding: "60px 20px",
-            textAlign: "center",
-            background: C.white,
-            border: `1px dashed ${C.border}`,
-            borderRadius: "14px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "34px",
-              marginBottom: "10px",
-            }}
-          >
+      {filtered.length ===
+      0 ? (
+        <div className="rounded-2xl border border-dashed border-blue-200 bg-white px-5 py-16 text-center">
+          <div className="text-4xl">
             👤
           </div>
 
-          <div
-            style={{
-              fontSize: "17px",
-              fontWeight: 700,
-              color: C.navy,
-              fontFamily:
-                "'Georgia', serif",
-            }}
-          >
+          <h3 className="mt-4 font-serif text-lg font-bold text-slate-900">
             No applicants found
-          </div>
+          </h3>
 
-          <div
-            style={{
-              marginTop: "5px",
-              fontSize: "13px",
-              color: C.gray,
-            }}
-          >
-            No applications match the
-            selected status.
-          </div>
+          <p className="mt-2 text-sm text-slate-500">
+            No applications
+            match the selected
+            status.
+          </p>
         </div>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-          }}
-        >
-          {filtered.map((app) => {
-            const isUpdating =
-              statusUpdatingId ===
-              app.id;
+        <div className="space-y-4">
+          {filtered.map(
+            (app) => {
+              const isUpdating =
+                statusUpdatingId ===
+                app.id;
 
-            return (
-              <div
-                key={app.id}
-                style={{
-                  background: C.white,
-                  border: `1px solid ${C.border}`,
-                  borderRadius: "14px",
-                  padding: "18px 22px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "16px",
-                  boxShadow:
-                    "0 2px 8px rgba(10,30,60,0.04)",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "50%",
-                    background: `linear-gradient(135deg, ${C.blue}, ${C.blueAcc})`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent:
-                      "center",
-                    fontSize: "15px",
-                    fontWeight: 800,
-                    color: "#fff",
-                    flexShrink: 0,
-                  }}
+              return (
+                <article
+                  key={app.id}
+                  className="rounded-2xl border border-blue-100 bg-white p-5 shadow-sm transition hover:border-blue-200 hover:shadow-md"
                 >
-                  {app.initials}
-                </div>
-
-                <div
-                  style={{
-                    flex: "1 1 420px",
-                    minWidth: 0,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginBottom: "5px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 700,
-                        color: C.navy,
-                        fontFamily:
-                          "'Georgia', serif",
-                      }}
-                    >
-                      {app.name}
-                    </span>
-
-                    <StatusBadge
-                      status={app.status}
-                    />
-
-                    <span
-                      style={{
-                        marginLeft:
-                          "auto",
-                        fontSize: "13px",
-                        fontWeight: 800,
-                        color:
-                          app.score >= 85
-                            ? C.green
-                            : app.score >=
-                                70
-                              ? C.amber
-                              : C.red,
-                      }}
-                    >
-                      ⭐ {app.score}%
-                    </span>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "14px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {[
-                      ["📋", app.role],
-                      [
-                        "📅",
-                        `Applied ${app.applied}`,
-                      ],
-                      [
-                        "📧",
-                        app.email ||
-                          "No email",
-                      ],
-                      [
-                        "📞",
-                        app.phone ||
-                          "No phone",
-                      ],
-                      ["📍", app.loc],
-                      ["💰", app.salary],
-                    ].map(
-                      (
-                        [
-                          icon,
-                          value,
-                        ],
-                        index
-                      ) => (
-                        <span
-                          key={`${icon}-${index}`}
-                          style={{
-                            fontSize:
-                              "12px",
-                            color: C.gray,
-                            display:
-                              "flex",
-                            alignItems:
-                              "center",
-                            gap: "3px",
-                            overflowWrap:
-                              "anywhere",
-                          }}
-                        >
-                          <span>
-                            {icon}
-                          </span>
-
-                          {value}
-                        </span>
-                      )
-                    )}
-                  </div>
-
-                  {app.status === "Rejected" &&
-                    app.rejectionReason && (
-                      <div
-                        style={{
-                          marginTop: "8px",
-                          padding: "8px 10px",
-                          borderRadius: "8px",
-                          background: C.redPale,
-                          border: `1px solid ${C.redBd}`,
-                          fontSize: "11.5px",
-                          color: C.red,
-                          lineHeight: 1.5,
-                        }}
-                      >
-                        <strong>Rejection reason:</strong>{" "}
-                        {app.rejectionReason}
+                  <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
+                    <div className="flex min-w-0 flex-1 gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-700 to-blue-400 text-sm font-extrabold text-white shadow">
+                        {
+                          app.initials
+                        }
                       </div>
-                    )}
 
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                      marginTop: "8px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {app.skills.length >
-                    0 ? (
-                      app.skills.map(
-                        (
-                          skill,
-                          index
-                        ) => (
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-serif text-lg font-bold text-slate-900">
+                            {app.name}
+                          </h3>
+
+                          <StatusBadge
+                            status={
+                              app.status
+                            }
+                          />
+
+                          {app.hasCv && (
+                            <span className="rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-xs font-bold text-green-700">
+                              CV available
+                            </span>
+                          )}
+
                           <span
-                            key={`${skill}-${index}`}
-                            style={{
-                              padding:
-                                "2px 9px",
-                              borderRadius:
-                                "5px",
-                              background:
-                                C.grayLight,
-                              border: `1px solid ${C.border}`,
-                              color:
-                                C.grayDark,
-                              fontSize:
-                                "11px",
-                              fontWeight:
-                                600,
-                            }}
+                            className={`ml-auto text-sm font-extrabold ${
+                              app.score >=
+                              85
+                                ? "text-green-700"
+                                : app.score >=
+                                    70
+                                  ? "text-amber-700"
+                                  : "text-red-700"
+                            }`}
                           >
-                            {skill}
+                            ⭐{" "}
+                            {app.score}
+                            %
                           </span>
-                        )
-                      )
-                    ) : (
-                      <span
-                        style={{
-                          color: C.gray,
-                          fontSize:
-                            "11px",
-                        }}
-                      >
-                        No skills provided
-                      </span>
-                    )}
-                  </div>
-                </div>
+                        </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection:
-                      "column",
-                    gap: "6px",
-                    flexShrink: 0,
-                    minWidth: "130px",
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSelectedId(
-                        app.id
-                      )
-                    }
-                    style={{
-                      padding: "8px 10px",
-                      borderRadius: "8px",
-                      border: "none",
-                      background: `linear-gradient(135deg, ${C.blue}, ${C.blueAcc})`,
-                      color: "#fff",
-                      fontSize: "12px",
-                      fontWeight: 700,
-                      cursor: "pointer",
-                    }}
-                  >
-                    View Profile
-                  </button>
+                        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
+                          <Metadata
+                            icon="📋"
+                            value={
+                              app.role
+                            }
+                          />
 
-                  {app.status !==
-                    "Offered" &&
-                    app.status !==
-                      "Rejected" && (
+                          <Metadata
+                            icon="📅"
+                            value={`Applied ${app.applied}`}
+                          />
+
+                          <Metadata
+                            icon="📧"
+                            value={
+                              app.email ||
+                              "No email"
+                            }
+                          />
+
+                          <Metadata
+                            icon="📞"
+                            value={
+                              app.phone ||
+                              "No phone"
+                            }
+                          />
+
+                          <Metadata
+                            icon="📍"
+                            value={
+                              app.loc
+                            }
+                          />
+
+                          <Metadata
+                            icon="💰"
+                            value={
+                              app.salary
+                            }
+                          />
+                        </div>
+
+                        {app.status ===
+                          "Rejected" &&
+                          app.rejectionReason && (
+                            <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-700">
+                              <strong>
+                                Rejection
+                                reason:
+                              </strong>{" "}
+                              {
+                                app.rejectionReason
+                              }
+                            </div>
+                          )}
+
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {app.skills
+                            .length >
+                          0 ? (
+                            app.skills.map(
+                              (
+                                skill,
+                                index
+                              ) => {
+                                const label =
+                                  normalizeSkill(
+                                    skill
+                                  );
+
+                                if (
+                                  !label
+                                ) {
+                                  return null;
+                                }
+
+                                return (
+                                  <span
+                                    key={`${label}-${index}`}
+                                    className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600"
+                                  >
+                                    {
+                                      label
+                                    }
+                                  </span>
+                                );
+                              }
+                            )
+                          ) : (
+                            <span className="text-xs text-slate-400">
+                              No
+                              skills
+                              provided
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid shrink-0 grid-cols-2 gap-2 lg:w-36 lg:grid-cols-1">
                       <button
                         type="button"
-                        disabled={
-                          isUpdating
+                        onClick={() =>
+                          setSelectedId(
+                            app.id
+                          )
                         }
-                        onClick={() => {
-                          const nextStatus =
-                            app.status ===
-                            "Applied"
-                              ? "Shortlisted"
-                              : app.status ===
-                                  "Shortlisted"
-                                ? "Interview"
-                                : "Offered";
-
-                          updateStatus(
-                            app.id,
-                            nextStatus
-                          );
-                        }}
-                        style={{
-                          padding:
-                            "8px 10px",
-                          borderRadius:
-                            "8px",
-                          border: `1.5px solid ${C.greenBd}`,
-                          background:
-                            C.greenPale,
-                          color: C.green,
-                          fontSize:
-                            "11px",
-                          fontWeight: 700,
-                          cursor:
-                            isUpdating
-                              ? "wait"
-                              : "pointer",
-                          opacity:
-                            isUpdating
-                              ? 0.6
-                              : 1,
-                        }}
+                        className="rounded-lg bg-gradient-to-r from-blue-700 to-blue-500 px-3 py-2.5 text-xs font-bold text-white transition hover:from-blue-800 hover:to-blue-600"
                       >
-                        {isUpdating
-                          ? "Updating..."
-                          : "▲ Advance"}
+                        View Profile
                       </button>
-                    )}
 
-                  {app.status !==
-                    "Rejected" && (
-                    <button
-                      type="button"
-                      disabled={
-                        isUpdating
-                      }
-                      onClick={() =>
-                        setRejectId(
-                          app.id
-                        )
-                      }
-                      style={{
-                        padding:
-                          "8px 10px",
-                        borderRadius:
-                          "8px",
-                        border: `1.5px solid ${C.redBd}`,
-                        background:
-                          C.redPale,
-                        color: C.red,
-                        fontSize:
-                          "11px",
-                        fontWeight: 700,
-                        cursor:
-                          isUpdating
-                            ? "wait"
-                            : "pointer",
-                        opacity:
-                          isUpdating
-                            ? 0.6
-                            : 1,
-                      }}
-                    >
-                      {isUpdating
-                        ? "Updating..."
-                        : "✕ Reject"}
-                    </button>
-                  )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCvApplicant(
+                            app
+                          )
+                        }
+                        className={`rounded-lg border px-3 py-2.5 text-xs font-bold transition ${
+                          app.hasCv
+                            ? "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                            : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+                        }`}
+                      >
+                        View CV
+                      </button>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setConfirmId(
-                        app.id
-                      )
-                    }
-                    style={{
-                      padding: "8px 10px",
-                      borderRadius: "8px",
-                      border: `1px solid ${C.border}`,
-                      background:
-                        "transparent",
-                      color: C.gray,
-                      fontSize: "11px",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                  >
-                    🗑 Remove
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+                      {app.status !==
+                        "Offered" &&
+                        app.status !==
+                          "Rejected" && (
+                          <button
+                            type="button"
+                            disabled={
+                              isUpdating
+                            }
+                            onClick={() => {
+                              const nextStatus =
+                                app.status ===
+                                "Applied"
+                                  ? "Shortlisted"
+                                  : app.status ===
+                                      "Shortlisted"
+                                    ? "Interview"
+                                    : "Offered";
+
+                              updateStatus(
+                                app.id,
+                                nextStatus
+                              );
+                            }}
+                            className="rounded-lg border border-green-200 bg-green-50 px-3 py-2.5 text-xs font-bold text-green-700 transition hover:bg-green-100 disabled:cursor-wait disabled:opacity-50"
+                          >
+                            {isUpdating
+                              ? "Updating..."
+                              : "▲ Advance"}
+                          </button>
+                        )}
+
+                      {app.status !==
+                        "Rejected" && (
+                        <button
+                          type="button"
+                          disabled={
+                            isUpdating
+                          }
+                          onClick={() =>
+                            setRejectId(
+                              app.id
+                            )
+                          }
+                          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-xs font-bold text-red-700 transition hover:bg-red-100 disabled:cursor-wait disabled:opacity-50"
+                        >
+                          {isUpdating
+                            ? "Updating..."
+                            : "✕ Reject"}
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setConfirmId(
+                            app.id
+                          )
+                        }
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                      >
+                        🗑 Remove
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            }
+          )}
         </div>
       )}
     </div>
+  );
+}
+
+function Metadata({
+  icon,
+  value,
+}) {
+  return (
+    <span className="flex min-w-0 items-center gap-1">
+      <span>{icon}</span>
+
+      <span className="break-words">
+        {value}
+      </span>
+    </span>
   );
 }
