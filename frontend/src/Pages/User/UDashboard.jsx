@@ -63,12 +63,7 @@ export default function UserDashboard() {
           })}
         </nav>
 
-        {/* Logout */}
-        <div style={{ padding:"14px 10px", borderTop:"1px solid rgba(255,255,255,0.08)" }}>
-          <button style={{ width:"100%", display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", borderRadius:"9px", border:"none", background:"rgba(220,38,38,0.12)", color:"rgba(248,113,113,0.9)", fontSize:"13px", fontWeight:600, cursor:"pointer" }}>
-            <span style={{ fontSize:"16px" }}>🚪</span> Sign Out
-          </button>
-        </div>
+
       </div>
 
       {/* ── MAIN CONTENT ────────────────────────── */}
@@ -77,7 +72,7 @@ export default function UserDashboard() {
         <div style={{ background:C.white, borderBottom:`1px solid ${C.border}`, padding:"16px 32px", display:"flex", justifyContent:"space-between", alignItems:"center", position:"sticky", top:0, zIndex:20 }}>
           <div>
             <div style={{ fontSize:"20px", fontWeight:700, color:C.navy, fontFamily:"'Georgia', serif" }}>{NAV_ITEMS.find(n=>n.key===page)?.label}</div>
-            <div style={{ fontSize:"12px", color:C.gray }}>CareerHub · Job Seeker Portal</div>
+            <div style={{ fontSize:"12px", color:C.gray }}>NoGhostJob · Job Seeker Portal</div>
           </div>
           <div style={{ display:"flex", gap:"10px", alignItems:"center" }}>
             <button style={{ position:"relative", padding:"8px 12px", borderRadius:"8px", border:`1px solid ${C.border}`, background:"transparent", cursor:"pointer", fontSize:"16px" }}>

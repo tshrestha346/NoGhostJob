@@ -12,7 +12,7 @@ export default function Footer() {
               </div>
 
               <span className="font-serif text-2xl font-bold">
-                CareerHub
+                NoGhostJob
               </span>
             </div>
 
@@ -166,7 +166,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-12">
           <div className="text-sm text-white/50">
-            © {new Date().getFullYear()} CareerHub. All rights reserved.
+            © {new Date().getFullYear()} NoGhostJob. All rights reserved.
           </div>
 
           <div className="flex flex-wrap gap-5 text-sm text-white/50">

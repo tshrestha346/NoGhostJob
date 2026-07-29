@@ -300,7 +300,7 @@ export default function Register({ onRegisterSuccess }) {
             C
           </div>
           <span className="font-serif text-2xl font-bold tracking-tight text-white">
-            CareerHub
+            NoGhostJob
           </span>
         </div>
 
@@ -398,7 +398,7 @@ export default function Register({ onRegisterSuccess }) {
               </h2>
 
               <p className="mb-6 text-sm leading-7 text-slate-500">
-                Welcome to CareerHub,{" "}
+                Welcome to NoGhostJob,{" "}
                 <strong className="text-[#07192E]">{form.fullName}</strong>!
                 <br />
                 We've sent a verification email to{" "}
@@ -419,8 +419,8 @@ export default function Register({ onRegisterSuccess }) {
                 <h1 className="mb-1.5 font-serif text-3xl font-bold tracking-tight text-[#07192E] text-center">
                   Create your account
                 </h1>
-                <p className="text-sm leading-6 text-slate-500 text-center">
-                  Join CareerHub and start applying to top roles today.
+                <p className="text-sm leading-6 text-slate-500">
+                  Join NoGhostJob and start applying to top roles today.
                 </p>
               </div>
 
@@ -501,7 +501,7 @@ export default function Register({ onRegisterSuccess }) {
                     </button>
 
                     <span className="text-sm leading-6 text-[#3D4A63]">
-                      I agree to CareerHub's{" "}
+                      I agree to NoGhostJob's{" "}
                       <a href="#" className="font-semibold text-blue-700 no-underline">
                         Terms of Service
                       </a>{" "}

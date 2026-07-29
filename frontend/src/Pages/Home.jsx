@@ -500,7 +500,7 @@ function WhyUs() {
         <div className="mb-12 text-center">
           <SectionLabel>Our Edge</SectionLabel>
           <h2 className="mb-2.5 font-serif text-3xl font-bold tracking-tight text-[#07192E] sm:text-4xl">
-            Why Choose CareerHub
+            Why Choose NoGhostJob
           </h2>
           <p className="text-slate-500">
             We make your job search experience exceptional
@@ -709,14 +709,8 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F7FAFF]">
-        <div className="text-center">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-700" />
-
-          <p className="mt-4 font-semibold text-[#3D4A63]">
-            Loading...
-          </p>
-        </div>
+      <div className="flex min-h-screen items-center justify-center text-xl font-bold text-blue-700">
+        Loading NoGhostJobb...
       </div>
     );
   }

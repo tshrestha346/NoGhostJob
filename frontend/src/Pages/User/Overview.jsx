@@ -69,27 +69,9 @@ export default function Overview({ setPage }) {
       </div>
 
       {/* Two-col: upcoming interviews + recent apps */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"20px", marginBottom:"24px" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"20px", marginBottom:"24px" }}>
         {/* Upcoming interviews */}
-        <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:"14px", padding:"22px 24px" }}>
-          <SectionHeader title="Upcoming Interviews" action="View All" onAction={()=>setPage("interviews")} />
-          <div style={{ display:"flex", flexDirection:"column", gap:"12px" }}>
-            {INTERVIEWS.map(iv => (
-              <div key={iv.id} style={{ display:"flex", gap:"12px", alignItems:"flex-start", padding:"12px", borderRadius:"10px", background:C.offWhite, border:`1px solid ${C.border}` }}>
-                <LogoBox logo={iv.logo} lc={iv.lc} size={40} />
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:"14px", fontWeight:700, color:C.navy }}>{iv.role}</div>
-                  <div style={{ fontSize:"12px", color:C.gray }}>{iv.company} · {iv.round}</div>
-                  <div style={{ display:"flex", gap:"10px", marginTop:"6px" }}>
-                    <span style={{ fontSize:"11px", color:C.blue, fontWeight:600 }}>📅 {iv.date}</span>
-                    <span style={{ fontSize:"11px", color:C.gray }}>🕐 {iv.time}</span>
-                  </div>
-                </div>
-                <span style={{ padding:"3px 8px", borderRadius:"6px", background:C.purplePale, color:C.purple, fontSize:"10px", fontWeight:700, border:`1px solid #C4B5FD`, whiteSpace:"nowrap" }}>{iv.type}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        
 
         {/* Recent applications */}
         <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:"14px", padding:"22px 24px" }}>
@@ -110,21 +92,7 @@ export default function Overview({ setPage }) {
       </div>
 
       {/* Recommended */}
-      <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:"14px", padding:"22px 24px" }}>
-        <SectionHeader title="Recommended for You" sub="Based on your profile and preferences" action="View All" onAction={()=>setPage("recommended")} />
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px" }}>
-          {RECOMMENDED.map(job => (
-            <div key={job.id} style={{ border:`1px solid ${C.border}`, borderRadius:"12px", padding:"16px", position:"relative" }}>
-              <div style={{ position:"absolute", top:"10px", right:"10px", background:C.greenPale, border:`1px solid ${C.greenBd}`, color:C.green, fontSize:"10px", fontWeight:800, padding:"2px 7px", borderRadius:"20px" }}>{job.match}% match</div>
-              <LogoBox logo={job.logo} lc={job.lc} size={38} />
-              <div style={{ fontSize:"13px", fontWeight:700, color:C.navy, marginTop:"10px", marginBottom:"3px" }}>{job.title}</div>
-              <div style={{ fontSize:"11px", color:C.gray, marginBottom:"8px" }}>{job.company?.name || "Company not specified"}</div>
-              <div style={{ fontSize:"12px", fontWeight:700, color:C.blue, marginBottom:"10px" }}>{job.salary}</div>
-              <button style={{ width:"100%", padding:"8px 0", borderRadius:"7px", border:"none", background:`linear-gradient(135deg,${C.blue},${C.blueAcc})`, color:"#fff", fontSize:"12px", fontWeight:700, cursor:"pointer" }}>Apply Now</button>
-            </div>
-          ))}
-        </div>
-      </div>
+      
     </div>
   );
 }

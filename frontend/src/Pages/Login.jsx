@@ -278,7 +278,7 @@ const handleSubmit = async (e) => {
             C
           </div>
           <span className="text-white font-serif text-2xl font-bold tracking-tight">
-            CareerHub
+            NoGhostJob
           </span>
         </div>
 
