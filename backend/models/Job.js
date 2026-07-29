@@ -40,13 +40,7 @@ const jobSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: [
-        "Full Time",
-        "Remote",
-        "Hybrid",
-        "Part Time",
-        "Internship",
-      ],
+      enum: ["Full Time", "Remote", "Hybrid", "Part Time", "Internship"],
       default: "Full Time",
     },
 
@@ -107,10 +101,7 @@ const jobSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-module.exports = mongoose.model(
-  "Job",
-  jobSchema
-);
+module.exports = mongoose.model("Job", jobSchema);

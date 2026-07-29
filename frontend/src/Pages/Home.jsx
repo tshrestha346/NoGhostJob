@@ -709,8 +709,14 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-xl font-bold text-blue-700">
-        Loading NoGhostJob...
+      <div className="flex min-h-screen items-center justify-center bg-[#F7FAFF]">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-700" />
+
+          <p className="mt-4 font-semibold text-[#3D4A63]">
+            Loading...
+          </p>
+        </div>
       </div>
     );
   }

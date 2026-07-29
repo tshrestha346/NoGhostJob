@@ -79,10 +79,10 @@ function findChromeExecutable() {
 
   for (const chromePath of possiblePaths) {
     if (fs.existsSync(chromePath)) {
-      console.log(
-        "Using Chrome executable:",
-        chromePath
-      );
+      // console.log(
+      //   "Using Chrome executable:",
+      //   chromePath
+      // );
 
       return chromePath;
     }

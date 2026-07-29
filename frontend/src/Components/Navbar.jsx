@@ -17,8 +17,7 @@ export default function Navbar() {
     user?.token
   );
 
-  const dashboardRoute =
-    user?.accountType === "employer" ? "/EDashboard" : "/UDashboard";
+  const dashboardRoute = user?.accountType === "employer" ? "/EDashboard" : user?.accountType === "admin" ? "/Dashboard" : "/UDashboard";
 
   const handleLogout = () => {
     localStorage.removeItem("token");

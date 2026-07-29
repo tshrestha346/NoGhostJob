@@ -244,10 +244,10 @@ exports.createJob = async (
   res
 ) => {
   try {
-    console.log(
-      "Create job request body:",
-      req.body
-    );
+    // console.log(
+    //   "Create job request body:",
+    //   req.body
+    // );
 
     const companyId =
       getCompanyId(req.body);

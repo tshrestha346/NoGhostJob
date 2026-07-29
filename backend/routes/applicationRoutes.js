@@ -6,6 +6,7 @@ const {
   getMyApplications,
   getApplicationsForJob,
   updateApplicationStatus,
+  getAllApplications,
 } = require("../Controller/applicationController");
 
 const protect = require(
