@@ -26,7 +26,7 @@ import MyApplicationsPage from "./Pages/MyApplicationsPage";
 import CompanyJobsPage from "./Pages/CompanyJobsPage";
 import Dashboard from "./Pages/Admin/Dashboard";
 import Employer from "./Pages/Admin/Employer";
-// import Members from "./Pages/Admin/Members";
+import Members from "./Pages/Admin/Members";
 // import Settings from "./Pages/Admin/Settings";
 
 function App() {
@@ -79,8 +79,8 @@ function AppContent() {
     location.pathname.startsWith("/Profile") ||
     location.pathname.startsWith("/CreateCV") ||
     location.pathname.startsWith("/Dashboard") ||
-    location.pathname.startsWith("/Employers");
-    // location.pathname.startsWith("/Members"); 
+    location.pathname.startsWith("/Employers") ||
+    location.pathname.startsWith("/Members"); 
 
   const isLoggedIn = !!(
     localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -147,7 +147,7 @@ function AppContent() {
             </ProtectedRoute>
           } 
         />
-        {/* <Route 
+        <Route 
           path="/Members"
           element={
             <ProtectedRoute>
@@ -156,7 +156,7 @@ function AppContent() {
               </AdminRoute>
             </ProtectedRoute>
           } 
-        /> */}
+        />
         {/* <Route 
           path="/Settings"
           element={
