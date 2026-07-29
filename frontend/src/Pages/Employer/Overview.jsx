@@ -1,4 +1,7 @@
 import { useState, useMemo } from "react";
+import {
+  getCurrentEmployer
+} from "./employerApi";
 
 // ─── TOKENS ───────────────────────────────────────────────────────────────────
 const C = {
@@ -10,9 +13,6 @@ const C = {
   red:"#DC2626",redPale:"#FEF2F2",redBd:"#FECACA",
   purple:"#7C3AED",purplePale:"#EDE9FE",
 };
-
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-const EMPLOYER = { name:"TechCorp Inc.", logo:"TC", industry:"Technology", email:"hr@techcorp.com", plan:"Pro" };
 
 const STATUS_META = {
   Applied:    { color:C.blue,   bg:C.bluePale,  border:C.blueSoft, icon:"📩" },
@@ -69,6 +69,9 @@ export default function Overview({ jobs, applicants, setPage }) {
   const totalApps  = applicants.length;
   const interviews = applicants.filter(a => a.status === "Interview").length;
   const offers     = applicants.filter(a => a.status === "Offered").length;
+  const employer = getCurrentEmployer();
+
+  const EMPLOYER = employer?.company?.name || employer?.companyName || employer?.fullName || "Employer";
 
   return (
     <div>
@@ -78,7 +81,7 @@ export default function Overview({ jobs, applicants, setPage }) {
         <div style={{ position:"relative", zIndex:2, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <div>
             <div style={{ fontSize:"13px", color:"rgba(255,255,255,0.6)", marginBottom:"4px" }}>Employer Dashboard</div>
-            <div style={{ fontSize:"26px", fontWeight:700, color:"#fff", fontFamily:"'Georgia', serif", marginBottom:"6px" }}>Welcome back, {EMPLOYER.name} 👋</div>
+            <div style={{ fontSize:"26px", fontWeight:700, color:"#fff", fontFamily:"'Georgia', serif", marginBottom:"6px" }}>Welcome back, {EMPLOYER} 👋</div>
             <div style={{ fontSize:"14px", color:"rgba(255,255,255,0.65)" }}>You have <strong style={{color:"#90CAF9"}}>{totalApps} applications</strong> to review across {activeJobs} active jobs.</div>
           </div>
           <button onClick={()=>setPage("post")} style={{ padding:"12px 24px", borderRadius:"10px", border:"none", background:C.white, color:C.blue, fontSize:"14px", fontWeight:700, cursor:"pointer" }}>+ Post a Job</button>

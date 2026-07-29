@@ -252,30 +252,30 @@ exports.loginUser = async (
       isMatch = true;
     }
 
-    console.log({
-      enteredEmail:
-        normalisedEmail,
+    // console.log({
+    //   enteredEmail:
+    //     normalisedEmail,
 
-      userId:
-        user._id.toString(),
+    //   userId:
+    //     user._id.toString(),
 
-      userFound: true,
+    //   userFound: true,
 
-      passwordLength:
-        receivedPassword.length,
+    //   passwordLength:
+    //     receivedPassword.length,
 
-      storedPasswordExists:
-        Boolean(user.password),
+    //   storedPasswordExists:
+    //     Boolean(user.password),
 
-      passwordMatches:
-        isMatch,
+    //   passwordMatches:
+    //     isMatch,
 
-      devBypassUsed:
-        allowDevBypass,
+    //   devBypassUsed:
+    //     allowDevBypass,
 
-      company:
-        user.company,
-    });
+    //   company:
+    //     user.company,
+    // });
 
     if (!isMatch) {
       return res.status(400).json({

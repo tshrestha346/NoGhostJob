@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const adminSchema = new mongoose.Schema(
+const settingSchema = new mongoose.Schema(
   {
     name: {type: String, required: true},
     title: {type: String, required: false},
@@ -16,4 +16,4 @@ const adminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Admin", adminSchema);
+module.exports = mongoose.model("Settings", settingSchema);

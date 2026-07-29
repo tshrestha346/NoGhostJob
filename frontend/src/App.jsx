@@ -24,6 +24,10 @@ import Profile from "./Pages/Profile.";
 import { Toaster } from "react-hot-toast";
 import MyApplicationsPage from "./Pages/MyApplicationsPage";
 import CompanyJobsPage from "./Pages/CompanyJobsPage";
+import Dashboard from "./Pages/Admin/Dashboard";
+import Employer from "./Pages/Admin/Employer";
+// import Members from "./Pages/Admin/Members";
+// import Settings from "./Pages/Admin/Settings";
 
 function App() {
   return (
@@ -41,6 +45,31 @@ function ProtectedRoute({ children }) {
   return isLoggedIn ? children : <Navigate to="/" replace />;
 }
 
+function AdminRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  return user?.accountType == "admin" ? children : <Navigate to="/" replace />;
+}
+
+function EmployerRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  return user?.accountType == "employer" ? (
+    children
+  ) : (
+    <Navigate to="/" replace />
+  );
+}
+
+function UserRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  return user?.accountType == "user" ? children : <Navigate to="/" replace />;
+}
+
 function AppContent() {
   const location = useLocation();
 
@@ -48,7 +77,10 @@ function AppContent() {
     location.pathname.startsWith("/UDashboard") ||
     location.pathname.startsWith("/EDashboard") ||
     location.pathname.startsWith("/Profile") ||
-    location.pathname.startsWith("/CreateCV");
+    location.pathname.startsWith("/CreateCV") ||
+    location.pathname.startsWith("/Dashboard") ||
+    location.pathname.startsWith("/Employers");
+    // location.pathname.startsWith("/Members"); 
 
   const isLoggedIn = !!(
     localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -94,12 +126,56 @@ function AppContent() {
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
 
+        {/* Admin Routes */}
+        <Route
+          path="/Dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Dashboard />
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/Employers"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Employer />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        />
+        {/* <Route 
+          path="/Members"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Members />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        /> */}
+        {/* <Route 
+          path="/Settings"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Settings />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        /> */}
+
         {/* User Routes */}
         <Route
           path="/UDashboard"
           element={
             <ProtectedRoute>
-              <UDashboard />
+              <UserRoute>
+                <UDashboard />
+              </UserRoute>
             </ProtectedRoute>
           }
         />
@@ -107,7 +183,9 @@ function AppContent() {
           path="/CreateCV"
           element={
             <ProtectedRoute>
-              <CreateCv />
+              <UserRoute>
+                <CreateCv />
+              </UserRoute>
             </ProtectedRoute>
           }
         />
@@ -116,7 +194,9 @@ function AppContent() {
           path="/Profile"
           element={
             <ProtectedRoute>
-              <Profile />
+              <UserRoute>
+                <Profile />
+              </UserRoute>
             </ProtectedRoute>
           }
         />
@@ -124,7 +204,9 @@ function AppContent() {
           path="/my-applications"
           element={
             <ProtectedRoute>
-              <MyApplicationsPage />
+              <UserRoute>
+                <MyApplicationsPage />
+              </UserRoute>
             </ProtectedRoute>
           }
         />
@@ -134,11 +216,12 @@ function AppContent() {
           path="/EDashboard"
           element={
             <ProtectedRoute>
-              <EDashboard />
+              <EmployerRoute>
+                <EDashboard />
+              </EmployerRoute>
             </ProtectedRoute>
           }
         />
-        
       </Routes>
 
       {!shouldHideFooter && <Footer />}

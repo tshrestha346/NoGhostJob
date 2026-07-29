@@ -155,8 +155,6 @@ const handleSubmit = async (e) => {
 
     const data = await res.json();
 
-    console.log("Login API response:", data);
-
     if (!res.ok) {
       throw new Error(
         data.message || "Login failed"
@@ -195,11 +193,6 @@ const handleSubmit = async (e) => {
     storage.setItem(
       "user",
       JSON.stringify(data)
-    );
-
-    console.log(
-      "Stored user:",
-      JSON.parse(storage.getItem("user"))
     );
 
     /*
