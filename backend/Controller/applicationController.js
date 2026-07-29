@@ -273,18 +273,18 @@ exports.applyForJob = async (req, res) => {
         "string" &&
       applicant.cvPdfUrl.trim() !== "";
 
-    console.log("CV application check:", {
-      userId: applicant._id,
-      hasCvData,
-      hasCvPdf,
-      cvPdfUrl:
-        applicant.cvPdfUrl || "",
-      cvKeys:
-        cvSnapshot &&
-        typeof cvSnapshot === "object"
-          ? Object.keys(cvSnapshot)
-          : [],
-    });
+    // console.log("CV application check:", {
+    //   userId: applicant._id,
+    //   hasCvData,
+    //   hasCvPdf,
+    //   cvPdfUrl:
+    //     applicant.cvPdfUrl || "",
+    //   cvKeys:
+    //     cvSnapshot &&
+    //     typeof cvSnapshot === "object"
+    //       ? Object.keys(cvSnapshot)
+    //       : [],
+    // });
 
     if (!hasCvData && !hasCvPdf) {
       return res.status(400).json({

@@ -37,7 +37,6 @@ export default function Overview({ setPage }) {
           </div>
           <div style={{ display:"flex", gap:"10px" }}>
             <button onClick={()=>setPage("applications")} style={{ padding:"10px 20px", borderRadius:"9px", border:"1.5px solid rgba(255,255,255,0.2)", background:"rgba(255,255,255,0.1)", color:"#fff", fontSize:"13px", fontWeight:600, cursor:"pointer" }}>View Applications</button>
-            <button style={{ padding:"10px 20px", borderRadius:"9px", border:"none", background:C.white, color:C.blue, fontSize:"13px", fontWeight:700, cursor:"pointer" }}>Browse Jobs →</button>
           </div>
         </div>
       </div>

@@ -416,52 +416,12 @@ export default function Register({ onRegisterSuccess }) {
           ) : (
             <>
               <div className="mb-6">
-                <h1 className="mb-1.5 font-serif text-3xl font-bold tracking-tight text-[#07192E]">
+                <h1 className="mb-1.5 font-serif text-3xl font-bold tracking-tight text-[#07192E] text-center">
                   Create your account
                 </h1>
                 <p className="text-sm leading-6 text-slate-500">
                   Join NoGhostJob and start applying to top roles today.
                 </p>
-              </div>
-
-              <div className="mb-6 flex items-center">
-                {[["1", "Your Info"], ["2", "Security"], ["3", "Review"]].map(
-                  ([n, label], i) => (
-                    <div key={n} className={`flex items-center ${i < 2 ? "flex-1" : ""}`}>
-                      <div className="flex flex-col items-center gap-1">
-                        <StepDot n={n} active={step === i + 1} done={step > i + 1} />
-                        <span
-                          className={`whitespace-nowrap text-[10px] font-semibold tracking-[0.3px] ${
-                            step >= i + 1 ? "text-blue-700" : "text-slate-500"
-                          }`}
-                        >
-                          {label}
-                        </span>
-                      </div>
-
-                      {i < 2 && (
-                        <div
-                          className={`mx-1.5 mb-3.5 h-0.5 flex-1 transition-colors duration-300 ${
-                            step > i + 1 ? "bg-blue-700" : "bg-[#DDEAFC]"
-                          }`}
-                        />
-                      )}
-                    </div>
-                  )
-                )}
-              </div>
-
-              <div className="mb-5 flex gap-2.5">
-                <SocialBtn icon="🔵" label="Google" />
-                <SocialBtn icon="🔗" label="LinkedIn" />
-              </div>
-
-              <div className="mb-5 flex items-center gap-3">
-                <div className="h-px flex-1 bg-[#DDEAFC]" />
-                <span className="whitespace-nowrap text-xs font-semibold text-slate-500">
-                  or register with email
-                </span>
-                <div className="h-px flex-1 bg-[#DDEAFC]" />
               </div>
 
               {serverError && (

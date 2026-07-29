@@ -40,13 +40,6 @@ export default function UserDashboard() {
     <div style={{ minHeight:"100vh", background:C.offWhite, fontFamily:"'Segoe UI', system-ui, sans-serif", display:"flex" }}>
       {/* ── SIDEBAR ─────────────────────────────── */}
       <div style={{ width:"230px", background:C.navy, display:"flex", flexDirection:"column", position:"sticky", top:0, height:"100vh", flexShrink:0 }}>
-        {/* Logo */}
-        <div style={{ padding:"24px 20px 20px", borderBottom:"1px solid rgba(255,255,255,0.08)" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:"9px" }}>
-            <div style={{ width:"32px", height:"32px", borderRadius:"8px", background:"linear-gradient(135deg,#42A5F5,#1565C0)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"14px", fontWeight:800, color:"#fff" }}>C</div>
-            <span style={{ color:"#fff", fontFamily:"'Georgia', serif", fontSize:"18px", fontWeight:700 }}>NoGhostJob</span>
-          </div>
-        </div>
 
         {/* User */}
         <div style={{ padding:"16px 20px", borderBottom:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", gap:"10px" }}>
@@ -82,7 +75,10 @@ export default function UserDashboard() {
             <div style={{ fontSize:"12px", color:C.gray }}>NoGhostJob · Job Seeker Portal</div>
           </div>
           <div style={{ display:"flex", gap:"10px", alignItems:"center" }}>
-            
+            <button style={{ position:"relative", padding:"8px 12px", borderRadius:"8px", border:`1px solid ${C.border}`, background:"transparent", cursor:"pointer", fontSize:"16px" }}>
+              🔔
+              <span style={{ position:"absolute", top:"5px", right:"5px", width:"7px", height:"7px", borderRadius:"50%", background:C.red, border:"1.5px solid #fff" }} />
+            </button>
           </div>
         </div>
 

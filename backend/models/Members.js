@@ -1,7 +1,3 @@
-
-
-/* This schema is for members to show in about page near our mission. */
-
 const mongoose = require("mongoose");
 
 const membersSchema = new mongoose.Schema(

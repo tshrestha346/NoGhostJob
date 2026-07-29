@@ -4,6 +4,7 @@ import {
   Route,
   useNavigate,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 
 import Login from "./Pages/Login";
@@ -23,6 +24,10 @@ import Profile from "./Pages/Profile.";
 import { Toaster } from "react-hot-toast";
 import MyApplicationsPage from "./Pages/MyApplicationsPage";
 import CompanyJobsPage from "./Pages/CompanyJobsPage";
+import Dashboard from "./Pages/Admin/Dashboard";
+import Employer from "./Pages/Admin/Employer";
+import Members from "./Pages/Admin/Members";
+// import Settings from "./Pages/Admin/Settings";
 
 function App() {
   return (
@@ -32,6 +37,39 @@ function App() {
   );
 }
 
+function ProtectedRoute({ children }) {
+  const isLoggedIn = !!(
+    localStorage.getItem("token") || sessionStorage.getItem("token")
+  );
+
+  return isLoggedIn ? children : <Navigate to="/" replace />;
+}
+
+function AdminRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  return user?.accountType == "admin" ? children : <Navigate to="/" replace />;
+}
+
+function EmployerRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  return user?.accountType == "employer" ? (
+    children
+  ) : (
+    <Navigate to="/" replace />
+  );
+}
+
+function UserRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || sessionStorage.getItem("user"),
+  );
+  return user?.accountType == "user" ? children : <Navigate to="/" replace />;
+}
+
 function AppContent() {
   const location = useLocation();
 
@@ -39,7 +77,14 @@ function AppContent() {
     location.pathname.startsWith("/UDashboard") ||
     location.pathname.startsWith("/EDashboard") ||
     location.pathname.startsWith("/Profile") ||
-    location.pathname.startsWith("/CreateCV");
+    location.pathname.startsWith("/CreateCV") ||
+    location.pathname.startsWith("/Dashboard") ||
+    location.pathname.startsWith("/Employers") ||
+    location.pathname.startsWith("/Members"); 
+
+  const isLoggedIn = !!(
+    localStorage.getItem("token") || sessionStorage.getItem("token")
+  );
 
   return (
     <>
@@ -80,18 +125,103 @@ function AppContent() {
         <Route path="/AboutPage" element={<AboutPage />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobDetailsPage />} />
+
+        {/* Admin Routes */}
         <Route
-          path="/my-applications"
-          element={<MyApplicationsPage />}
+          path="/Dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Dashboard />
+              </AdminRoute>
+            </ProtectedRoute>
+          }
         />
+        <Route 
+          path="/Employers"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Employer />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/Members"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Members />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        />
+        {/* <Route 
+          path="/Settings"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Settings />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        /> */}
 
         {/* User Routes */}
-        <Route path="/UDashboard" element={<UDashboard />} />
-        <Route path="/CreateCV" element={<CreateCv />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route
+          path="/UDashboard"
+          element={
+            <ProtectedRoute>
+              <UserRoute>
+                <UDashboard />
+              </UserRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/CreateCV"
+          element={
+            <ProtectedRoute>
+              <UserRoute>
+                <CreateCv />
+              </UserRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/Profile"
+          element={
+            <ProtectedRoute>
+              <UserRoute>
+                <Profile />
+              </UserRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-applications"
+          element={
+            <ProtectedRoute>
+              <UserRoute>
+                <MyApplicationsPage />
+              </UserRoute>
+            </ProtectedRoute>
+          }
+        />
 
         {/* Employer Routes */}
-        <Route path="/EDashboard" element={<EDashboard />} />
+        <Route
+          path="/EDashboard"
+          element={
+            <ProtectedRoute>
+              <EmployerRoute>
+                <EDashboard />
+              </EmployerRoute>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {!shouldHideFooter && <Footer />}
@@ -106,11 +236,7 @@ function LoginPage() {
 function RegisterPage() {
   const navigate = useNavigate();
 
-  return (
-    <Register
-      onRegisterSuccess={() => navigate("/UDashboard")}
-    />
-  );
+  return <Register onRegisterSuccess={() => navigate("/UDashboard")} />;
 }
 
 export default App;
