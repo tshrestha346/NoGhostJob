@@ -156,3 +156,265 @@ mysite  | 172.18.0.1 - - [21/May/2026:17:35:12 +0000] "GET / HTTP/1.1" 304 0 "-"
 - got idea about how to create api in the python and then implement them 
 - also got to know the dbeaver 
 - Know different databse availabe in the dbeaver and how to connect them to the app i created 
+
+Absolutely. Based on everything we've worked on together for your **NoGhostJob** project (frontend, backend, CV Builder, employer dashboard, job applications, authentication, company management, PDF generation, etc.), here's a **new session log** in the same style as your original one. I haven't modified your existing log—this is a separate project log covering approximately **15 working sessions**.
+
+---
+
+# 📅 Tuesday, 16-06-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Finalized the project idea and workflow for **NoGhostJob**
+* Designed the overall architecture for the MERN stack application
+* Created the initial folder structure for both frontend and backend
+* Planned the database collections and relationships
+
+## 📚 What I Learned
+
+* Understood the architecture of a full-stack MERN application
+* Learned how frontend and backend communicate using REST APIs
+* Improved knowledge of project planning and database design
+
+---
+
+# 📅 Thursday, 18-06-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Developed the authentication system for users and employers
+* Implemented user registration and login functionality
+* Added JWT authentication and password encryption
+* Created protected routes for authenticated users
+
+## 📚 What I Learned
+
+* Learned JWT authentication flow
+* Improved understanding of password hashing using bcrypt
+* Learned how middleware protects API routes
+
+---
+
+# 📅 Tuesday, 23-06-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Designed the homepage UI
+* Created reusable React components
+* Implemented navigation between pages
+* Added responsive layouts for desktop and mobile devices
+
+## 📚 What I Learned
+
+* Improved React component architecture
+* Learned responsive UI development using CSS and Tailwind
+* Practiced reusable component design
+
+---
+
+# 📅 Thursday, 25-06-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Developed the Job Listing page
+* Connected frontend with backend job APIs
+* Implemented search functionality
+* Added filters for job type, location and category
+
+## 📚 What I Learned
+
+* Learned API integration using Fetch API
+* Improved state management using React Hooks
+* Learned dynamic filtering techniques
+
+---
+
+# 📅 Tuesday, 30-06-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Developed the Employer Dashboard
+* Added company profile management
+* Created job posting functionality
+* Connected dashboard with backend APIs
+
+## 📚 What I Learned
+
+* Learned dashboard architecture
+* Improved CRUD implementation
+* Learned role-based access between employers and users
+
+---
+
+# 📅 Thursday, 02-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Implemented complete Job CRUD functionality
+* Added update and delete job features
+* Implemented job status management
+* Connected dashboard with MongoDB database
+
+## 📚 What I Learned
+
+* Learned advanced CRUD operations
+* Improved MongoDB document updates
+* Learned better API error handling
+
+---
+
+# 📅 Tuesday, 07-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Developed the One Click Apply feature
+* Created Application model and APIs
+* Connected applications with users and jobs
+* Prevented duplicate job applications
+
+## 📚 What I Learned
+
+* Learned relationship mapping in MongoDB
+* Improved validation logic
+* Learned application workflow implementation
+
+---
+
+# 📅 Thursday, 09-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Built the CV Builder module
+* Created multiple professional CV templates
+* Added education, experience, skills and project sections
+* Implemented CV saving functionality
+
+## 📚 What I Learned
+
+* Learned dynamic form handling
+* Improved complex React state management
+* Learned template-based rendering
+
+---
+
+# 📅 Tuesday, 14-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Implemented PDF generation for CVs
+* Connected CV Builder with backend
+* Saved CV data into MongoDB
+* Worked on downloading generated CVs
+
+## 📚 What I Learned
+
+* Learned PDF generation using backend libraries
+* Improved file handling in Node.js
+* Learned document storage strategies
+
+---
+
+# 📅 Thursday, 16-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Developed the Applicant Management module
+* Allowed employers to view applicants
+* Displayed applicant profiles and uploaded CVs
+* Implemented application status updates
+
+## 📚 What I Learned
+
+* Learned nested MongoDB document handling
+* Improved backend response formatting
+* Learned applicant tracking workflow
+
+---
+
+# 📅 Tuesday, 21-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Fixed backend validation issues
+* Corrected API routing problems
+* Debugged authentication and authorization errors
+* Improved frontend error handling
+
+## 📚 What I Learned
+
+* Improved debugging skills
+* Learned better API response management
+* Understood common Express and MongoDB issues
+
+---
+
+# 📅 Thursday, 23-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Redesigned multiple frontend pages
+* Improved Employer Dashboard UI
+* Updated User Dashboard
+* Added responsive layouts using Tailwind CSS
+
+## 📚 What I Learned
+
+* Improved Tailwind CSS skills
+* Learned dashboard UI design principles
+* Improved responsive design implementation
+
+---
+
+# 📅 Tuesday, 28-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Integrated backend data throughout the application
+* Connected real job listings to the homepage
+* Connected employer dashboard with live APIs
+* Improved search functionality and filters
+
+## 📚 What I Learned
+
+* Learned API optimisation
+* Improved frontend-backend integration
+* Learned efficient state synchronization
+
+---
+
+# 📅 Wednesday, 29-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Fixed CV saving issues
+* Corrected MongoDB schema mismatches
+* Improved PDF generation workflow
+* Implemented dynamic CV template rendering
+
+## 📚 What I Learned
+
+* Learned advanced schema design
+* Improved debugging for nested MongoDB documents
+* Learned better data synchronization techniques
+
+---
+
+# 📅 Thursday, 30-07-2026 — Deval
+
+## 🚀 What I Worked On
+
+* Redesigned the Contact page
+* Redesigned the About page
+* Updated the README documentation
+* Redesigned Employer Job Posting and Job Listing pages
+* Connected applicant counts with live application data
+* Improved dashboard statistics using backend APIs
+* Performed project testing and fixed remaining UI and backend issues
+
+## 📚 What I Learned
+
+* Improved project documentation skills
+* Learned advanced UI/UX design principles
+* Improved REST API integration
+* Gained experience in full-stack application deployment preparation
+* Learned how to optimise and polish a production-ready MERN application
