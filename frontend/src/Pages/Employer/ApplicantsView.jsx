@@ -988,7 +988,7 @@ function ApplicantCvModal({
         }
       >
         <div className="cv-no-print mb-4 flex flex-wrap justify-end gap-3">
-          <button
+          {/* <button
             type="button"
             onClick={handlePrint}
             disabled={
@@ -997,7 +997,7 @@ function ApplicantCvModal({
             className="rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Print / Save as PDF
-          </button>
+          </button> */}
 
           <button
             type="button"
