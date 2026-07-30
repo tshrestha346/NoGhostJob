@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {getSettings} from "../SettingsApi";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    getSettings().then((result) => {
+      setSettings(result.settings);
+    });
+  }, []);
+
+  const logo = settings?.name
+    .split(" ")
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 
   const user = JSON.parse(
     localStorage.getItem("user") ||
@@ -33,10 +47,10 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
         <Link to="/" className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-gradient-to-br from-blue-400 to-blue-700 text-base font-extrabold text-white shadow-sm">
-            C
+            {logo}
           </div>
           <span className="font-serif text-2xl font-bold tracking-tight text-[#07192E]">
-            CareerHub
+            {settings?.name}
           </span>
         </Link>
 

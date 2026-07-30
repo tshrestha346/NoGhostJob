@@ -264,7 +264,7 @@ export default function MembersPage() {
   const location = useLocation();
   const page = location.pathname.split("/").pop();
 
-  const [members, setMembers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [modalMode, setModalMode] = useState(null); // null | "add" | "edit"
@@ -284,26 +284,30 @@ export default function MembersPage() {
     .map((part) => part[0]?.toUpperCase())
     .join("");
 
-  const loadMembers = async () => {
+  const loadMessages = async () => {
     try {
-      setLoading(true);
-      setError("");
-      const res = await axios.get(`${API_BASE}/admin/members`);
-      const rows = res.data?.members || res.data?.data || [];
-      setMembers(rows);
+        setLoading(true);
+        setError("");
+
+        const res = await axios.get(`${API_BASE}/admin/contacts`);
+
+        setMessages(res.data.messages);
+
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "Failed to load members.",
-      );
+        setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to load contact messages."
+        );
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+    };
 
   useEffect(() => {
-    loadMembers();
+    loadMessages();
   }, []);
-
+  console.log('contact',messages)
   const openAdd = () => {
     setEditingMember(null);
     setModalMode("add");
@@ -479,9 +483,6 @@ export default function MembersPage() {
               Manage team/member profiles
             </div>
           </div>
-          <button onClick={openAdd} style={btnPrimary}>
-            + Add New
-          </button>
         </div>
 
         <div style={{ padding: "28px 32px" }}>
@@ -503,82 +504,70 @@ export default function MembersPage() {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr>
-                  <th style={th}>Photo</th>
-                  <th style={th}>Title</th>
-                  <th style={th}>Full Name</th>
-                  <th style={th}>Designation</th>
-                  <th style={th}>Action</th>
+                  <th style={th}>Name</th>
+                  <th style={th}>Email</th>
+                  <th style={th}>Company</th>
+                  <th style={th}>Subject</th>
+                  <th style={th}>Status</th>
+                  <th style={th}>Message</th>
+                  <th style={th}>Received</th>
                 </tr>
               </thead>
+
               <tbody>
-                {members.length === 0 ? (
+                {messages.length === 0 ? (
                   <tr>
                     <td
+                      colSpan={7}
                       style={{ ...td, textAlign: "center", color: C.gray }}
-                      colSpan={5}
                     >
-                      No members found.
+                      No contact messages found.
                     </td>
                   </tr>
                 ) : (
-                  members.map((member) => (
-                    <tr key={member._id}>
+                  messages.map((msg) => (
+                    <tr key={msg._id}>
+                      <td style={{ ...td, fontWeight: 600 }}>{msg.name}</td>
+
+                      <td style={td}>{msg.email}</td>
+
+                      <td style={td}>{msg.company || "-"}</td>
+
+                      <td style={td}>{msg.subject || "-"}</td>
+
                       <td style={td}>
-                        {member.image ? (
-                          <img
-                            src={member.image}
-                            alt={member.full_name}
-                            style={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              objectFit: "cover",
-                            }}
-                          />
-                        ) : (
-                          <div
-                            style={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              background: C.border,
-                            }}
-                          />
-                        )}
-                      </td>
-                      <td style={td}>{member.title || "—"}</td>
-                      <td style={{ ...td, fontWeight: 600 }}>
-                        {member.full_name}
-                      </td>
-                      <td style={td}>{member.designation || "—"}</td>
-                      <td style={{ ...td }}>
-                        <button
-                          onClick={() => openEdit(member)}
+                        <span
                           style={{
-                            border: "none",
-                            background: "none",
-                            color: C.blue,
-                            fontSize: 12,
+                            padding: "4px 10px",
+                            borderRadius: 20,
+                            fontSize: 11,
                             fontWeight: 700,
-                            cursor: "pointer",
-                            paddingRight: "60px"
+                            background:
+                              msg.status === "new"
+                                ? "#DBEAFE"
+                                : msg.status === "read"
+                                  ? "#FEF3C7"
+                                  : "#DCFCE7",
+                            color:
+                              msg.status === "new"
+                                ? "#1D4ED8"
+                                : msg.status === "read"
+                                  ? "#92400E"
+                                  : "#166534",
                           }}
                         >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(member)}
-                          style={{
-                            border: "none",
-                            background: "none",
-                            color: C.red,
-                            fontSize: 12,
-                            fontWeight: 700,
-                            cursor: "pointer",
-                          }}
-                        >
-                          Delete
-                        </button>
+                          {msg.status}
+                        </span>
+                      </td>
+
+                      <td style={{ ...td, maxWidth: 300 }}>
+                        {msg.message.length > 80
+                          ? msg.message.substring(0, 80) + "..."
+                          : msg.message}
+                      </td>
+
+                      <td style={td}>
+                        {new Date(msg.createdAt).toLocaleDateString()}
                       </td>
                     </tr>
                   ))

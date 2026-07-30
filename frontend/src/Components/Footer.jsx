@@ -1,4 +1,21 @@
+import { useState, useEffect } from "react";
+import {getSettings} from "../SettingsApi";
+
 export default function Footer() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    getSettings().then((result) => {
+      setSettings(result.settings);
+    });
+  }, []);
+
+  const logo = settings?.name
+    .split(" ")
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+
   return (
     <footer className="bg-[#07192E] text-white">
       {/* Top Section */}
@@ -8,11 +25,11 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400 to-blue-700 text-lg font-extrabold text-white">
-                C
+                {logo}
               </div>
 
               <span className="font-serif text-2xl font-bold">
-                CareerHub
+                {settings?.name}
               </span>
             </div>
 
@@ -51,9 +68,7 @@ export default function Footer() {
               {[
                 "Find Jobs",
                 "Companies",
-                "Salary Guide",
                 "Career Advice",
-                "Resources",
               ].map((item) => (
                 <li key={item}>
                   <a
@@ -166,7 +181,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-12">
           <div className="text-sm text-white/50">
-            © {new Date().getFullYear()} CareerHub. All rights reserved.
+            © {new Date().getFullYear()} {settings?.name}. All rights reserved.
           </div>
 
           <div className="flex flex-wrap gap-5 text-sm text-white/50">

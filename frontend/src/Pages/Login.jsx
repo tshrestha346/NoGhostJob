@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {getSettings} from "../SettingsApi";
 
 function AuthInput({ label, name, type = "text", value, onChange, error }) {
   const [focused, setFocused] = useState(false);
@@ -100,6 +101,19 @@ export default function Login({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [settings, setSettings] = useState(null);
+  
+    useEffect(() => {
+      getSettings().then((result) => {
+        setSettings(result.settings);
+      });
+    }, []);
+  
+    const settings_logo = settings?.name
+      .split(" ")
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("");
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -275,10 +289,10 @@ const handleSubmit = async (e) => {
 
         <div className="relative z-10 flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-400 to-blue-700 border border-white/20 flex items-center justify-center text-white text-base font-extrabold">
-            C
+            {settings_logo}
           </div>
           <span className="text-white font-serif text-2xl font-bold tracking-tight">
-            CareerHub
+            {settings?.name}
           </span>
         </div>
 

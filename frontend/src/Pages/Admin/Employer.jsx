@@ -34,6 +34,7 @@ const NAV_ITEMS = [
   { key: "Employers", icon: "💼", label: "Employers" },
   { key: "Members", icon: "👥", label: "Members" },
   { key: "Settings", icon: "✏️", label: "Settings" },
+  { key: "Contacts", icon: "📩", label: "Contacts" }
 ];
 
 const th = {

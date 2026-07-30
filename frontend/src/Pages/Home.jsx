@@ -7,6 +7,7 @@ import {
   fetchTestimonials,
   subscribeNewsletter,
 } from "../services/api";
+import {getSettings} from "../SettingsApi";
 
 
 function extractArray(response, key) {
@@ -494,13 +495,20 @@ function Categories({ categories }) {
 }
 
 function WhyUs() {
+  const [settings, setSettings] = useState(null);
+  useEffect(() => {
+    getSettings().then((result) => {
+      setSettings(result.settings);
+    });
+  }, []);
+
   return (
     <section className="border-t border-[#DDEAFC] bg-[#F7FAFF] px-5 py-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
           <SectionLabel>Our Edge</SectionLabel>
           <h2 className="mb-2.5 font-serif text-3xl font-bold tracking-tight text-[#07192E] sm:text-4xl">
-            Why Choose CareerHub
+            Why Choose {settings?.name}
           </h2>
           <p className="text-slate-500">
             We make your job search experience exceptional

@@ -18,6 +18,7 @@ import {
 } from '../../Components/User/UserSections.jsx';
 
 export default function Overview({ setPage }) {
+  console.log('Application', APPLICATIONS)
   const counts = useMemo(() => {
     const r = { Applied:0, Screening:0, Interview:0, Offered:0, Rejected:0 };
     APPLICATIONS.forEach(a => r[a.status]++);
@@ -46,7 +47,7 @@ export default function Overview({ setPage }) {
         <StatCard icon="📋" value={APPLICATIONS.length} label="Total Applied" sub="Last 30 days" />
         <StatCard icon="🎙️" value={counts.Interview}    label="Interviews"   sub="Scheduled"   color={C.purple} bg={C.purplePale} />
         <StatCard icon="🎉" value={counts.Offered}      label="Offers"       sub="Active"      color={C.green}  bg={C.greenPale}  />
-        <StatCard icon="🔖" value={SAVED_JOBS.length}   label="Saved Jobs"   sub="In watchlist" />
+        {/* <StatCard icon="🔖" value={SAVED_JOBS.length}   label="Saved Jobs"   sub="In watchlist" /> */}
       </div>
 
       {/* Application pipeline */}

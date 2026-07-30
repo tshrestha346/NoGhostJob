@@ -848,3 +848,26 @@ exports.updateApplicationStatus =
       });
     }
   };
+
+  exports.getApplicationsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+ 
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user id." });
+    }
+ 
+    const applications = await Application.find({ applicant: userId })
+      .populate({
+        path: "job",
+        populate: { path: "company", select: "name" }, // adjust if Job's company ref field differs
+      })
+      .sort({ appliedAt: -1 })
+      .lean();
+ 
+    res.status(200).json({ applications });
+  } catch (err) {
+    console.error("getApplicationsByUser error:", err);
+    res.status(500).json({ message: "Failed to fetch applications", error: err.message });
+  }
+};

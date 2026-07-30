@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Overview from './Overview';
 import ApplicationsView from "./ApplicationsView";
 import MyApplicationsPage from "../MyApplicationsPage.jsx";
@@ -25,6 +25,7 @@ import {
     StatusBadge,
     LogoBox
 } from '../../Components/User/UserSections.jsx';
+import {getSettings} from "../../SettingsApi";
 
 // ─── VIEWS ────────────────────────────────────────────────────────────────────
 
@@ -33,6 +34,19 @@ import {
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function UserDashboard() {
   const [page, setPage] = useState("overview");
+  const [settings, setSettings] = useState(null);
+  
+    useEffect(() => {
+      getSettings().then((result) => {
+        setSettings(result.settings);
+      });
+    }, []);
+  
+    const settings_logo = settings?.name
+      .split(" ")
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("");
 
   const views = { overview:<Overview setPage={setPage}/>, applications:<MyApplicationsPage/>,  profile:<ProfileView/> };
 
@@ -65,19 +79,18 @@ export default function UserDashboard() {
 
         {/* Logout */}
         <div style={{ padding:"14px 10px", borderTop:"1px solid rgba(255,255,255,0.08)" }}>
-          <button style={{ width:"100%", display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", borderRadius:"9px", border:"none", background:"rgba(220,38,38,0.12)", color:"rgba(248,113,113,0.9)", fontSize:"13px", fontWeight:600, cursor:"pointer" }}>
+          {/* <button style={{ width:"100%", display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", borderRadius:"9px", border:"none", background:"rgba(220,38,38,0.12)", color:"rgba(248,113,113,0.9)", fontSize:"13px", fontWeight:600, cursor:"pointer" }}>
             <span style={{ fontSize:"16px" }}>🚪</span> Sign Out
-          </button>
+          </button> */}
         </div>
       </div>
-
       {/* ── MAIN CONTENT ────────────────────────── */}
       <div style={{ flex:1, overflow:"auto" }}>
         {/* Topbar */}
         <div style={{ background:C.white, borderBottom:`1px solid ${C.border}`, padding:"16px 32px", display:"flex", justifyContent:"space-between", alignItems:"center", position:"sticky", top:0, zIndex:20 }}>
           <div>
             <div style={{ fontSize:"20px", fontWeight:700, color:C.navy, fontFamily:"'Georgia', serif" }}>{NAV_ITEMS.find(n=>n.key===page)?.label}</div>
-            <div style={{ fontSize:"12px", color:C.gray }}>CareerHub · Job Seeker Portal</div>
+            <div style={{ fontSize:"12px", color:C.gray }}>{settings?.name} · Job Seeker Portal</div>
           </div>
           <div style={{ display:"flex", gap:"10px", alignItems:"center" }}>
             <button style={{ position:"relative", padding:"8px 12px", borderRadius:"8px", border:`1px solid ${C.border}`, background:"transparent", cursor:"pointer", fontSize:"16px" }}>
