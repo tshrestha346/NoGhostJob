@@ -16,8 +16,8 @@ const C = {
 
 const STATUS_META = {
   Applied:    { color:C.blue,   bg:C.bluePale,  border:C.blueSoft, icon:"📩" },
-  Shortlisted:{ color:C.amber,  bg:C.amberPale, border:C.amberBd,  icon:"⭐" },
-  Interview:  { color:C.purple, bg:C.purplePale,border:"#C4B5FD",  icon:"🎙️" },
+  // Shortlisted:{ color:C.amber,  bg:C.amberPale, border:C.amberBd,  icon:"⭐" },
+  // Interview:  { color:C.purple, bg:C.purplePale,border:"#C4B5FD",  icon:"🎙️" },
   Offered:    { color:C.green,  bg:C.greenPale, border:C.greenBd,  icon:"🎉" },
   Rejected:   { color:C.red,    bg:C.redPale,   border:C.redBd,    icon:"✕"  },
 };
@@ -67,7 +67,7 @@ export default function Overview({ jobs, applicants, setPage }) {
   // const activeJobs = jobs.filter(j => j.status === "Active").length;
   const activeJobs = (jobs || []).filter(j => j.is_active).length;
   const totalApps  = applicants.length;
-  const interviews = applicants.filter(a => a.status === "Interview").length;
+  // const interviews = applicants.filter(a => a.status === "Interview").length;
   const offers     = applicants.filter(a => a.status === "Offered").length;
   const employer = getCurrentEmployer();
 
@@ -92,7 +92,7 @@ export default function Overview({ jobs, applicants, setPage }) {
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"14px", marginBottom:"24px" }}>
         <StatCard icon="💼" value={activeJobs}  label="Active Jobs"  sub="Currently open"     />
         <StatCard icon="👥" value={totalApps}   label="Applications" sub="Total received"     bg={C.amberPale} />
-        <StatCard icon="🎙️" value={interviews}  label="Interviews"  sub="Scheduled"           bg={C.purplePale} />
+        {/* <StatCard icon="🎙️" value={interviews}  label="Interviews"  sub="Scheduled"           bg={C.purplePale} /> */}
         <StatCard icon="🎉" value={offers}       label="Offers Sent" sub="Awaiting response"  bg={C.greenPale} />
       </div>
 
