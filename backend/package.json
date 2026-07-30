@@ -1,0 +1,32 @@
+{
+  "name": "noghostjob",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed/seedData.js"
+  },
+  "keywords": [],
+  "author": "Tej Bahadur Shrestha <tshrestha346@gmail.com> (https://github.com/tshrestha346/NoGhostJob)",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "html2canvas-pro": "^2.2.3",
+    "jsonwebtoken": "^9.0.3",
+    "jspdf": "^4.2.1",
+    "mongoose": "^9.7.0",
+    "morgan": "^1.10.1",
+    "nodemailer": "^9.0.1",
+    "puppeteer": "^25.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
