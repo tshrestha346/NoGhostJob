@@ -264,10 +264,11 @@ exports.applyForJob = async (req, res) => {
 
     const cvSnapshot =
       getCvSnapshot(applicant);
+      console.log("cvvvv",getCvSnapshot(applicant))
 
     const hasCvData =
       hasMeaningfulCvData(cvSnapshot);
-
+  console.log("bsaihdb",hasCvData)
     const hasCvPdf =
       typeof applicant.cvPdfUrl ===
         "string" &&
@@ -648,69 +649,140 @@ exports.getMyApplications =
 |--------------------------------------------------------------------------
 */
 
-exports.getApplicationsForJob =
-  async (req, res) => {
-    try {
-      const { jobId } = req.params;
+exports.getApplicationsForJob = async (req, res) => {
+  try {
+    const { jobId } = req.params;
 
-      if (
-        !mongoose.Types.ObjectId.isValid(
-          jobId
-        )
-      ) {
-        return res.status(400).json({
-          message:
-            "Invalid job ID.",
-        });
-      }
-
-      const job =
-        await Job.findById(jobId);
-
-      if (!job) {
-        return res.status(404).json({
-          message: "Job not found.",
-        });
-      }
-
-      const applications =
-        await Application.find({
-          job: jobId,
-        })
-          .populate(
-            "applicant",
-            "_id fullName name email phoneNo accountType role cv cvPdfUrl cvPdfFilename"
-          )
-          .populate({
-            path: "job",
-            select:
-              "title company loc location type jobType sal salary status",
-            populate: {
-              path: "company",
-              select:
-                "_id name initials logo industry location",
-            },
-          })
-          .sort({
-            createdAt: -1,
-          });
-
-      return res
-        .status(200)
-        .json(applications);
-    } catch (error) {
-      console.error(
-        "Get job applications error:",
-        error
-      );
-
-      return res.status(500).json({
-        message:
-          "Failed to load job applications.",
-        error: error.message,
+    const applications = await Application.find({
+      job: jobId,
+    })
+      .populate(
+        "applicant",
+        "_id fullName email phoneNo address role cv"
+      )
+      .populate(
+        "job",
+        "_id title company location"
+      )
+      .sort({
+        createdAt: -1,
       });
-    }
-  };
+
+    const normalizedApplications = applications.map(
+      (application) => {
+        const applicant =
+          application.applicant || {};
+
+        const snapshot =
+          application.applicantSnapshot || {};
+
+        const snapshotCv =
+          snapshot.cv || null;
+
+        const currentCv =
+          applicant.cv || null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Use snapshot CV only when it contains actual data
+        |--------------------------------------------------------------------------
+        */
+
+        const snapshotHasData =
+          snapshotCv &&
+          snapshotCv.data &&
+          typeof snapshotCv.data === "object" &&
+          Object.keys(snapshotCv.data).length > 0;
+
+        const currentHasData =
+          currentCv &&
+          currentCv.data &&
+          typeof currentCv.data === "object" &&
+          Object.keys(currentCv.data).length > 0;
+
+        const selectedCv =
+          snapshotHasData
+            ? snapshotCv
+            : currentHasData
+            ? currentCv
+            : null;
+
+        return {
+          _id: application._id,
+
+          applicationId:
+            application._id,
+
+          job:
+            application.job,
+
+          status:
+            application.status,
+
+          createdAt:
+            application.createdAt,
+
+          applicant: {
+            _id:
+              applicant._id ||
+              snapshot.userId ||
+              null,
+
+            fullName:
+              applicant.fullName ||
+              snapshot.fullName ||
+              "",
+
+            email:
+              applicant.email ||
+              snapshot.email ||
+              "",
+
+            phoneNo:
+              applicant.phoneNo ||
+              snapshot.phoneNo ||
+              "",
+
+            address:
+              applicant.address ||
+              snapshot.address ||
+              "",
+
+            role:
+              applicant.role ||
+              snapshot.role ||
+              "",
+
+            /*
+            |--------------------------------------------------------------------------
+            | Return CV data directly
+            |--------------------------------------------------------------------------
+            */
+
+            cv:
+              selectedCv,
+          },
+        };
+      }
+    );
+
+    return res.status(200).json({
+      applications:
+        normalizedApplications,
+    });
+  } catch (error) {
+    console.error(
+      "Get applications for job error:",
+      error
+    );
+
+    return res.status(500).json({
+      message:
+        error.message ||
+        "Unable to load applications",
+    });
+  }
+};
 
 /*
 |--------------------------------------------------------------------------
