@@ -1,7 +1,3 @@
-
-
-/* This schema is for feature to show in about page near our mission. */
-
 const mongoose = require("mongoose");
 
 const featuresSchema = new mongoose.Schema(

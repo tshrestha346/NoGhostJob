@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import {getSettings} from "../SettingsApi";
 
 function getStrength(pwd) {
   let score = 0;
@@ -171,7 +172,19 @@ export default function Register({ onRegisterSuccess }) {
   const [success, setSuccess] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [settings, setSettings] = useState(null);
 
+    useEffect(() => {
+      getSettings().then((result) => {
+        setSettings(result.settings);
+      });
+    }, []);
+
+    const settings_logo = settings?.name
+      .split(" ")
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("");
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -297,10 +310,10 @@ export default function Register({ onRegisterSuccess }) {
 
         <div className="relative z-10 flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-gradient-to-br from-blue-400 to-blue-700 text-base font-extrabold text-white">
-            C
+            {settings_logo}
           </div>
           <span className="font-serif text-2xl font-bold tracking-tight text-white">
-            NoGhostJob
+            {settings?.name}
           </span>
         </div>
 
@@ -398,7 +411,7 @@ export default function Register({ onRegisterSuccess }) {
               </h2>
 
               <p className="mb-6 text-sm leading-7 text-slate-500">
-                Welcome to NoGhostJob,{" "}
+                Welcome to {settings?.name},{" "}
                 <strong className="text-[#07192E]">{form.fullName}</strong>!
                 <br />
                 We've sent a verification email to{" "}
@@ -419,8 +432,8 @@ export default function Register({ onRegisterSuccess }) {
                 <h1 className="mb-1.5 font-serif text-3xl font-bold tracking-tight text-[#07192E] text-center">
                   Create your account
                 </h1>
-                <p className="text-sm leading-6 text-slate-500">
-                  Join NoGhostJob and start applying to top roles today.
+                <p className="text-sm leading-6 text-slate-500 text-center">
+                  Join {settings?.name} and start applying to top roles today.
                 </p>
               </div>
 
@@ -501,7 +514,7 @@ export default function Register({ onRegisterSuccess }) {
                     </button>
 
                     <span className="text-sm leading-6 text-[#3D4A63]">
-                      I agree to NoGhostJob's{" "}
+                      I agree to {settings?.name}'s{" "}
                       <a href="#" className="font-semibold text-blue-700 no-underline">
                         Terms of Service
                       </a>{" "}

@@ -2,11 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const puppeteer = require("puppeteer");
 
-/*
-|--------------------------------------------------------------------------
-| Escape HTML
-|--------------------------------------------------------------------------
-*/
 
 function escapeHtml(value = "") {
   return String(value)
@@ -17,11 +12,6 @@ function escapeHtml(value = "") {
     .replace(/'/g, "&#039;");
 }
 
-/*
-|--------------------------------------------------------------------------
-| Format date range
-|--------------------------------------------------------------------------
-*/
 
 function formatDateRange(
   start,
@@ -39,11 +29,6 @@ function formatDateRange(
   }`;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Convert multiline text to HTML
-|--------------------------------------------------------------------------
-*/
 
 function formatDescription(value = "") {
   return escapeHtml(value).replace(
@@ -52,11 +37,6 @@ function formatDescription(value = "") {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Find Chrome executable
-|--------------------------------------------------------------------------
-*/
 
 function findChromeExecutable() {
   const possiblePaths = [
@@ -91,35 +71,11 @@ function findChromeExecutable() {
   return null;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Build CV HTML
-|--------------------------------------------------------------------------
-*/
 
 function buildCvHtml(
   cv = {},
   user = {}
 ) {
-  /*
-  |--------------------------------------------------------------------------
-  | Support frontend structure:
-  |
-  | {
-  |   template: "modern",
-  |   data: {
-  |     personal: {},
-  |     summary: "",
-  |     skills: [],
-  |     experience: [],
-  |     education: [],
-  |     languages: [],
-  |     projects: [],
-  |     certifications: []
-  |   }
-  | }
-  |--------------------------------------------------------------------------
-  */
 
   const cvData =
     cv?.data &&
@@ -844,11 +800,6 @@ function buildCvHtml(
   `;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Generate CV PDF
-|--------------------------------------------------------------------------
-*/
 
 async function generateCvPdf({
   cv,
@@ -881,11 +832,6 @@ async function generateCvPdf({
   const relativeUrl =
     `/uploads/cvs/${filename}`;
 
-  /*
-  |--------------------------------------------------------------------------
-  | buildCvHtml is now defined above
-  |--------------------------------------------------------------------------
-  */
 
   const html =
     buildCvHtml(cv, user);
@@ -973,11 +919,6 @@ async function generateCvPdf({
       error
     );
 
-    /*
-    |--------------------------------------------------------------------------
-    | Remove an incomplete PDF if one was created
-    |--------------------------------------------------------------------------
-    */
 
     if (
       fs.existsSync(

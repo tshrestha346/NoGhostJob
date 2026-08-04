@@ -5,7 +5,6 @@ exports.createContactMessage = async (req, res) => {
   try {
     const { name, email, company, subject, message } = req.body;
 
-    // Save to DB
     const newMessage = await ContactMessage.create({
       name,
       email,
@@ -14,7 +13,6 @@ exports.createContactMessage = async (req, res) => {
       message,
     });
 
-    // Send email (optional)
     try {
       await sendContactEmail({ name, email, company, subject, message });
     } catch (emailErr) {
@@ -30,6 +28,23 @@ exports.createContactMessage = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error",
+    });
+  }
+};
+
+exports.getContactMessage = async (req, res) => {
+  try {
+    const messages = await ContactMessage.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: messages.length,
+      messages,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
     });
   }
 };
