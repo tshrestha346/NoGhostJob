@@ -2,12 +2,6 @@ const mongoose = require("mongoose");
 const Job = require("../models/Job");
 const Company = require("../models/Company");
 
-/*
-|--------------------------------------------------------------------------
-| Helpers
-|--------------------------------------------------------------------------
-*/
-
 function normaliseRequirements(requirements) {
   if (Array.isArray(requirements)) {
     return requirements
@@ -54,11 +48,6 @@ function getSalary(body) {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Get all jobs
-|--------------------------------------------------------------------------
-*/
 
 exports.getJobs = async (req, res) => {
   try {
@@ -179,11 +168,6 @@ exports.getJobs = async (req, res) => {
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Get one job
-|--------------------------------------------------------------------------
-*/
 
 exports.getJobById = async (
   req,
@@ -233,21 +217,12 @@ exports.getJobById = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Create job
-|--------------------------------------------------------------------------
-*/
 
 exports.createJob = async (
   req,
   res
 ) => {
   try {
-    // console.log(
-    //   "Create job request body:",
-    //   req.body
-    // );
 
     const companyId =
       getCompanyId(req.body);
@@ -461,11 +436,6 @@ exports.createJob = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Update job
-|--------------------------------------------------------------------------
-*/
 
 exports.updateJob = async (
   req,
@@ -751,11 +721,6 @@ exports.updateJob = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Update job status
-|--------------------------------------------------------------------------
-*/
 
 exports.updateJobStatus = async (
   req,
@@ -834,11 +799,6 @@ exports.updateJobStatus = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Delete job
-|--------------------------------------------------------------------------
-*/
 
 exports.deleteJob = async (
   req,

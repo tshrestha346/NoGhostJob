@@ -27,7 +27,8 @@ import CompanyJobsPage from "./Pages/CompanyJobsPage";
 import Dashboard from "./Pages/Admin/Dashboard";
 import Employer from "./Pages/Admin/Employer";
 import Members from "./Pages/Admin/Members";
-// import Settings from "./Pages/Admin/Settings";
+import Settings from "./Pages/Admin/Settings";
+import Contact from "./Pages/Admin/Contact"
 
 function App() {
   return (
@@ -80,7 +81,9 @@ function AppContent() {
     location.pathname.startsWith("/CreateCV") ||
     location.pathname.startsWith("/Dashboard") ||
     location.pathname.startsWith("/Employers") ||
-    location.pathname.startsWith("/Members"); 
+    location.pathname.startsWith("/Members") ||
+    location.pathname.startsWith("/Settings") ||
+    location.pathname.startsWith("/Contacts"); 
 
   const isLoggedIn = !!(
     localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -157,7 +160,7 @@ function AppContent() {
             </ProtectedRoute>
           } 
         />
-        {/* <Route 
+        <Route 
           path="/Settings"
           element={
             <ProtectedRoute>
@@ -166,7 +169,17 @@ function AppContent() {
               </AdminRoute>
             </ProtectedRoute>
           } 
-        /> */}
+        />
+        <Route 
+          path="/Contacts"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Contact />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        />
 
         {/* User Routes */}
         <Route

@@ -5,11 +5,6 @@ import {
   frontendStatusToBackend,
 } from "./employerApi";
 
-/*
-|--------------------------------------------------------------------------
-| Status configuration
-|--------------------------------------------------------------------------
-*/
 
 const STATUS_META = {
   Applied: {
@@ -53,11 +48,6 @@ const STATUS_META = {
   },
 };
 
-/*
-|--------------------------------------------------------------------------
-| General helpers
-|--------------------------------------------------------------------------
-*/
 
 function backendStatusToFrontend(status) {
   const statusMap = {
@@ -131,11 +121,6 @@ function hasObjectContent(value) {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Check whether CV contains meaningful information
-|--------------------------------------------------------------------------
-*/
 
 function hasCvContent(cv) {
   if (!cv || typeof cv !== "object") {
@@ -210,14 +195,6 @@ function hasCvContent(cv) {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Select CV
-|--------------------------------------------------------------------------
-| Snapshot CV is used only when it actually contains information.
-| Otherwise, the current populated applicant CV is used.
-|--------------------------------------------------------------------------
-*/
 
 function getSelectedCv(application) {
   const snapshotCv =
@@ -248,12 +225,6 @@ function getSelectedCv(application) {
     null
   );
 }
-
-/*
-|--------------------------------------------------------------------------
-| Get CV summary information
-|--------------------------------------------------------------------------
-*/
 
 function getCvData(application) {
   const cv = getSelectedCv(application);
@@ -321,12 +292,6 @@ function getCvData(application) {
       "",
   };
 }
-
-/*
-|--------------------------------------------------------------------------
-| Normalize applicant
-|--------------------------------------------------------------------------
-*/
 
 function normalizeApplicant(application) {
   const applicant =
@@ -477,12 +442,6 @@ function normalizeApplicant(application) {
       application?.coverLetter ||
       "",
 
-    /*
-    |--------------------------------------------------------------------------
-    | Full CV object for direct rendering
-    |--------------------------------------------------------------------------
-    */
-
     cv:
       cvData.cv,
 
@@ -522,11 +481,6 @@ function normalizeApplicant(application) {
   };
 }
 
-/*
-|--------------------------------------------------------------------------
-| Status badge
-|--------------------------------------------------------------------------
-*/
 
 function StatusBadge({ status }) {
   const meta =
@@ -546,11 +500,6 @@ function StatusBadge({ status }) {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Section header
-|--------------------------------------------------------------------------
-*/
 
 function SectionHeader({
   title,
@@ -585,11 +534,6 @@ function SectionHeader({
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Reject modal
-|--------------------------------------------------------------------------
-*/
 
 function RejectModal({
   applicantName,
@@ -686,12 +630,6 @@ function RejectModal({
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Confirm modal
-|--------------------------------------------------------------------------
-*/
-
 function ConfirmModal({
   msg,
   onConfirm,
@@ -736,11 +674,6 @@ function ConfirmModal({
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| CV helpers
-|--------------------------------------------------------------------------
-*/
 
 function normalizeSkill(skill) {
   if (
@@ -825,11 +758,6 @@ function CvEntry({
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Applicant CV preview
-|--------------------------------------------------------------------------
-*/
 
 function ApplicantCvModal({
   app,
@@ -988,16 +916,6 @@ function ApplicantCvModal({
         }
       >
         <div className="cv-no-print mb-4 flex flex-wrap justify-end gap-3">
-          {/* <button
-            type="button"
-            onClick={handlePrint}
-            disabled={
-              !cvHasContent
-            }
-            className="rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Print / Save as PDF
-          </button> */}
 
           <button
             type="button"
@@ -1839,11 +1757,6 @@ function InfoRow({
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Main component
-|--------------------------------------------------------------------------
-*/
 
 export default function ApplicantsView({
   applicants = [],

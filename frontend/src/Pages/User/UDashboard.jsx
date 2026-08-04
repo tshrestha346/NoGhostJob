@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Overview from './Overview';
 import ApplicationsView from "./ApplicationsView";
 import MyApplicationsPage from "../MyApplicationsPage.jsx";
@@ -25,6 +25,7 @@ import {
     StatusBadge,
     LogoBox
 } from '../../Components/User/UserSections.jsx';
+import {getSettings} from "../../SettingsApi";
 
 // ─── VIEWS ────────────────────────────────────────────────────────────────────
 
@@ -33,6 +34,19 @@ import {
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function UserDashboard() {
   const [page, setPage] = useState("overview");
+  const [settings, setSettings] = useState(null);
+  
+    useEffect(() => {
+      getSettings().then((result) => {
+        setSettings(result.settings);
+      });
+    }, []);
+  
+    const settings_logo = settings?.name
+      .split(" ")
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("");
 
   const views = { overview:<Overview setPage={setPage}/>, applications:<MyApplicationsPage/>,  profile:<ProfileView/> };
 
@@ -63,9 +77,7 @@ export default function UserDashboard() {
           })}
         </nav>
 
-
       </div>
-
       {/* ── MAIN CONTENT ────────────────────────── */}
       <div style={{ flex:1, overflow:"auto" }}>
         {/* Topbar */}

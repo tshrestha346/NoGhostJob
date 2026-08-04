@@ -2,12 +2,6 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5000/api";
 
-/*
-|--------------------------------------------------------------------------
-| Stored user
-|--------------------------------------------------------------------------
-*/
-
 function getStoredUser() {
   try {
     const storedUser =
@@ -54,12 +48,6 @@ export function getEmployerCompanyId() {
     null
   );
 }
-
-/*
-|--------------------------------------------------------------------------
-| Request helper
-|--------------------------------------------------------------------------
-*/
 
 async function request(
   path,
@@ -117,12 +105,6 @@ async function request(
   return data;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Company jobs
-|--------------------------------------------------------------------------
-*/
-
 export async function getCompanyJobs(
   companyId
 ) {
@@ -147,12 +129,6 @@ export async function getCompanyJobs(
       data?.pagination || null,
   };
 }
-
-/*
-|--------------------------------------------------------------------------
-| Job API
-|--------------------------------------------------------------------------
-*/
 
 export function createJob(payload) {
   return request("/jobs", {
@@ -193,11 +169,6 @@ export function updateJobStatus(
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Application API
-|--------------------------------------------------------------------------
-*/
 
 export async function getApplicationsForJob(
   jobId
@@ -229,11 +200,6 @@ export function updateApplicationStatus(
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Application status conversion
-|--------------------------------------------------------------------------
-*/
 
 export function frontendStatusToBackend(
   status
@@ -266,11 +232,6 @@ export function backendStatusToFrontend(
   return map[status] || status;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Job normaliser
-|--------------------------------------------------------------------------
-*/
 
 export function normaliseJob(raw) {
   const company =
@@ -362,11 +323,6 @@ export function normaliseJob(raw) {
   };
 }
 
-/*
-|--------------------------------------------------------------------------
-| Applicant initials
-|--------------------------------------------------------------------------
-*/
 
 function createInitials(
   name = "Applicant"
@@ -381,11 +337,6 @@ function createInitials(
     .join("");
 }
 
-/*
-|--------------------------------------------------------------------------
-| Application normaliser
-|--------------------------------------------------------------------------
-*/
 
 export function normaliseApplication(
   raw,

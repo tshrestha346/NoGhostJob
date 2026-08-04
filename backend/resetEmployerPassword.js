@@ -52,11 +52,6 @@ async function resetEmployerPassword() {
         10
       );
 
-    /*
-    |--------------------------------------------------------------------------
-    | Direct update prevents unexpected document save behaviour
-    |--------------------------------------------------------------------------
-    */
 
     const updateResult =
       await User.updateOne(
@@ -79,11 +74,6 @@ async function resetEmployerPassword() {
       updateResult
     );
 
-    /*
-    |--------------------------------------------------------------------------
-    | Fetch password again directly from MongoDB
-    |--------------------------------------------------------------------------
-    */
 
     const updatedUser =
       await User.findOne({

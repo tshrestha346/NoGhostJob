@@ -64,8 +64,9 @@ function SectionHeader({ title, sub, action, onAction }) {
 
 // ─── OVERVIEW ─────────────────────────────────────────────────────────────────
 export default function Overview({ jobs, applicants, setPage }) {
-  // const activeJobs = jobs.filter(j => j.status === "Active").length;
-  const activeJobs = (jobs || []).filter(j => j.is_active).length;
+  const activeJobs = jobs.filter(j => j.status === "Active").length;
+  // const activeJobs = (jobs || []).filter(j => j.is_active).length;
+  console.log('active job',applicants)
   const totalApps  = applicants.length;
   // const interviews = applicants.filter(a => a.status === "Interview").length;
   const offers     = applicants.filter(a => a.status === "Offered").length;
@@ -109,7 +110,7 @@ export default function Overview({ jobs, applicants, setPage }) {
                   <div style={{ fontSize:"11px", color:C.gray }}>{job.dept} · {job.type} · {job.loc}</div>
                 </div>
                 <div style={{ marginLeft:"auto", textAlign:"right" }}>
-                  <div style={{ fontSize:"18px", fontWeight:800, color:C.blue }}>{job.apps}</div>
+                  <div style={{ fontSize:"18px", fontWeight:800, color:C.blue }}>{totalApps}</div>
                   <div style={{ fontSize:"10px", color:C.gray }}>applicants</div>
                 </div>
                 <div style={{ textAlign:"right" }}>

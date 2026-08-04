@@ -8,11 +8,6 @@ const jwt = require("jsonwebtoken");
 const {
   generateCvPdf,
 } = require("../utils/cvPdfGenerator");
-/*
-|--------------------------------------------------------------------------
-| Generate JWT token
-|--------------------------------------------------------------------------
-*/
 
 const generateToken = (id) => {
   if (!process.env.JWT_SECRET) {
@@ -32,11 +27,6 @@ const generateToken = (id) => {
   );
 };
 
-/*
-|--------------------------------------------------------------------------
-| Create standard user response
-|--------------------------------------------------------------------------
-*/
 
 const createUserResponse = (
   user,
@@ -73,12 +63,6 @@ const createUserResponse = (
 
   return response;
 };
-
-/*
-|--------------------------------------------------------------------------
-| Register user
-|--------------------------------------------------------------------------
-*/
 
 exports.registerUser = async (
   req,
@@ -170,11 +154,6 @@ exports.registerUser = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Login user
-|--------------------------------------------------------------------------
-*/
 
 exports.loginUser = async (
   req,
@@ -228,12 +207,6 @@ exports.loginUser = async (
         user.password
       );
 
-    /*
-    |--------------------------------------------------------------------------
-    | Temporary development bypass
-    |--------------------------------------------------------------------------
-    */
-
     const allowDevBypass =
       process.env.NODE_ENV ===
         "development" &&
@@ -251,31 +224,6 @@ exports.loginUser = async (
 
       isMatch = true;
     }
-
-    // console.log({
-    //   enteredEmail:
-    //     normalisedEmail,
-
-    //   userId:
-    //     user._id.toString(),
-
-    //   userFound: true,
-
-    //   passwordLength:
-    //     receivedPassword.length,
-
-    //   storedPasswordExists:
-    //     Boolean(user.password),
-
-    //   passwordMatches:
-    //     isMatch,
-
-    //   devBypassUsed:
-    //     allowDevBypass,
-
-    //   company:
-    //     user.company,
-    // });
 
     if (!isMatch) {
       return res.status(400).json({
@@ -353,11 +301,6 @@ exports.loginUser = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Get current user's profile
-|--------------------------------------------------------------------------
-*/
 
 exports.getUserProfile = async (
   req,
@@ -403,11 +346,6 @@ exports.getUserProfile = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Update current user's profile
-|--------------------------------------------------------------------------
-*/
 
 exports.updateUserProfile = async (
   req,
@@ -500,11 +438,6 @@ exports.updateUserProfile = async (
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Save or replace current user's CV
-|--------------------------------------------------------------------------
-*/
 
 async function removeOldCvPdf(
   oldUrl
@@ -546,11 +479,6 @@ async function removeOldCvPdf(
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| POST /api/auth/cv
-|--------------------------------------------------------------------------
-*/
 
 exports.saveUserCv = async (req, res) => {
   try {
@@ -572,11 +500,6 @@ exports.saveUserCv = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Extract only the CV template and data
-    |--------------------------------------------------------------------------
-    */
 
     const cvData = {
       template:
@@ -600,22 +523,12 @@ exports.saveUserCv = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Save CV content first
-    |--------------------------------------------------------------------------
-    */
 
     user.cv = cvData;
     user.cvUpdatedAt = new Date();
 
     await user.save();
 
-    /*
-    |--------------------------------------------------------------------------
-    | Generate PDF
-    |--------------------------------------------------------------------------
-    */
 
     let generatedPdf = null;
 
@@ -625,11 +538,6 @@ exports.saveUserCv = async (req, res) => {
         user,
       });
 
-      /*
-      |--------------------------------------------------------------------------
-      | Save PDF details at the USER TOP LEVEL
-      |--------------------------------------------------------------------------
-      */
 
       user.cvPdfUrl =
         generatedPdf.relativeUrl;
@@ -709,11 +617,6 @@ exports.saveUserCv = async (req, res) => {
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Get current user's CV
-|--------------------------------------------------------------------------
-*/
 
 exports.getUserCV = async (
   req,

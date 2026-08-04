@@ -4,11 +4,6 @@ const Application = require("../models/Application");
 const Job = require("../models/Job");
 const User = require("../models/user");
 
-/*
-|--------------------------------------------------------------------------
-| Helpers
-|--------------------------------------------------------------------------
-*/
 
 function getAuthenticatedUserId(req) {
   return req.user?._id || req.user?.id || null;
@@ -192,13 +187,6 @@ function createAbsoluteFileUrl(req, relativeUrl) {
   return `${baseUrl}${normalisedUrl}`;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Apply for a job
-|--------------------------------------------------------------------------
-| POST /api/applications/:jobId/apply
-|--------------------------------------------------------------------------
-*/
 
 exports.applyForJob = async (req, res) => {
   try {
@@ -224,11 +212,6 @@ exports.applyForJob = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Load applicant
-    |--------------------------------------------------------------------------
-    */
 
     const applicant =
       await User.findById(userId);
@@ -255,12 +238,6 @@ exports.applyForJob = async (req, res) => {
           "Your account is inactive.",
       });
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Check CV data or CV PDF
-    |--------------------------------------------------------------------------
-    */
 
     const cvSnapshot =
       getCvSnapshot(applicant);
@@ -294,11 +271,6 @@ exports.applyForJob = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Load job and company
-    |--------------------------------------------------------------------------
-    */
 
     const job =
       await Job.findById(jobId).populate(
@@ -329,11 +301,6 @@ exports.applyForJob = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Prevent duplicate applications
-    |--------------------------------------------------------------------------
-    */
 
     const existingApplication =
       await Application.findOne({
@@ -350,11 +317,6 @@ exports.applyForJob = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Prepare snapshots
-    |--------------------------------------------------------------------------
-    */
 
     const companyId =
       job.company?._id ||
@@ -382,11 +344,6 @@ exports.applyForJob = async (req, res) => {
         ? req.body.coverLetter.trim()
         : "";
 
-    /*
-    |--------------------------------------------------------------------------
-    | Create application
-    |--------------------------------------------------------------------------
-    */
 
     const application =
       await Application.create({
@@ -450,12 +407,6 @@ exports.applyForJob = async (req, res) => {
 
         appliedAt: new Date(),
       });
-
-    /*
-    |--------------------------------------------------------------------------
-    | Return populated application
-    |--------------------------------------------------------------------------
-    */
 
     const populatedApplication =
       await Application.findById(
@@ -525,13 +476,6 @@ exports.applyForJob = async (req, res) => {
   }
 };
 
-/*
-|--------------------------------------------------------------------------
-| Get application status for current user
-|--------------------------------------------------------------------------
-| GET /api/applications/:jobId/status
-|--------------------------------------------------------------------------
-*/
 
 exports.getApplicationStatus =
   async (req, res) => {
@@ -585,14 +529,6 @@ exports.getApplicationStatus =
     }
   };
 
-/*
-|--------------------------------------------------------------------------
-| Get current user's applications
-|--------------------------------------------------------------------------
-| GET /api/applications/my-applications
-|--------------------------------------------------------------------------
-*/
-
 exports.getMyApplications =
   async (req, res) => {
     try {
@@ -641,14 +577,6 @@ exports.getMyApplications =
     }
   };
 
-/*
-|--------------------------------------------------------------------------
-| Get applications for one job
-|--------------------------------------------------------------------------
-| GET /api/applications/job/:jobId
-|--------------------------------------------------------------------------
-*/
-
 exports.getApplicationsForJob = async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -682,11 +610,6 @@ exports.getApplicationsForJob = async (req, res) => {
         const currentCv =
           applicant.cv || null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Use snapshot CV only when it contains actual data
-        |--------------------------------------------------------------------------
-        */
 
         const snapshotHasData =
           snapshotCv &&
@@ -752,13 +675,6 @@ exports.getApplicationsForJob = async (req, res) => {
               applicant.role ||
               snapshot.role ||
               "",
-
-            /*
-            |--------------------------------------------------------------------------
-            | Return CV data directly
-            |--------------------------------------------------------------------------
-            */
-
             cv:
               selectedCv,
           },
@@ -783,14 +699,6 @@ exports.getApplicationsForJob = async (req, res) => {
     });
   }
 };
-
-/*
-|--------------------------------------------------------------------------
-| Update application status
-|--------------------------------------------------------------------------
-| PATCH /api/applications/:applicationId/status
-|--------------------------------------------------------------------------
-*/
 
 exports.updateApplicationStatus =
   async (req, res) => {
@@ -833,12 +741,6 @@ exports.updateApplicationStatus =
         });
       }
 
-      /*
-      |--------------------------------------------------------------------------
-      | Require a reason when rejecting
-      |--------------------------------------------------------------------------
-      */
-
       if (
         status === "Rejected" &&
         (!rejectionReason ||
@@ -849,15 +751,6 @@ exports.updateApplicationStatus =
             "A rejection reason is required.",
         });
       }
-
-      /*
-      |--------------------------------------------------------------------------
-      | Build the fields to update
-      |--------------------------------------------------------------------------
-      | Save the reason only when rejecting, and clear any stale reason
-      | if the status is later changed away from "Rejected".
-      |--------------------------------------------------------------------------
-      */
 
       const updateFields = {
         status,
@@ -920,3 +813,26 @@ exports.updateApplicationStatus =
       });
     }
   };
+
+  exports.getApplicationsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+ 
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user id." });
+    }
+ 
+    const applications = await Application.find({ applicant: userId })
+      .populate({
+        path: "job",
+        populate: { path: "company", select: "name" },
+      })
+      .sort({ appliedAt: -1 })
+      .lean();
+ 
+    res.status(200).json({ applications });
+  } catch (err) {
+    console.error("getApplicationsByUser error:", err);
+    res.status(500).json({ message: "Failed to fetch applications", error: err.message });
+  }
+};
