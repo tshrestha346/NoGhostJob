@@ -5,7 +5,6 @@ exports.createContactMessage = async (req, res) => {
   try {
     const { name, email, company, subject, message } = req.body;
 
-    // Save to DB
     const newMessage = await ContactMessage.create({
       name,
       email,
@@ -14,7 +13,6 @@ exports.createContactMessage = async (req, res) => {
       message,
     });
 
-    // Send email (optional)
     try {
       await sendContactEmail({ name, email, company, subject, message });
     } catch (emailErr) {

@@ -1,10 +1,5 @@
 const Settings = require("../models/Settings");
 
-/**
- * GET /api/admin/settings
- * Returns the single settings document, or an empty object if none exists yet
- * (so the frontend form can render blank fields on first run).
- */
 exports.getSettings = async (req, res) => {
   try {
     const settings = await Settings.findOne();
@@ -15,11 +10,6 @@ exports.getSettings = async (req, res) => {
   }
 };
 
-/**
- * PUT /api/admin/settings
- * Creates the settings document if it doesn't exist yet, otherwise updates it.
- * Settings is a singleton — there's only ever one document.
- */
 exports.updateSettings = async (req, res) => {
   try {
     const {

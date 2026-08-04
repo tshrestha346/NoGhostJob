@@ -7,21 +7,11 @@ const User = require("./models/user");
 const Company = require("./models/Company");
 const Job = require("./models/Job");
 
-/*
-|--------------------------------------------------------------------------
-| Configuration
-|--------------------------------------------------------------------------
-*/
 
 const SEED_PREFIX = "seedcompany";
 const JOBS_PER_COMPANY = 3;
 const BCRYPT_ROUNDS = 10;
 
-/*
-|--------------------------------------------------------------------------
-| Companies
-|--------------------------------------------------------------------------
-*/
 
 const COMPANIES = [
   {
@@ -351,11 +341,6 @@ const COMPANIES = [
   },
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Job templates
-|--------------------------------------------------------------------------
-*/
 
 const INDUSTRY_JOB_TEMPLATES = {
   Technology: [
@@ -553,11 +538,6 @@ const DEFAULT_JOB_TEMPLATES = [
   },
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Schema helpers
-|--------------------------------------------------------------------------
-*/
 
 function hasSchemaPath(model, path) {
   return Boolean(model.schema.path(path));
@@ -647,11 +627,6 @@ function addFieldWhenSupported(model, target, path, value) {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Job type handling
-|--------------------------------------------------------------------------
-*/
 
 function addJobTypeFields(target, requestedJobType) {
   const employmentFields = [
@@ -682,11 +657,6 @@ function addJobTypeFields(target, requestedJobType) {
       return;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Try alternative employment-type names
-    |--------------------------------------------------------------------------
-    */
 
     const alternatives = {
       "Full-time": [
@@ -744,15 +714,6 @@ function addJobTypeFields(target, requestedJobType) {
   });
 }
 
-/*
-|--------------------------------------------------------------------------
-| Job type field
-|--------------------------------------------------------------------------
-|
-| In your schema, "type" does not accept values such as "Full-time".
-| It may represent workplace type, for example Remote, Hybrid or On-site.
-|
-*/
 
 function addWorkplaceType(target, jobIndex) {
   if (!hasSchemaPath(Job, "type")) {
@@ -797,11 +758,6 @@ function addWorkplaceType(target, jobIndex) {
     }
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Use a valid enum value when type is required
-  |--------------------------------------------------------------------------
-  */
 
   if (isSchemaPathRequired(Job, "type")) {
     target.type = enumValues[0];
@@ -812,11 +768,6 @@ function addWorkplaceType(target, jobIndex) {
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Job status handling
-|--------------------------------------------------------------------------
-*/
 
 function addJobStatusFields(target) {
   if (hasSchemaPath(Job, "status")) {

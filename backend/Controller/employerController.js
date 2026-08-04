@@ -4,10 +4,6 @@ const Company = require("../models/Company");
 const Job = require("../models/Job");
 const User = require("../models/user");
 
-/**
- * GET /api/admin/employers
- * List all employers with their owner's basic info and a computed jobsCount.
- */
 exports.getAllEmployers = async (req, res) => {
   try {
     const employers = await Company.find()
@@ -46,18 +42,6 @@ exports.getAllEmployers = async (req, res) => {
   }
 };
 
-/**
- * POST /api/admin/employers
- * Create a new employer/company AND the User account that owns it, in one go.
- *
- * Body:
- *   name, industry, location, size            (required, Company)
- *   website, description, founded, logo       (optional, Company)
- *   ownerFullName, ownerEmail, ownerPassword   (required, User)
- *
- * The created User gets accountType: "employer" and termsAndCondition: true
- * automatically (admin is creating the account on the employer's behalf).
- */
 exports.createEmployer = async (req, res) => {
   try {
     const {
@@ -97,8 +81,6 @@ exports.createEmployer = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(ownerPassword, 10);
 
-    // Create the user first (without a company), then the company, then link them.
-    // If company creation fails, roll back the user so we don't leave an orphan.
     const user = await User.create({
       fullName: ownerFullName,
       email: normalisedEmail,
@@ -136,10 +118,7 @@ exports.createEmployer = async (req, res) => {
   }
 };
 
-/**
- * PUT /api/admin/employers/:id
- * Update an existing employer/company's details.
- */
+
 exports.updateEmployer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -187,11 +166,6 @@ exports.updateEmployer = async (req, res) => {
   }
 };
 
-/**
- * PATCH /api/admin/employers/:id/status
- * Toggle (or explicitly set) an employer's active/inactive status.
- * Body: { isActive?: boolean } — if omitted, the current status is flipped.
- */
 exports.toggleEmployerStatus = async (req, res) => {
   try {
     const { id } = req.params;
